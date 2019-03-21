@@ -7,11 +7,7 @@ Metaheuristic combining GRASP with scheduling patterns data mining
 *   [About grasp-mining](#about-grasp-mining)
 *   [Codemap](#codemap)
 *   [Installation](#installation)
-*   [Build with CMake](#build-with-cmake)
-*   [Quick Start](#quick-start)
 *   [Documentation](#documentation)
-*   [Contributing](#contributing)
-*   [License](#license)
 
 ## About grasp-mining
 
