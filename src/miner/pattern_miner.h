@@ -3,9 +3,9 @@
 
 class PatternMiner {
 public:
-	PairPatterns();
+	PatternMiner();
 
-	~PairPatterns();
+	~PatternMiner();
 
 	void BuildGraph(const Problem& problem, const vector<BierwirthSequence>& solutions);
 
