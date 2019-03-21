@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+ <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="2034" height="610">
+<title> Diagramme de Gantt du Probleme: la20.txt</title>
+<desc> Cette figure represente le planning des operations du probleme traite.</desc>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="16" height="48" x="96" y="362"/>
+<text x="104" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="104" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">17</text><text x="104" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">26</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="160" height="48" x="252" y="112"/>
+<text x="332" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="332" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">95</text><text x="332" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">176</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="108" height="48" x="542" y="262"/>
+<text x="596" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="596" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">240</text><text x="596" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">295</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="78" height="48" x="708" y="162"/>
+<text x="747" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="747" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">323</text><text x="747" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">363</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="62" height="48" x="788" y="462"/>
+<text x="819" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="819" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">363</text><text x="819" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">395</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="72" height="48" x="1030" y="212"/>
+<text x="1066" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="1066" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">484</text><text x="1066" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">521</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="10" height="48" x="1104" y="62"/>
+<text x="1109" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="1109" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">521</text><text x="1109" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">527</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="36" height="48" x="1130" y="312"/>
+<text x="1148" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="1148" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">534</text><text x="1148" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">553</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="160" height="48" x="1230" y="512"/>
+<text x="1310" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="1310" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">584</text><text x="1310" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">665</text>
+<rect style="fill:rgb(62,139,185);fill-opacity:0.5;" width="78" height="48" x="1392" y="412"/>
+<text x="1431" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J0</text><text x="1431" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">665</text><text x="1431" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">705</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="40" height="48" x="62" y="412"/>
+<text x="82" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="82" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="82" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">21</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="138" height="48" x="396" y="162"/>
+<text x="465" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="465" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">167</text><text x="465" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">237</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="128" height="48" x="536" y="512"/>
+<text x="600" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="600" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">237</text><text x="600" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">302</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="126" height="48" x="666" y="262"/>
+<text x="729" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="729" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">302</text><text x="729" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">366</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="90" height="48" x="874" y="112"/>
+<text x="919" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="919" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">406</text><text x="919" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">452</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="128" height="48" x="1000" y="312"/>
+<text x="1064" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="1064" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">469</text><text x="1064" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">534</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="48" height="48" x="1130" y="462"/>
+<text x="1154" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="1154" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">534</text><text x="1154" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">559</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="152" height="48" x="1180" y="62"/>
+<text x="1256" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="1256" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">559</text><text x="1256" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">636</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="108" height="48" x="1334" y="212"/>
+<text x="1388" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="1388" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">636</text><text x="1388" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">691</text>
+<rect style="fill:rgb(238,172,238);fill-opacity:0.5;" width="28" height="48" x="1444" y="362"/>
+<text x="1458" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J1</text><text x="1458" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">691</text><text x="1458" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">706</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="168" height="48" x="226" y="162"/>
+<text x="310" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="310" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">82</text><text x="310" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">167</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="72" height="48" x="452" y="312"/>
+<text x="488" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="488" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">195</text><text x="488" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">232</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="78" height="48" x="526" y="62"/>
+<text x="565" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="565" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">232</text><text x="565" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">272</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="46" height="48" x="618" y="212"/>
+<text x="641" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="641" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">278</text><text x="641" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">302</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="86" height="48" x="786" y="112"/>
+<text x="829" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="829" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">362</text><text x="829" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">406</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="164" height="48" x="874" y="362"/>
+<text x="956" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="956" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">406</text><text x="956" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">489</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="176" height="48" x="1040" y="262"/>
+<text x="1128" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="1128" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">489</text><text x="1128" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">578</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="60" height="48" x="1218" y="462"/>
+<text x="1248" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="1248" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">578</text><text x="1248" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">609</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="166" height="48" x="1472" y="412"/>
+<text x="1555" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="1555" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">705</text><text x="1555" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">789</text>
+<rect style="fill:rgb(47,232,102);fill-opacity:0.5;" width="56" height="48" x="1754" y="512"/>
+<text x="1782" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J2</text><text x="1782" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">846</text><text x="1782" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">875</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="158" height="48" x="202" y="262"/>
+<text x="281" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="281" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">70</text><text x="281" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">150</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="152" height="48" x="366" y="362"/>
+<text x="442" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="442" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">152</text><text x="442" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">229</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="110" height="48" x="520" y="412"/>
+<text x="575" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="575" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">229</text><text x="575" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">285</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="14" height="48" x="632" y="62"/>
+<text x="639" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="639" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">285</text><text x="639" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">293</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="58" height="48" x="648" y="162"/>
+<text x="677" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="677" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">293</text><text x="677" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">323</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="116" height="48" x="708" y="312"/>
+<text x="766" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="766" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">323</text><text x="766" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">382</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="74" height="48" x="836" y="212"/>
+<text x="873" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="873" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">387</text><text x="873" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">425</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="158" height="48" x="966" y="112"/>
+<text x="1045" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="1045" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">452</text><text x="1045" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">532</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="80" height="48" x="1148" y="512"/>
+<text x="1188" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="1188" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">543</text><text x="1188" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">584</text>
+<rect style="fill:rgb(25,19,248);fill-opacity:0.5;" width="192" height="48" x="1702" y="462"/>
+<text x="1798" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J3</text><text x="1798" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">820</text><text x="1798" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">917</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="180" height="48" x="104" y="62"/>
+<text x="194" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="194" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">21</text><text x="194" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">112</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="78" height="48" x="286" y="362"/>
+<text x="325" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="325" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">112</text><text x="325" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">152</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="174" height="48" x="366" y="262"/>
+<text x="453" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="453" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">152</text><text x="453" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">240</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="32" height="48" x="542" y="112"/>
+<text x="558" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="558" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">240</text><text x="558" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">257</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="140" height="48" x="788" y="162"/>
+<text x="858" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="858" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">363</text><text x="858" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">434</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="98" height="48" x="930" y="212"/>
+<text x="979" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="979" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">434</text><text x="979" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">484</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="116" height="48" x="1030" y="512"/>
+<text x="1088" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="1088" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">484</text><text x="1088" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">543</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="158" height="48" x="1542" y="462"/>
+<text x="1621" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="1621" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">740</text><text x="1621" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">820</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="110" height="48" x="1702" y="312"/>
+<text x="1757" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="1757" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">820</text><text x="1757" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">876</text>
+<rect style="fill:rgb(142,6,56);fill-opacity:0.5;" width="12" height="48" x="1892" y="412"/>
+<text x="1898" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J4</text><text x="1898" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">915</text><text x="1898" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">922</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="14" height="48" x="62" y="162"/>
+<text x="69" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="69" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="69" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">8</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="16" height="48" x="78" y="362"/>
+<text x="86" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="86" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">8</text><text x="86" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">17</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="114" height="48" x="182" y="212"/>
+<text x="239" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="239" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">60</text><text x="239" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">118</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="152" height="48" x="298" y="312"/>
+<text x="374" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="374" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">118</text><text x="374" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">195</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="56" height="48" x="452" y="112"/>
+<text x="480" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="480" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">195</text><text x="480" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">224</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="190" height="48" x="510" y="462"/>
+<text x="605" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="605" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">224</text><text x="605" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">320</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="88" height="48" x="702" y="62"/>
+<text x="746" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="746" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">320</text><text x="746" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">365</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="18" height="48" x="792" y="512"/>
+<text x="801" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="801" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">365</text><text x="801" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">375</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="106" height="48" x="812" y="262"/>
+<text x="865" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="865" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">375</text><text x="865" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">429</text>
+<rect style="fill:rgb(65,243,73);fill-opacity:0.5;" width="70" height="48" x="920" y="412"/>
+<text x="955" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J5</text><text x="955" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">429</text><text x="955" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">465</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="138" height="48" x="62" y="262"/>
+<text x="131" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="131" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="131" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">70</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="182" height="48" x="298" y="212"/>
+<text x="389" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="389" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">118</text><text x="389" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">210</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="194" height="48" x="590" y="112"/>
+<text x="687" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="687" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">264</text><text x="687" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">362</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="172" height="48" x="826" y="312"/>
+<text x="912" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="912" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">382</text><text x="912" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">469</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="196" height="48" x="1040" y="362"/>
+<text x="1138" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1138" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">489</text><text x="1138" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">588</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="52" height="48" x="1238" y="412"/>
+<text x="1264" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1264" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">588</text><text x="1264" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">615</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="170" height="48" x="1292" y="462"/>
+<text x="1377" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1377" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">615</text><text x="1377" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">701</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="190" height="48" x="1464" y="512"/>
+<text x="1559" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1559" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">701</text><text x="1559" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">797</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="54" height="48" x="1660" y="62"/>
+<text x="1687" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1687" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">799</text><text x="1687" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">827</text>
+<rect style="fill:rgb(117,156,15);fill-opacity:0.5;" width="144" height="48" x="1742" y="162"/>
+<text x="1814" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J6</text><text x="1814" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">840</text><text x="1814" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">913</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="188" height="48" x="62" y="112"/>
+<text x="156" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="156" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="156" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">95</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="182" height="48" x="252" y="412"/>
+<text x="343" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="343" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">95</text><text x="343" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">187</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="168" height="48" x="666" y="212"/>
+<text x="750" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="750" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">302</text><text x="750" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">387</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="102" height="48" x="920" y="262"/>
+<text x="971" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="971" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">429</text><text x="971" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">481</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="160" height="48" x="1238" y="362"/>
+<text x="1318" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1318" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">588</text><text x="1318" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">669</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="62" height="48" x="1400" y="512"/>
+<text x="1431" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1431" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">669</text><text x="1431" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">701</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="76" height="48" x="1464" y="462"/>
+<text x="1502" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1502" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">701</text><text x="1502" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">740</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="116" height="48" x="1542" y="62"/>
+<text x="1600" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1600" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">740</text><text x="1600" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">799</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="80" height="48" x="1660" y="162"/>
+<text x="1700" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1700" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">799</text><text x="1700" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">840</text>
+<rect style="fill:rgb(241,98,202);fill-opacity:0.5;" width="110" height="48" x="1814" y="312"/>
+<text x="1869" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J7</text><text x="1869" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">876</text><text x="1869" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">932</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="118" height="48" x="62" y="212"/>
+<text x="121" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="121" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="121" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">60</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="88" height="48" x="182" y="462"/>
+<text x="226" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="226" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">60</text><text x="226" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">105</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="174" height="48" x="286" y="62"/>
+<text x="373" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="373" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">112</text><text x="373" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">200</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="22" height="48" x="536" y="162"/>
+<text x="547" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="547" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">237</text><text x="547" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">249</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="12" height="48" x="576" y="112"/>
+<text x="582" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="582" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">257</text><text x="582" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">264</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="42" height="48" x="590" y="312"/>
+<text x="611" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="611" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">264</text><text x="611" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">286</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="184" height="48" x="1218" y="262"/>
+<text x="1310" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="1310" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">578</text><text x="1310" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">671</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="96" height="48" x="1656" y="512"/>
+<text x="1704" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="1704" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">797</text><text x="1704" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">846</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="136" height="48" x="1754" y="412"/>
+<text x="1822" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="1822" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">846</text><text x="1822" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">915</text>
+<rect style="fill:rgb(44,47,26);fill-opacity:0.5;" width="52" height="48" x="1892" y="362"/>
+<text x="1918" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J8</text><text x="1918" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">915</text><text x="1918" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">942</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="40" height="48" x="62" y="62"/>
+<text x="82" y="77" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="82" y="87" font-family="sans-serif" font-size="10px" text-anchor="middle">0</text><text x="82" y="97" font-family="sans-serif" font-size="10px" text-anchor="middle">21</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="120" height="48" x="104" y="162"/>
+<text x="164" y="177" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="164" y="187" font-family="sans-serif" font-size="10px" text-anchor="middle">21</text><text x="164" y="197" font-family="sans-serif" font-size="10px" text-anchor="middle">82</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="134" height="48" x="482" y="212"/>
+<text x="549" y="227" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="549" y="237" font-family="sans-serif" font-size="10px" text-anchor="middle">210</text><text x="549" y="247" font-family="sans-serif" font-size="10px" text-anchor="middle">278</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="50" height="48" x="634" y="312"/>
+<text x="659" y="327" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="659" y="337" font-family="sans-serif" font-size="10px" text-anchor="middle">286</text><text x="659" y="347" font-family="sans-serif" font-size="10px" text-anchor="middle">312</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="162" height="48" x="686" y="362"/>
+<text x="767" y="377" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="767" y="387" font-family="sans-serif" font-size="10px" text-anchor="middle">312</text><text x="767" y="397" font-family="sans-serif" font-size="10px" text-anchor="middle">394</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="140" height="48" x="850" y="512"/>
+<text x="920" y="527" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="920" y="537" font-family="sans-serif" font-size="10px" text-anchor="middle">394</text><text x="920" y="547" font-family="sans-serif" font-size="10px" text-anchor="middle">465</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="86" height="48" x="992" y="462"/>
+<text x="1035" y="477" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="1035" y="487" font-family="sans-serif" font-size="10px" text-anchor="middle">465</text><text x="1035" y="497" font-family="sans-serif" font-size="10px" text-anchor="middle">509</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="196" height="48" x="1404" y="262"/>
+<text x="1502" y="277" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="1502" y="287" font-family="sans-serif" font-size="10px" text-anchor="middle">671</text><text x="1502" y="297" font-family="sans-serif" font-size="10px" text-anchor="middle">770</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="64" height="48" x="1640" y="412"/>
+<text x="1672" y="427" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="1672" y="437" font-family="sans-serif" font-size="10px" text-anchor="middle">789</text><text x="1672" y="447" font-family="sans-serif" font-size="10px" text-anchor="middle">822</text>
+<rect style="fill:rgb(42,223,105);fill-opacity:0.5;" width="166" height="48" x="1706" y="112"/>
+<text x="1789" y="127" font-family="sans-serif" font-size="10px" text-anchor="middle">J9</text><text x="1789" y="137" font-family="sans-serif" font-size="10px" text-anchor="middle">822</text><text x="1789" y="147" font-family="sans-serif" font-size="10px" text-anchor="middle">906</text>
+<line x1="60" y1="40" x2="60" y2="562" stroke="dimgrey" />
+<line x1="60" y1="40" x2="70" y2="50" stroke="dimgrey" />
+<text x="35" y="90" font-family="sans-serif" font-size="10px" text-anchor="middle">M.1</text>
+<text x="35" y="140" font-family="sans-serif" font-size="10px" text-anchor="middle">M.2</text>
+<text x="35" y="190" font-family="sans-serif" font-size="10px" text-anchor="middle">M.3</text>
+<text x="35" y="240" font-family="sans-serif" font-size="10px" text-anchor="middle">M.4</text>
+<text x="35" y="290" font-family="sans-serif" font-size="10px" text-anchor="middle">M.5</text>
+<text x="35" y="340" font-family="sans-serif" font-size="10px" text-anchor="middle">M.6</text>
+<text x="35" y="390" font-family="sans-serif" font-size="10px" text-anchor="middle">M.7</text>
+<text x="35" y="440" font-family="sans-serif" font-size="10px" text-anchor="middle">M.8</text>
+<text x="35" y="490" font-family="sans-serif" font-size="10px" text-anchor="middle">M.9</text>
+<text x="35" y="540" font-family="sans-serif" font-size="10px" text-anchor="middle">M.10</text>
+<line x1="60" y1="562" x2="1964" y2="562" stroke="dimgrey" />
+<line x1="1954" y1="552" x2="1964" y2="562" stroke="dimgrey" />
+<line x1="1944" y1="564" x2="1944" y2="572" stroke="dimgrey" />
+<text x="70" y="35" font-family="sans-serif" font-size="20px" text-anchor="middle" fill="dimgrey">Machines</text>
+<text x="1984" y="562" font-family="sans-serif" font-size="20px" text-anchor="middle" fill="dimgrey">Time</text>
+<text x="1017" y="592" font-family="sans-serif" font-size="30px" text-anchor="middle" fill="dimgrey">Diagramme de Gantt du problème: la20.txt - makespan: 942</text>
+</svg>
