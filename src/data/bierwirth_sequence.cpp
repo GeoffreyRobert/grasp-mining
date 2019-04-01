@@ -39,7 +39,6 @@ void BierwirthSequence::GenerateBinato(const Problem& problem, double alpha) {
 	vector<int> num_ops_of_job(problem.nJob, 0);	// nombre d'op. traitées par job
 
 	// Gestion de la Restricted Candidate List
-	int rcl_size, n_cand;
 	vector<int> rc_list(problem.nJob);				// Restricted Candidate List
 	int index_job, chosen_job;						// index et job tiré de la RCL
 
@@ -50,17 +49,16 @@ void BierwirthSequence::GenerateBinato(const Problem& problem, double alpha) {
 
 	// Gestion de la distribution des makespans
 	int minMakespan, maxMakespan, split_value;
-	vector<int> makespan_for_job(problem.nJob);
-	vector<int> job_for_makespan(problem.nJob);
+	vector<pair<int,int>> job_and_makespan(problem.nJob);
 
 	makespan = 0;
 	for (idx = 0; idx < problem.size; ++idx) { // pour chaque operation
 		minMakespan = std::numeric_limits<int>::max();
 		maxMakespan = 0;
-		//if ((i+1) % percent == 0) Partial_local_search(une_solution, solution_loc, problem, i);
 
-		n_cand = 0; //reinitialisation pour stockage des données
+		// reinitialisation pour stockage des données
         for (jid = 0; jid < problem.nJob; ++jid) {		// pour chaque job 
+
             if (num_ops_of_job[jid] < problem.nMac) {	// on ne prend pas les jobs terminés
 				oid = problem.operationNumber[jid][num_ops_of_job[jid]];
 				mid = problem.machineNumber[oid];
@@ -71,21 +69,20 @@ void BierwirthSequence::GenerateBinato(const Problem& problem, double alpha) {
                     parent = problem.prevOperation[oid];
 					date = end_date[parent];
                 }
-                // recuperation parent et date disjonctifs								
-				if (last_op_on_mac[mid] != -1) { 						
+							
+				if (last_op_on_mac[mid] != -1) {	// recuperation parent et date disj.			
                     parent_disj = last_op_on_mac[mid]; 
                     date_disj = end_date[parent_disj];
                 }
                 
-                if (date < date_disj) {				// si la durée disj est superieure à horiz
+                if (date < date_disj) {				// si la date disj est superieure
                     date = date_disj;				// on retient date disj
                     parent = parent_disj;			// on retient le parent
                 } 
                 // date de fin de l'operation
 				date_end = date + problem.timeOnMachine[oid]; 
 
-				makespan_for_job[n_cand] = date_end;
-				job_for_makespan[n_cand] = jid;
+				job_and_makespan.push_back(std::make_pair(jid, date_end));
 				start_date[jid] = date;
 				end_date[jid] = date_end;
 
@@ -96,33 +93,37 @@ void BierwirthSequence::GenerateBinato(const Problem& problem, double alpha) {
 				if (maxMakespan < date_end) {
 					maxMakespan = date_end;
 				}
-
-				n_cand++;
             }
         }
 
 		// on choisit une zone de coupe par rapport au paramètre alpha
-        split_value = minMakespan + (int) (alpha*(maxMakespan-minMakespan));
+        split_value = minMakespan + (int) (alpha * (maxMakespan-minMakespan));
             
-        rcl_size=0; // construction de la RCL à partir de la splitValue précédente
-		for (int i = 0; i < n_cand; ++i) {
-			if (makespan_for_job[i] <= split_value) {
-				rc_list[rcl_size++] = job_for_makespan[i];
+        // construction de la RCL à partir de la splitValue précédente
+		for (pair<int,int> j_and_m: job_and_makespan) {
+			if (j_and_m.second <= split_value) {
+				rc_list.push_back(j_and_m.first);
 			}
 		}
 
         // choix d'un job aléatoirement dans la RCL
-		index_job = genrand64_int64() % (rcl_size>0 ? rcl_size : 1);
+		index_job = genrand64_int64() % (rc_list.size() > 0 ? rc_list.size() : 1);
         chosen_job = rc_list[index_job];
 
         // stockage des données pour l'operation
 		sequenceVec[idx] = chosen_job;
+
+		// stockage des dépendances
 		oid = problem.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
 		mid = problem.machineNumber[oid];
 
 		last_op_on_mac[mid] = oid;
 		num_ops_on_mac[mid] ++;
         num_ops_of_job[chosen_job] ++;
+
+		// reinitialisation des structures de données
+		job_and_makespan.clear();
+		rc_list.clear();
 	} 
 
 }

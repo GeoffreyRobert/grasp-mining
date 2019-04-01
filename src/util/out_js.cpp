@@ -1,21 +1,22 @@
 #include "Out_JS.h"
 
-void stock_Res(OutJS& res, Data& data, BierwirthSequence& b, int instance, int replic) {
+void OutJS::StockResult(Problem& problem, Solution& solution, int instance, int replic) {
 	
-	res.tt_Instance_X_Replication[instance][replic] = ((double) b.totalTime - b.init)/CLOCKS_PER_SEC;
-	res.ttb_Instance_X_Replication[instance][replic]=((double) b.timeToBest - b.init)/CLOCKS_PER_SEC;
-	res.s_Instance_X_Replication[instance][replic]=b.makespan;
-	res.deviance_Instance_X_Replication[instance][replic]= (((float) b.makespan-data.lowerBound)/data.lowerBound)*100;
+	tt_Instance_X_Replication[instance][replic] = ((double) solution.totalTime - b.init)/CLOCKS_PER_SEC;
+	ttb_Instance_X_Replication[instance][replic]=((double) solution.timeToBest - b.init)/CLOCKS_PER_SEC;
+	s_Instance_X_Replication[instance][replic]=b.makespan;
+	deviance_Instance_X_Replication[instance][replic]= (((float) b.makespan-problem.lowerBound)/problem.lowerBound)*100;
 
-	res.avg_S_Instance[instance]+=b.makespan;		
-	res.avg_TTB_Instance[instance]+=res.ttb_Instance_X_Replication[instance][replic];
-	res.avg_TT_Instance[instance]+=res.tt_Instance_X_Replication[instance][replic];
-	if (b.makespan == data.lowerBound) ++res.nb_Opt[instance]; 
+	avg_S_Instance[instance]+=b.makespan;		
+	avg_TTB_Instance[instance]+=ttb_Instance_X_Replication[instance][replic];
+	avg_TT_Instance[instance]+=tt_Instance_X_Replication[instance][replic];
+	if (b.makespan == problem.lowerBound) ++nb_Opt[instance]; 
 }
 
-void out_Results(OutJS& res, int start, int end) {
+void OutJS::OutputResults(int start, int end) {
 	double avg_S = 0, avg_TTB=0, avg_TT=0, avg_DEV = 0, avg_LB=0, avg_BestValue = 0, avg_TTBValue=0, avg_DEVBestValue=0;
-	int bestValue;double bestTime;
+	int bestValue;
+	double bestTime;
 	
 	string s1, s2, s3, s4, s5, s6, s7, s8;
 	ofstream resultsForGantt("..\\Results\\JSFF_Results.csv", ios::out | ios::app); 
@@ -26,46 +27,46 @@ void out_Results(OutJS& res, int start, int end) {
 	for (int inst = start; inst <= end; ++inst) {
 		bestValue = INFINITE_C;
 		bestTime = INFINITE_C;
-		avg_LB+=res.lower_bound[inst];
-		res.avg_S_Instance[inst]=res.avg_S_Instance[inst]/MAX_REPLICATION;
-		res.avg_TT_Instance[inst]=res.avg_TT_Instance[inst]/MAX_REPLICATION;
-		res.avg_TTB_Instance[inst]=res.avg_TTB_Instance[inst]/MAX_REPLICATION;
-		res.avg_DEV_Instance[inst] = (((float) res.avg_S_Instance[inst]-res.lower_bound[inst])/res.lower_bound[inst])*100;
+		avg_LB+=lower_bound[inst];
+		avg_S_Instance[inst]=avg_S_Instance[inst]/MAX_REPLICATION;
+		avg_TT_Instance[inst]=avg_TT_Instance[inst]/MAX_REPLICATION;
+		avg_TTB_Instance[inst]=avg_TTB_Instance[inst]/MAX_REPLICATION;
+		avg_DEV_Instance[inst] = (((float) avg_S_Instance[inst]-lower_bound[inst])/lower_bound[inst])*100;
 
-		resultsForGantt << res.name_Instance[inst] << " ; " << " LB = " << res.lower_bound[inst] << "\n";
+		resultsForGantt << name_Instance[inst] << " ; " << " LB = " << lower_bound[inst] << "\n";
 		resultsForGantt << "Replication ;  S ; TT_S ; TTB_S ; Dev_S  " << "\n";
 		for (int i = 0; i<MAX_REPLICATION; ++i) { 
-			s1=to_string(res.tt_Instance_X_Replication[inst][i]);		s1=s1.replace(s1.find("."),1,",");
-			s2=to_string(res.ttb_Instance_X_Replication[inst][i]);		s2=s2.replace(s2.find("."),1,",");
-			s3=to_string(res.deviance_Instance_X_Replication[inst][i]); s3=s3.replace(s3.find("."),1,",");
+			s1=to_string(tt_Instance_X_Replication[inst][i]);		s1=s1.replace(s1.find("."),1,",");
+			s2=to_string(ttb_Instance_X_Replication[inst][i]);		s2=s2.replace(s2.find("."),1,",");
+			s3=to_string(deviance_Instance_X_Replication[inst][i]); s3=s3.replace(s3.find("."),1,",");
 			
-			resultsForGantt << i+1 << " ; " << res.s_Instance_X_Replication[inst][i] << " ; " <<s1 << " ; " << s2 <<" ; " << s3  << "\n";
-			if (res.s_Instance_X_Replication[inst][i]<bestValue) {
-				bestValue=res.s_Instance_X_Replication[inst][i];
-				bestTime=res.ttb_Instance_X_Replication[inst][i];
+			resultsForGantt << i+1 << " ; " << s_Instance_X_Replication[inst][i] << " ; " <<s1 << " ; " << s2 <<" ; " << s3  << "\n";
+			if (s_Instance_X_Replication[inst][i]<bestValue) {
+				bestValue=s_Instance_X_Replication[inst][i];
+				bestTime=ttb_Instance_X_Replication[inst][i];
 			}
 		}
 
-		avg_S+=res.avg_S_Instance[inst];
-		avg_TT+=res.avg_TT_Instance[inst];
-		avg_TTB+=res.avg_TTB_Instance[inst];
-		avg_DEV+=res.avg_DEV_Instance[inst];
+		avg_S+=avg_S_Instance[inst];
+		avg_TT+=avg_TT_Instance[inst];
+		avg_TTB+=avg_TTB_Instance[inst];
+		avg_DEV+=avg_DEV_Instance[inst];
 		avg_BestValue+=bestValue;
 		avg_TTBValue+=bestTime;
 
-		s1 = to_string(res.avg_S_Instance[inst]);		s1=s1.replace(s1.find("."),1,",");
-		s2 = to_string(res.avg_TT_Instance[inst]);		s2=s2.replace(s2.find("."),1,",");
-		s3 = to_string(res.avg_TTB_Instance[inst]);		s3=s3.replace(s3.find("."),1,",");
-		s4 = to_string(res.avg_DEV_Instance[inst]);		s4=s4.replace(s4.find("."),1,",");
+		s1 = to_string(avg_S_Instance[inst]);		s1=s1.replace(s1.find("."),1,",");
+		s2 = to_string(avg_TT_Instance[inst]);		s2=s2.replace(s2.find("."),1,",");
+		s3 = to_string(avg_TTB_Instance[inst]);		s3=s3.replace(s3.find("."),1,",");
+		s4 = to_string(avg_DEV_Instance[inst]);		s4=s4.replace(s4.find("."),1,",");
 		s5 = to_string(bestValue);						
 		s6 = to_string(bestTime);						s6=s6.replace(s6.find("."),1,",");
-		s7 = to_string((((float) bestValue-res.lower_bound[inst])/res.lower_bound[inst])*100);	s7=s7.replace(s7.find("."),1,",");
+		s7 = to_string((((float) bestValue-lower_bound[inst])/lower_bound[inst])*100);	s7=s7.replace(s7.find("."),1,",");
 
-		avg_DEVBestValue+=(((float) bestValue-res.lower_bound[inst])/res.lower_bound[inst])*100;
+		avg_DEVBestValue+=(((float) bestValue-lower_bound[inst])/lower_bound[inst])*100;
 		resultsForGantt<< "Average : \n";
 		resultsForGantt << " - " << " ; " << s1 << " ; " << s2 << " ; " << s3 <<" ; " << s4 << " ; " << "\n\n\n";
 		
-		resultsLightForGantt << res.name_Instance[inst]<< " ; " << res.lower_bound[inst]<< " ; " << s1 << " ; " << s2 << " ; " << s3 <<" ; " << s4 << " ; " << s5 << " ; " << s6 << " ; "  << s7 << " ; "  <<res.nb_Opt[inst]<< "\n";
+		resultsLightForGantt << name_Instance[inst]<< " ; " << lower_bound[inst]<< " ; " << s1 << " ; " << s2 << " ; " << s3 <<" ; " << s4 << " ; " << s5 << " ; " << s6 << " ; "  << s7 << " ; "  <<nb_Opt[inst]<< "\n";
 
 	}
 
@@ -86,16 +87,16 @@ void out_Results(OutJS& res, int start, int end) {
 }
 
 
-void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName) {
+void OutJS::writeGANTT_SVG(Problem& problem, Solution& solution, string& prob_name) {
 	int i, job, mac;
-	int nbmac = data.nbmac, nbjob = data.nbjob;
+	int nbmac = problem.nMac, nbjob = problem.nJob;
 	int margin = 60;
 	int marginBetweenRect = 2;
 	int fleche = 20;
 	int rectWidth = 50;
 	int xStart = 0, xLength = 0, yStart = 0, yLength = 0, stringLen = 0;
 
-	ofstream dataForGantt("..\\Results\\" + pName + "_gantt.svg", ios::out | ios::trunc);
+	ofstream dataForGantt("..\\Results\\" + prob_name + "_gantt.svg", ios::out | ios::trunc);
 
 
 	//dataForGantt << data.pName + "\n");  // écrire une ligne dans le fichier resultat.txt
@@ -105,22 +106,22 @@ void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName) {
 	Ratio pour taille des rectangles du diagramme
 	----------------------------------------------------------------------*/
 	int ratio = 2;
-	/*if (seq.makespan <= 30) {
+	/*if (solution.makespan <= 30) {
 	ratio = 20;
-	} else if (seq.makespan < 100) {
+	} else if (solution.makespan < 100) {
 	ratio = 10;
-	} else if (seq.makespan < 250) {
+	} else if (solution.makespan < 250) {
 	ratio = 5;
-	} else if (seq.makespan < 500) {
+	} else if (solution.makespan < 500) {
 	ratio = 2;
 	} */
-	int maxDiagLength = (int)((ratio)*seq.makespan + 2 * margin + fleche + data.nbmac);
-	int maxDiagHeight = (rectWidth + marginBetweenRect)*data.nbmac + margin + fleche + 10;
+	int maxDiagLength = (int)((ratio)*solution.makespan + 2 * margin + fleche + problem.nMac);
+	int maxDiagHeight = (rectWidth + marginBetweenRect)*problem.nMac + margin + fleche + 10;
 
 	dataForGantt << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 	//dataForGantt <<  "<svg width=\"" + maxDiagLength + "\" height=\"" + maxDiagHeight + "\">");
 	dataForGantt << " <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" << maxDiagLength << "\" height=\"" << maxDiagHeight << "\">\n";
-	dataForGantt << "<title> Diagramme de Gantt du Probleme: " << pName << "</title>\n";
+	dataForGantt << "<title> Diagramme de Gantt du Probleme: " << prob_name << "</title>\n";
 	dataForGantt << "<desc> Cette figure represente le planning des operations du probleme traite.</desc>\n";
 
 
@@ -135,13 +136,13 @@ void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName) {
 		colors[i][2] = genrand64_int64() % 256;
 	}
 
-	for (i = 0; i < data.size; i++) {
+	for (i = 0; i < problem.size; i++) {
 
-		job = data.jobForOp[i];
-		mac = data.machineNumber[i];
+		job = problem.jobForOp[i];
+		mac = problem.machineNumber[i];
 
-		xStart = margin + (ratio)*(seq.endDate[i] - data.timeOnMachine[i]) + marginBetweenRect; //+dd1*macVisited[mac]
-		xLength = (ratio)*(data.timeOnMachine[i]) - marginBetweenRect; //+dd1
+		xStart = margin + (ratio)*(solution.endDate[i] - problem.timeOnMachine[i]) + marginBetweenRect; //+dd1*macVisited[mac]
+		xLength = (ratio)*(problem.timeOnMachine[i]) - marginBetweenRect; //+dd1
 		yStart = margin + mac*rectWidth + marginBetweenRect;
 		yLength = rectWidth - marginBetweenRect;
 
@@ -149,8 +150,8 @@ void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName) {
 
 
 		dataForGantt << "<text x=\"" << ((xLength + 2 * xStart) / 2) << "\" y=\"" << (yStart + 15) << "\" font-family=\"sans-serif\" font-size=\"10px\" text-anchor=\"middle\">J" << job << "</text>";
-		dataForGantt << "<text x=\"" << ((xLength + 2 * xStart) / 2) << "\" y=\"" << (yStart + 25) << "\" font-family=\"sans-serif\" font-size=\"10px\" text-anchor=\"middle\">" << (seq.endDate[i] - data.timeOnMachine[i]) << "</text>";
-		dataForGantt << "<text x=\"" << ((xLength + 2 * xStart) / 2) << "\" y=\"" << (yStart + 35) << "\" font-family=\"sans-serif\" font-size=\"10px\" text-anchor=\"middle\">" << seq.endDate[i] << "</text>\n";
+		dataForGantt << "<text x=\"" << ((xLength + 2 * xStart) / 2) << "\" y=\"" << (yStart + 25) << "\" font-family=\"sans-serif\" font-size=\"10px\" text-anchor=\"middle\">" << (solution.endDate[i] - problem.timeOnMachine[i]) << "</text>";
+		dataForGantt << "<text x=\"" << ((xLength + 2 * xStart) / 2) << "\" y=\"" << (yStart + 35) << "\" font-family=\"sans-serif\" font-size=\"10px\" text-anchor=\"middle\">" << solution.endDate[i] << "</text>\n";
 
 
 
@@ -171,14 +172,14 @@ void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName) {
 
 
 	//horizontal
-	dataForGantt << "<line x1=\"" << margin << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" x2=\"" << (margin + ratio*seq.makespan + fleche) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" stroke=\"dimgrey\" />\n";
-	dataForGantt << "<line x1=\"" << (margin + ratio*seq.makespan + fleche - 10) << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect - 10) << "\" x2=\"" << (margin + ratio*seq.makespan + fleche) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" stroke=\"dimgrey\" />\n";
-	dataForGantt << "<line x1=\"" << (margin + ratio*seq.makespan) << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 2) << "\" x2=\"" << (margin + ratio*seq.makespan) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 10) << "\" stroke=\"dimgrey\" />\n";
+	dataForGantt << "<line x1=\"" << margin << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" x2=\"" << (margin + ratio*solution.makespan + fleche) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" stroke=\"dimgrey\" />\n";
+	dataForGantt << "<line x1=\"" << (margin + ratio*solution.makespan + fleche - 10) << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect - 10) << "\" x2=\"" << (margin + ratio*solution.makespan + fleche) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" stroke=\"dimgrey\" />\n";
+	dataForGantt << "<line x1=\"" << (margin + ratio*solution.makespan) << "\" y1=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 2) << "\" x2=\"" << (margin + ratio*solution.makespan) << "\" y2=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 10) << "\" stroke=\"dimgrey\" />\n";
 
 	dataForGantt << "<text x=\"" << (margin + 10) << "\" y=\"" << (margin - fleche - 5) << "\" font-family=\"sans-serif\" font-size=\"20px\" text-anchor=\"middle\" fill=\"dimgrey\">Machines</text>\n";
-	dataForGantt << "<text x=\"" << (margin + ratio*seq.makespan + 2 * fleche) << "\" y=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" font-family=\"sans-serif\" font-size=\"20px\" text-anchor=\"middle\" fill=\"dimgrey\">Time</text>\n";
+	dataForGantt << "<text x=\"" << (margin + ratio*solution.makespan + 2 * fleche) << "\" y=\"" << (margin + nbmac*rectWidth + marginBetweenRect) << "\" font-family=\"sans-serif\" font-size=\"20px\" text-anchor=\"middle\" fill=\"dimgrey\">Time</text>\n";
 
-	dataForGantt << "<text x=\"" << (maxDiagLength / 2) << "\" y=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 30) << "\" font-family=\"sans-serif\" font-size=\"30px\" text-anchor=\"middle\" fill=\"dimgrey\">Diagramme de Gantt du problème: " << pName << " - makespan: " << seq.makespan << "</text>\n";
+	dataForGantt << "<text x=\"" << (maxDiagLength / 2) << "\" y=\"" << (margin + nbmac*rectWidth + marginBetweenRect + 30) << "\" font-family=\"sans-serif\" font-size=\"30px\" text-anchor=\"middle\" fill=\"dimgrey\">Diagramme de Gantt du problème: " << prob_name << " - makespan: " << solution.makespan << "</text>\n";
 
 
 	//Fin du fichier

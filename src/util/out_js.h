@@ -1,7 +1,6 @@
-#ifndef _OUT_JS_
-#define _OUT_JS_
+#ifndef OUT_JS_H_
+#define OUT_JS_H_
 
-#include "Global.h"
 #include "data/problem.h"
 #include "data/bierwirth_sequence.h"
 
@@ -12,26 +11,26 @@
 
 struct OutJS {
 
-	string name_Instance[MAX_INSTANCES+1];										// nom de l'instance
-	int lower_bound[MAX_INSTANCES+1];											// nom de l'instance
-	double tt_Instance_X_Replication[MAX_INSTANCES+1][MAX_REPLICATION] ;			// temps total d'execution pour la replication
-	double ttb_Instance_X_Replication[MAX_INSTANCES+1][MAX_REPLICATION] ;		// temps d'execution pour arriver à la meilleure solution pour la replication
-	int s_Instance_X_Replication[MAX_INSTANCES+1][MAX_REPLICATION] ;			// solution found
-	int nb_Opt[MAX_INSTANCES+1];												// solution found
-	double deviance_Instance_X_Replication[MAX_INSTANCES+1][MAX_REPLICATION] ;	// deviance
-	
-	double avg_TTB_Instance[MAX_INSTANCES + 1];								// temps d'execution moyen pour arriver à la meilleure solution pour la replication
-	double avg_TT_Instance[MAX_INSTANCES + 1];								// temps d'execution moyen pour arriver à la meilleure solution pour la replication
-	double avg_S_Instance[MAX_INSTANCES + 1];									// temps d'execution moyen pour arriver à la meilleure solution pour la replication
-	double avg_DEV_Instance[MAX_INSTANCES + 1];								// temps d'execution moyen pour arriver à la meilleure solution pour la replication
+	vector<string> name_Instance;					// nom de l'instance
+	vector<int> lower_bound;						// solution connue de l'instance
+	vector<double> tt_Instance_X_Replication;		// temps total d'execution par replication
+	vector<double> ttb_Instance_X_Replication;		// temps pour arriver à la meilleure sol. par replication
+	vector<int> s_Instance_X_Replication;			// score trouve par instance pour chaque replication
+	vector<int> nb_Opt;								// solution found
+	vector<double> deviance_Instance_X_Replication;	// deviance par rapport à l'optimum (?)
+
+	vector<double> avg_TT_Instance;					// temps d'execution moyen par instance
+	vector<double> avg_TTB_Instance;				// temps moyen pour arriver à la meilleure sol. par instance
+	vector<double> avg_S_Instance;					// score moyen trouvé par instance
+	vector<double> avg_DEV_Instance;				// écart type du score par instance
 
 
-	void stock_Res(Problem& data, BierwirthSequence& b, int instance, int replic); // méthode pour stocker résultat
-	void outputResults(int start, int end);			// résultats en sortie					
+	void StockResult(Problem&, Solution&, int instance, int replic); // méthode pour stocker résultat
+	void OutputResults(int start, int end);			// résultats en sortie					
 
 
 	// fichier de sortie pour obtenir un diagramme de GANTT - solution perso (code java)
-	void writeGANTT_SVG(Data& data, BierwirthSequence& seq, string pName);
+	void writeGANTT_SVG(Problem& problem, Solution& solution, string& prob_name);
 };
 
-#endif	// _OUT_JS_
+#endif	// OUT_JS_H_

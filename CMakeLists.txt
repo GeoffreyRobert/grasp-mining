@@ -6,13 +6,22 @@ project(grasp-mining
 )
 
 add_executable(grasp
-	src/Main.cpp
-	src/data/bierwirth_sequence.cpp
+	src/main.cpp
+	src/const-heuristic/binato_heuristic.cpp
+	src/const-heuristic/random_placement.cpp
 	src/data/problem.cpp
-	src/local-search/laarhoven.cpp
+	src/data/solution.cpp
+	src/local-search/empty_search.cpp
+	src/local-search/laarhoven_search.cpp
+	src/miner/empty_miner.cpp
+	src/miner/pattern_miner.cpp
 	src/solver/solver.cpp
-	src/util/MT.cpp
-	src/util/Out_JS.cpp
+	#src/solver/solver_factory.cpp
+	#src/util/Out_JS.cpp
+)
+
+target_compile_features(grasp
+	PRIVATE cxx_std_11
 )
 
 target_include_directories(grasp

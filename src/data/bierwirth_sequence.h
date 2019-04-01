@@ -7,8 +7,8 @@
 */
 
 #include <vector>
+#include <chrono>
 
-#include "Global.h"
 #include "data/problem.h"
 #include "data/solution.h"
 
@@ -25,12 +25,11 @@ public:
 	void GenerateBinato(const Problem& problem, double alpha);
 
 	// echange de deux valeurs dans le vecteur de bierwirth
-	void swapOperation(int sommet1, int sommet2);
+	void SwapOperation(int sommet1, int sommet2);
 
-	vector<unsigned int> sequenceVec;		// vecteur contenant la séquence de Bierwirth
+	vector<unsigned> sequenceVec;		// vecteur contenant la séquence de Bierwirth
 
 private:
-
 	clock_t init;							// stockage des temps d'exécution
 	clock_t timeToBest;
 	clock_t totalTime;
