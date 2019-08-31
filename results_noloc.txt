@@ -1,0 +1,164 @@
+problem name : la01.txt
+problem: 666 -- solution: 679
+problem name : la02.txt
+problem: 655 -- solution: 725
+problem name : la03.txt
+problem: 597 -- solution: 663
+problem name : la04.txt
+problem: 590 -- solution: 652
+problem name : la05.txt
+problem: 593 -- solution: 600
+problem name : la06.txt
+problem: 926 -- solution: 963
+problem name : la07.txt
+problem: 890 -- solution: 933
+problem name : la08.txt
+problem: 863 -- solution: 920
+problem name : la09.txt
+problem: 951 -- solution: 954
+problem name : la10.txt
+problem: 958 -- solution: 1020
+problem name : la11.txt
+problem: 1222 -- solution: 1245
+problem name : la12.txt
+problem: 1039 -- solution: 1068
+problem name : la13.txt
+problem: 1150 -- solution: 1203
+problem name : la14.txt
+problem: 1292 -- solution: 1325
+problem name : la15.txt
+problem: 1207 -- solution: 1311
+problem name : la16.txt
+problem: 945 -- solution: 1041
+problem name : la17.txt
+problem: 784 -- solution: 868
+problem name : la18.txt
+problem: 848 -- solution: 921
+problem name : la19.txt
+problem: 842 -- solution: 946
+problem name : la20.txt
+problem: 902 -- solution: 997
+problem name : la21.txt
+problem: 1046 -- solution: 1273
+problem name : la22.txt
+problem: 927 -- solution: 1162
+problem name : la23.txt
+problem: 1032 -- solution: 1158
+problem name : la24.txt
+problem: 935 -- solution: 1165
+problem name : la25.txt
+problem: 977 -- solution: 1183
+problem name : la26.txt
+problem: 1218 -- solution: 1521
+problem name : la27.txt
+problem: 1235 -- solution: 1522
+problem name : la28.txt
+problem: 1216 -- solution: 1505
+problem name : la29.txt
+problem: 1152 -- solution: 1514
+problem name : la30.txt
+problem: 1355 -- solution: 1571
+problem name : la31.txt
+problem: 1784 -- solution: 1979
+problem name : la32.txt
+problem: 1850 -- solution: 2083
+problem name : la33.txt
+problem: 1719 -- solution: 1900
+problem name : la34.txt
+problem: 1721 -- solution: 1989
+problem name : la35.txt
+problem: 1888 -- solution: 2106
+problem name : la36.txt
+problem: 1268 -- solution: 1517
+problem name : la37.txt
+problem: 1397 -- solution: 1630
+problem name : la38.txt
+problem: 1196 -- solution: 1394
+problem name : la39.txt
+problem: 1233 -- solution: 1419
+problem name : la40.txt
+problem: 1222 -- solution: 1441
+problem name : abz5.txt
+problem: 1234 -- solution: 1347
+problem name : abz6.txt
+problem: 943 -- solution: 1041
+problem name : abz7.txt
+problem: 656 -- solution: 812
+problem name : abz8.txt
+problem: 645 -- solution: 819
+problem name : abz9.txt
+problem: 661 -- solution: 845
+problem name : ft06.txt
+problem: 55 -- solution: 58
+problem name : ft10.txt
+problem: 930 -- solution: 1077
+problem name : ft20.txt
+problem: 1165 -- solution: 1320
+problem name : orb01.txt
+problem: 1059 -- solution: 1202
+problem name : orb02.txt
+problem: 888 -- solution: 1018
+problem name : orb03.txt
+problem: 1005 -- solution: 1224
+problem name : orb04.txt
+problem: 1005 -- solution: 1141
+problem name : orb05.txt
+problem: 887 -- solution: 1017
+problem name : orb06.txt
+problem: 1010 -- solution: 1160
+problem name : orb07.txt
+problem: 397 -- solution: 440
+problem name : orb08.txt
+problem: 899 -- solution: 1042
+problem name : orb09.txt
+problem: 934 -- solution: 1060
+problem name : orb10.txt
+problem: 944 -- solution: 1099
+problem name : swv01.txt
+problem: 1407 -- solution: 1713
+problem name : swv02.txt
+problem: 1475 -- solution: 1797
+problem name : swv03.txt
+problem: 1369 -- solution: 1764
+problem name : swv04.txt
+problem: 1450 -- solution: 1883
+problem name : swv05.txt
+problem: 1424 -- solution: 1845
+problem name : swv06.txt
+problem: 1591 -- solution: 2144
+problem name : swv07.txt
+problem: 1446 -- solution: 1982
+problem name : swv08.txt
+problem: 1640 -- solution: 2279
+problem name : swv09.txt
+problem: 1604 -- solution: 2172
+problem name : swv10.txt
+problem: 1631 -- solution: 2244
+problem name : swv11.txt
+problem: 2983 -- solution: 3820
+problem name : swv12.txt
+problem: 2972 -- solution: 3866
+problem name : swv13.txt
+problem: 3104 -- solution: 3923
+problem name : swv14.txt
+problem: 2968 -- solution: 3896
+problem name : swv15.txt
+problem: 2885 -- solution: 3713
+problem name : swv16.txt
+problem: 2924 -- solution: 3105
+problem name : swv17.txt
+problem: 2794 -- solution: 3020
+problem name : swv18.txt
+problem: 2852 -- solution: 2999
+problem name : swv19.txt
+problem: 2843 -- solution: 3064
+problem name : swv20.txt
+problem: 2823 -- solution: 2985
+problem name : yn1.txt
+problem: 826 -- solution: 1082
+problem name : yn2.txt
+problem: 861 -- solution: 1112
+problem name : yn3.txt
+problem: 827 -- solution: 1064
+problem name : yn4.txt
+problem: 918 -- solution: 1208

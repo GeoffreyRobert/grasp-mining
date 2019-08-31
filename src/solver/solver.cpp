@@ -1,5 +1,6 @@
 #include <limits>
 #include <chrono>
+#include <iostream>
 
 #include "solver.h"
 #include "const-heuristic/binato_heuristic.h"
@@ -7,12 +8,13 @@
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
 
-using std::chrono::high_resolution_clock;
+using std::chrono::high_resolution_clock; using std::cout;
 
 Solver::Solver(ConstHeuristic& init_heuristic, ConstHeuristic& const_heuristic,
-			   LocalSearch& local_search, DataMiner& data_miner) :
+			   LocalSearch& local_search, DataMiner& data_miner, int pop_size) :
 	constHeuristic(const_heuristic), initHeuristic(init_heuristic),
-	localSearch(local_search), dataMiner(data_miner), runtime(0.)
+	localSearch(local_search), dataMiner(data_miner), runtime(0.), 
+	populationSize(pop_size)
 {}
 
 Solver::Solver(Solver&& other) :
@@ -20,7 +22,17 @@ Solver::Solver(Solver&& other) :
 	localSearch(other.localSearch), dataMiner(other.dataMiner)
 {}
 
+void Solver::ModulesResourcesAlloc(const Problem& problem) {
+	initHeuristic.ResourcesAlloc();
+	constHeuristic.ResourcesAlloc();
+	localSearch.ResourcesAlloc();
+	dataMiner.ResourcesAlloc();
+}
+
 Solution Solver::Solve(const Problem& problem) {
+	// allocation des ressources pour les différents modules du solver
+	ModulesResourcesAlloc(problem);
+
 	// solutions manipulées dans l'algo
 	Solution best_solution(problem);
 	vector<Solution> solution_set(populationSize, best_solution);
@@ -35,7 +47,9 @@ Solution Solver::Solve(const Problem& problem) {
 	for (Solution& sol : solution_set)  {
 		initHeuristic(problem, sol);
 
+		localSearch.hit_count = 0;
 		localSearch(problem, sol);
+		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée
 		if (sol.makespan < best_solution.makespan) {
@@ -48,7 +62,9 @@ Solution Solver::Solve(const Problem& problem) {
 	for (Solution& sol : solution_set) {
 		constHeuristic(problem, sol);
 
+		localSearch.hit_count = 0;
 		localSearch(problem, sol);
+		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée
 		if (sol.makespan < best_solution.makespan) {

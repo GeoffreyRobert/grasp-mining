@@ -5,13 +5,13 @@
 
 #include "data/problem.h"
 #include "data/solution.h"
+#include "solver/solver_module.h"
 
 using std::vector;
 
-class DataMiner {
+class DataMiner : public SolverModule {
 public:
 	virtual void operator()(const Problem&, const vector<Solution>&) = 0;
 	virtual vector<int> ProposePattern(const Problem&, int operation, double support) = 0;
-
 };
 #endif // DATA_MINER_H_

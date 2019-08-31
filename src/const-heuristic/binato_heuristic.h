@@ -10,12 +10,14 @@ class BinatoHeuristic : public ConstHeuristic {
 public:
 	BinatoHeuristic();
 	BinatoHeuristic(double alpha);
+	void ResourcesAlloc(const Problem&);
+
 	// construction greedy randomisée
 	Solution& operator()(const Problem&, Solution&);
 
 private:
 	double alpha = 0.5;
 	std::mt19937 generator;
-	int ChooseRandomJob(vector<int>& rc_list);
+	int ChooseRandomJob();
 };
 #endif // !BINATO_HEURISTIC_H_

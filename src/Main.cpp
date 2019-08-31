@@ -9,9 +9,10 @@
 //#include "util/out_js.h"
 #include "const-heuristic/binato_heuristic.h"
 #include "local-search/laarhoven_search.h"
+#include "local-search/empty_search.h"
 #include "miner/empty_miner.h"
 
-using std::vector; using std::string; using std::cout;
+using std::vector; using std::string; using std::cout; 
 
 /*
 	Programme principal permettant l'appel des différentes méthodes
@@ -33,17 +34,18 @@ int main(int argc, char** argv) {
 
 	Problem problem;	// Déclaration d'un problème et d'un vecteur
 	//OutJS res;			// Structure de stockage des résultats
-	int max_replications = 10; // TEMPORAIRE
+	std::ofstream file(file_path + "_results.txt", std::ios::out);
+	int max_replications = 1; // TEMPORAIRE
 
 	// Construction du solver
 	BinatoHeuristic init_heuristic(0.5);
 	BinatoHeuristic const_heuristic;
 	LaarhovenSearch local_search;
 	EmptyMiner data_miner;
-	Solver solver(init_heuristic, const_heuristic, local_search, data_miner);
+	Solver solver(init_heuristic, const_heuristic, local_search, data_miner, 20);
 
 	for (const string& problem_name: instances) {
-		cout << "problem name : " << problem_name << '\n';
+		file << "problem name : " << problem_name << '\n';
 		// extraction des données
 		problem.LoadProblemFromFile(file_path, problem_name);
 		Solution best_sol(problem);
@@ -56,8 +58,8 @@ int main(int argc, char** argv) {
 				best_sol = sol;
 			}
 		}
-		cout << "problem: " << problem.lowerBound << " -- solution: "
-			<< best_sol.makespan << '\n';
+		file << "problem: " << problem.lowerBound << " -- solution: "
+			<< best_sol.makespan << std::endl;
 		//writeGANTT_SVG(problem, b, problem_name);
 		
 		problem.Clear();

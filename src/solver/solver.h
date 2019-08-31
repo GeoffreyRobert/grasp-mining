@@ -10,16 +10,18 @@
 
 class Solver {
 public:
-	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, DataMiner&);
+	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, DataMiner&, int pop_size);
 
 	Solver(Solver&&);
 
-	// Solves the given JSSP and returns the solve status. See the ProblemStatus 
-	// documentation for a description of the different values.
+	// Allocation des ressources pour les modules
+	void ModulesResourcesAlloc(const Problem&);
+
+	// Resout une instance de JSSP et retourne une solution
 	Solution Solve(const Problem&);
 
-	// Same as Solve() but use the given time limit.
-	//void SolveWithTimeLimit(const Problem&, TimeLimit&);
+	// Idem que Solve mais utilise une limite temporelle
+	// void SolveWithTimeLimit(const Problem&, TimeLimit&);
 
 	// The hybrid solver.
 	ConstHeuristic& initHeuristic;

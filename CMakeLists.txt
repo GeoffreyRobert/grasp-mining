@@ -11,6 +11,7 @@ add_executable(grasp
 	src/const-heuristic/random_placement.cpp
 	src/data/problem.cpp
 	src/data/solution.cpp
+    src/data/solution_impl.cpp
 	src/local-search/empty_search.cpp
 	src/local-search/laarhoven_search.cpp
 	src/miner/empty_miner.cpp
@@ -25,5 +26,20 @@ target_compile_features(grasp
 )
 
 target_include_directories(grasp
+	PUBLIC src/
+)
+
+add_executable(laarhoven_test
+	src/tests/laarhoven_test.cpp
+	src/data/problem.cpp
+	src/data/solution.cpp
+	src/local-search/laarhoven_search.cpp
+)
+
+target_compile_features(laarhoven_test
+	PRIVATE cxx_std_11
+)
+
+target_include_directories(laarhoven_test
 	PUBLIC src/
 )

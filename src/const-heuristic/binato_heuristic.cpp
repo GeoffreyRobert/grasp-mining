@@ -15,6 +15,10 @@ BinatoHeuristic::BinatoHeuristic(double alpha) :
 	this->alpha = alpha;
 }
 
+void BinatoHeuristic::ResourcesAlloc(const Problem&) {
+
+}
+
 Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution) {
 	int idx, jid, oid, mid;				// index des operations, job ID, operation ID, mach. ID
 
@@ -122,7 +126,7 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 	return solution;
 }
 
-int BinatoHeuristic::ChooseRandomJob(vector<int>& rc_list) {
+int BinatoHeuristic::ChooseRandomJob(const vector<int>& rc_list) {
 	std::uniform_int_distribution<int> uni(0, rc_list.size()-1);
 	return (int)rc_list[uni(generator)];
 }

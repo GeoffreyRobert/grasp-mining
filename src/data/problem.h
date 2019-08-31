@@ -32,8 +32,8 @@ public:
 	vector<int> nextOperation;				// numéro de l'op. précédente dans le job
 	vector<int> machineNumber;				// numéro de la machine devant traiter la pièce
 	vector<int> timeOnMachine;				// durée à passer sur la machine
-	vector<int> jobForOp;					// job associé à un numéro d'opération
-	vector<int> rankForOp;					// rang d'une opération dans un job
+	vector<int> opToJob;					// job associé à un numéro d'opération
+	vector<int> opToRank;					// rang d'une opération dans un job
 
 };
 

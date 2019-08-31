@@ -3,10 +3,13 @@
 
 #include "data/problem.h"
 #include "data/solution.h"
+#include "solver/solver_module.h"
 
-class LocalSearch {
+class LocalSearch : public SolverModule {
 public:
 	virtual Solution& operator()(const Problem& problem, Solution& solution) = 0;
+
+	int hit_count;
 };
 
 #endif // LOCAL_SEARCH_H_

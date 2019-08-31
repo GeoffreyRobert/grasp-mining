@@ -32,8 +32,8 @@ void Problem::LoadProblemFromFile(const string& file_path, const string& file_na
 		for (int oid=0; oid<nMac; oid++) {
 			operationNumber[jid][oid] = jid * nMac + oid;
 			nextOperation[jid * nMac + oid]	= jid * nMac + oid + 1;
-			jobForOp[operationNumber[jid][oid]]	= jid;
-			rankForOp[operationNumber[jid][oid]] = oid;
+			opToJob[operationNumber[jid][oid]]	= jid;
+			opToRank[operationNumber[jid][oid]] = oid;
 			file >> machineNumber[operationNumber[jid][oid]];
 			file >> timeOnMachine[operationNumber[jid][oid]];
 		}
@@ -54,8 +54,8 @@ void Problem::Init() {
 	nextOperation.resize(size);
 	machineNumber.resize(size);
 	timeOnMachine.resize(size);
-	jobForOp.resize(size);
-	rankForOp.resize(size);
+	opToJob.resize(size);
+	opToRank.resize(size);
 }
 
 
@@ -65,6 +65,6 @@ void Problem::Clear() {
 	nextOperation.clear();
 	machineNumber.clear();
 	timeOnMachine.clear();
-	jobForOp.clear();
-	rankForOp.clear();
+	opToJob.clear();
+	opToRank.clear();
 }
