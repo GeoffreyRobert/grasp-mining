@@ -15,32 +15,33 @@ BinatoHeuristic::BinatoHeuristic(double alpha) :
 	this->alpha = alpha;
 }
 
-void BinatoHeuristic::ResourcesAlloc(const Problem&) {
+void BinatoHeuristic::ResourcesAlloc(const Problem& problem) {
+    // Gestion des contraintes de dépendance
+    last_op_on_mac.resize(problem.nMac, -1);	// dernière op. traitée par mach.
+    num_ops_of_job.resize(problem.nJob, 0);	// nombre d'op. traitées par job
 
+    // Gestion de la Restricted Candidate List
+    rc_list.resize(problem.nJob);				// Restricted Candidate List
+
+    // Gestion des candidats à la RCL, de leur parent et du makespan
+    candidate_jobs.resize(problem.nJob);
+    tmp_parent_list.resize(problem.nJob);
+    tmp_mkspan_list.resize(problem.nJob);
+    tmp_is_on_mac.resize(problem.nJob, false);
 }
 
 Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution) {
-	int idx, jid, oid, mid;				// index des operations, job ID, operation ID, mach. ID
-
-	// Gestion des contraintes de dépendance
-	vector<int> last_op_on_mac(problem.nMac, -1);	// dernière op. traitée par mach.
-	vector<int> num_ops_of_job(problem.nJob, 0);	// nombre d'op. traitées par job
-
-	// Gestion de la Restricted Candidate List
-	vector<int> rc_list(problem.nJob);				// Restricted Candidate List
-	int chosen_job;									// index et job tiré de la RCL
+	// index des operations, job ID, operation ID, mach. ID
+    int jid, oid, mid;
 
 	// Gestion des candidats à la RCL, de leur parent et du makespan
-	int parent, parent_disj, date, date_disj;
-	vector<int> candidate_jobs(problem.nJob);
-	vector<int> tmp_parent_list(problem.nJob);
-	vector<int> tmp_mkspan_list(problem.nJob);
-	vector<bool> tmp_is_on_mac(problem.nJob, false);
+	int parent, parent_mac, date, date_disj;
 
 	// Gestion de la distribution des makespans
 	int min_makespan, max_makespan, split_value;
+    int chosen_job;									// index et job tiré de la RCL
 
-	for (idx = 0; idx < problem.size; ++idx) {		// pour chaque operation
+	for (int idx = 0; idx < problem.size; ++idx) {		// pour chaque operation
 		min_makespan = std::numeric_limits<int>::max();
 		max_makespan = 0;
 
@@ -51,22 +52,22 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 				oid = problem.operationNumber[jid][num_ops_of_job[jid]];
 				mid = problem.machineNumber[oid];
 
-				// initialisations durées+parent
-				date = 0; parent = -1; parent_disj = -1; date_disj = 0;
-
+                // initialisations durées+parent
+                parent = -1; date = 0;
 				if (num_ops_of_job[jid] != 0) {		// parent et date hors debut de job
 					parent = problem.prevOperation[oid];
 					date = solution.endDate[parent];
 				}
 
+                parent_mac = -1; date_disj = 0;
 				if (last_op_on_mac[mid] != -1) {	// recuperation parent et date disj.			
-					parent_disj = last_op_on_mac[mid];
-					date_disj = solution.endDate[parent_disj];
+					parent_mac = last_op_on_mac[mid];
+					date_disj = solution.endDate[parent_mac];
 				}
 
 				if (date < date_disj) {				// si la date disj est superieure
 					date = date_disj;				// on retient date disj
-					parent = parent_disj;			// on retient le parent
+					parent = parent_mac;			// on retient le parent
 					tmp_is_on_mac[jid] = true;
 				}
 				else {
@@ -89,7 +90,7 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 		}
 
 		// on choisit une zone de coupe par rapport au paramètre alpha
-		split_value = min_makespan + (int)(alpha * (max_makespan - min_makespan));
+		split_value = min_makespan + static_cast<int>(alpha * static_cast<double>(max_makespan - min_makespan));
 
 		// construction de la RCL à partir de la splitValue précédente
 		for (int c_job : candidate_jobs) {
@@ -99,7 +100,8 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 		}
 
 		// choix d'un job aléatoirement dans la RCL
-		chosen_job = ChooseRandomJob(rc_list);
+        std::uniform_int_distribution<int> uni(0, rc_list.size() - 1);
+        chosen_job = (int)rc_list[uni(generator)];
 
 		// récupération des identifiants operation, machine et parent
 		oid = problem.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
@@ -117,16 +119,11 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 
 		// stockage des dépendances
 		last_op_on_mac[mid] = oid;
-		num_ops_of_job[chosen_job] ++;
+		++num_ops_of_job[chosen_job];
 
 		// reinitialisation des structures de données
 		candidate_jobs.clear();
 		rc_list.clear();
 	}
 	return solution;
-}
-
-int BinatoHeuristic::ChooseRandomJob(const vector<int>& rc_list) {
-	std::uniform_int_distribution<int> uni(0, rc_list.size()-1);
-	return (int)rc_list[uni(generator)];
 }

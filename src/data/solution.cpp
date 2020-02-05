@@ -1,49 +1,58 @@
 #include <cassert>
 
 #include "solution.h"
-#include "solution_impl.h"
 
 using std::vector;
 
+OpUpdate& operator++(OpUpdate& up) {
+    return up = static_cast<OpUpdate>(static_cast<int>(up) + 1);
+}
+OpUpdate& operator--(OpUpdate& up) {
+    return up = static_cast<OpUpdate>(static_cast<int>(up) - 1);
+}
+
 Solution::Solution(const Problem& problem) :
-	problem(problem), implSol(AccessImpl(problem)),
-    startDate(&AccessImpl::getStartDate), endDate(&AccessImpl::getEndDate),
-    macParent(&AccessImpl::getMacParent), macChild(&AccessImpl::getMacChild),
-    isCritMachine(&AccessImpl::getIsCritMachine)
+	problem(problem), startDate(problem.size), endDate(problem.size),
+    macParent(problem.size), macChild(problem.size),
+    isCritMachine(problem.size)
 {
 }
 
 Solution::Solution(const Solution& other) :
-	problem(other.problem), implSol(other.implSol)
+	problem(other.problem), startDate(other.startDate), endDate(other.endDate),
+    macParent(other.macParent), macChild(other.macChild),
+    isCritMachine(other.isCritMachine)
 {
 }
 
 // Move assignment operator.
 Solution& Solution::operator=(Solution&& other) {
-	if (this != &other and *problem == *other.problem) {
+	if (this != &other && &problem == &other.problem) {
 		makespan = other.makespan;
 		criticalOp = other.criticalOp;
 
-		implSol = std::move(other.implSol);
-        return *this;
+        startDate = std::move(other.startDate);
+        endDate = std::move(other.endDate);
+        macParent = std::move(other.macParent);
+        macChild = std::move(other.macChild);
+        isCritMachine = std::move(other.isCritMachine);
     }
-    else {
-        return nullptr;
-    }
+    return *this;
 }
 
 // Copy assignment operator.
 Solution& Solution::operator=(const Solution& other) {
-	if (this != &other and *problem == *other.problem) {
+	if (this != &other && &problem == &other.problem) {
 		makespan = other.makespan;
 		criticalOp = other.criticalOp;
 
-		implSol = other.implSol;
-        return *this;
+        startDate = other.startDate;
+        endDate = other.endDate;
+        macParent = other.macParent;
+        macChild = other.macChild;
+        isCritMachine = other.isCritMachine;
     }
-    else {
-        return nullptr;
-    }
+    return *this;
 }
 
 
@@ -60,8 +69,9 @@ void Solution::AddOperation(int oid, int start, int end, int parent, bool is_on_
 	}
 }
 
-void Solution::DoChanges(vector<unsigned>& new_start_date, vector<unsigned>& new_end_date,
-						 vector<bool>& new_is_crit_mac, vector<OpUpdate>& is_changed) {
+void Solution::DoChanges(
+        vector<unsigned>& new_start_date, vector<unsigned>& new_end_date,
+		vector<bool>& new_is_crit_mac, vector<OpUpdate>& is_changed) {
 	for (int oid = 0; oid < problem.size; ++oid) {
 		if (is_changed[oid] == OpUpdate::Changed) {
 			startDate[oid] = new_start_date[oid];

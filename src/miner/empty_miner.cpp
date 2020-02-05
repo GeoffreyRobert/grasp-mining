@@ -6,3 +6,7 @@ void EmptyMiner::operator()(const Problem& problem, const vector<Solution>& solu
 vector<int> EmptyMiner::ProposePattern(const Problem& problem, int operation, double support) {
 	return vector<int>();
 }
+
+void EmptyMiner::ResourcesAlloc(const Problem& problem) {
+    return;
+}

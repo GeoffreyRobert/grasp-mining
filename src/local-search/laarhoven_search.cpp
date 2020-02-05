@@ -6,10 +6,11 @@
 using std::deque;
 
 void LaarhovenSearch::ResourcesAlloc(const Problem& pb) {
-	is_changed.resize(pb.size);
+	is_changed.resize(pb.size, OpUpdate::Unchanged);
 	new_start_date.resize(pb.size);
 	new_end_date.resize(pb.size);
 	new_is_crit_mac.resize(pb.size);
+    ops_to_move.set_capacity(pb.size);
 }
 
 Solution& LaarhovenSearch::operator()(const Problem& pb, Solution& sol) {
@@ -42,9 +43,10 @@ Solution& LaarhovenSearch::operator()(const Problem& pb, Solution& sol) {
 }
 
 
-bool LaarhovenSearch::CheckAndSwap(const Problem& pb, Solution& sol, int parent, int child) {
+bool LaarhovenSearch::CheckAndSwap(
+        const Problem& pb, Solution& sol, int parent, int child) {
     // cas qui allonge forcément le chemin critique
-	if (pb.prevOperation[child] != -1 and
+	if (pb.prevOperation[child] != -1 &&
 		sol.startDate[parent] < sol.endDate[pb.prevOperation[child]]) {
 		return false;
 	}
@@ -118,7 +120,7 @@ bool LaarhovenSearch::CheckAndSwap(const Problem& pb, Solution& sol, int parent,
 
     unsigned oid;
     unsigned date_old;
-    // stack vs queue en termes de perfs ? stack: locality, queue: moins de doubles accès
+    // stack vs queue en termes de perfs ? stack: localité, queue: moins de doubles accès
 	while (!ops_to_move.empty()) {
 		// récupération des identifiants
 		oid = ops_to_move.front();
@@ -170,7 +172,7 @@ bool LaarhovenSearch::CheckAndSwap(const Problem& pb, Solution& sol, int parent,
                 std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
                 return false;
             }
-            --is_changed[oid]; // ToChange -> Unchanged and ChangedToChange -> Changed
+            ++is_changed[oid]; // ToChange -> Unchanged and ChangedToChange -> Changed
 			continue;
 		}
 
@@ -179,9 +181,10 @@ bool LaarhovenSearch::CheckAndSwap(const Problem& pb, Solution& sol, int parent,
 		new_end_date[oid] = date_par + pb.timeOnMachine[oid];
 
         // vérification que la nouvelle solution reste sub-critique
-        if (pb.nextOperation[oid] == -1 and sol.macChild[oid] == -1 and new_end_date[oid] >= sol.makespan) {
+        if (pb.nextOperation[oid] == -1 && sol.macChild[oid] == -1 && new_end_date[oid] >= sol.makespan) {
             sol.SwapOperations(child, parent);
             std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
+
             return false;
         }
 

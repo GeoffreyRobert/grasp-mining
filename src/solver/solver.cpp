@@ -18,15 +18,16 @@ Solver::Solver(ConstHeuristic& init_heuristic, ConstHeuristic& const_heuristic,
 {}
 
 Solver::Solver(Solver&& other) :
-	constHeuristic(other.constHeuristic), initHeuristic(initHeuristic),
-	localSearch(other.localSearch), dataMiner(other.dataMiner)
+	constHeuristic(other.constHeuristic), initHeuristic(other.initHeuristic),
+	localSearch(other.localSearch), dataMiner(other.dataMiner),
+    runtime(other.runtime), populationSize(other.populationSize)
 {}
 
 void Solver::ModulesResourcesAlloc(const Problem& problem) {
-	initHeuristic.ResourcesAlloc();
-	constHeuristic.ResourcesAlloc();
-	localSearch.ResourcesAlloc();
-	dataMiner.ResourcesAlloc();
+	initHeuristic.ResourcesAlloc(problem);
+	constHeuristic.ResourcesAlloc(problem);
+	localSearch.ResourcesAlloc(problem);
+	dataMiner.ResourcesAlloc(problem);
 }
 
 Solution Solver::Solve(const Problem& problem) {

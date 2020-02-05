@@ -1,7 +1,9 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
+#include <chrono>
 #include <memory>
+#include <ratio>
 
 #include "const-heuristic/const_heuristic.h"
 #include "data/problem.h"

@@ -8,6 +8,6 @@ public:
 	void operator()(const Problem&, const vector<Solution>&);
 	vector<int> ProposePattern(const Problem&, int operation, double support);
 
-    virtual void ResourcesAlloc(const Problem&) = 0;
+    void ResourcesAlloc(const Problem&);
 };
 #endif // EMPTY_MINER_H_

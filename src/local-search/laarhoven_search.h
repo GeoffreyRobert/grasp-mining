@@ -1,7 +1,9 @@
 #ifndef LAARHOVEN_H_
 #define LAARHOVEN_H_
 
-#include <deque>
+#include <queue>
+
+#include "boost/circular_buffer.hpp"
 
 #include "local_search.h"
 #include "data/problem.h"
@@ -22,7 +24,7 @@ private:
     bool CheckAndSwap(const Problem&, Solution&, int parent, int child);
 
 	// stockage des operations à déplacer
-	deque<int> ops_to_move;
+    boost::circular_buffer<int> ops_to_move;
 
 	// stockage des modifications de la solution
 	unsigned tmp_critical, tmp_makespan;
