@@ -3,3 +3,7 @@ build/
 
 # Ignore VS folder
 .vs/
+
+# Ignore trash files
+TODO.txt
+JSSP_apprentissage.zip
