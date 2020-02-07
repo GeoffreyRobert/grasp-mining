@@ -16,7 +16,8 @@ class Problem {
 	// JOB SHOP BASE	****************************************************************
 	// *********************************************************************************
 public:
-	void LoadProblemFromFile(const string& file_path, const string& file_name);	// méthode pour extraire les données d'un fichier .txt
+    // méthode pour extraire les données d'un fichier .txt
+	void LoadProblemFromFile(const string& file_path);
 
 	void Clear();
 

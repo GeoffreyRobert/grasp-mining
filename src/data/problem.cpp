@@ -10,12 +10,12 @@
 	
 */
 
-void Problem::LoadProblemFromFile(const string& file_path, const string& file_name) {
+void Problem::LoadProblemFromFile(const string& file_path) {
 
 	// Nettoyage des structures de données
 	Clear();
 
-	std::ifstream file(file_path+file_name, std::ios::in);
+	std::ifstream file(file_path, std::ios::in);
 
 	// Taille du problème
 	file >> nJob;
@@ -39,7 +39,7 @@ void Problem::LoadProblemFromFile(const string& file_path, const string& file_na
 		}
 		nextOperation[jid * nMac + nMac - 1] = -1;
 		for (int oid=1; oid<nMac; oid++) {
-			prevOperation[jid*nMac+ oid] = jid*nMac + oid- 1;
+			prevOperation[jid*nMac + oid] = jid*nMac + oid - 1;
 		}
 	}
 	
