@@ -66,6 +66,6 @@ Solution& RandomPlacement::operator()(const Problem& problem, Solution& solution
 }
 
 int RandomPlacement::ChooseRandomJob(vector<int>& jobs_left) {
-	std::uniform_int_distribution<int> uni(0, jobs_left.size());
+	std::uniform_int_distribution<int> uni(0, static_cast<int>(jobs_left.size()));
 	return (int)jobs_left[uni(generator)];
 }

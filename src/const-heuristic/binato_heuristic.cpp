@@ -99,9 +99,9 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 			}
 		}
 
-		// choix d'un job aléatoirement dans la RCL
-        std::uniform_int_distribution<int> uni(0, rc_list.size() - 1);
-        chosen_job = (int)rc_list[uni(generator)];
+		// choix d'un job aléatoirement dans la RCL 
+        std::uniform_int_distribution<int> uni(0, static_cast<int>(rc_list.size()) - 1);
+        chosen_job = rc_list[uni(generator)];
 
 		// récupération des identifiants operation, machine et parent
 		oid = problem.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
