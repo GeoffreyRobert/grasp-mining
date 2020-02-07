@@ -1,3 +1,5 @@
+#include "gtest/gtest.h"
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -8,14 +10,12 @@
 
 using std::vector; using std::string;
 
-int main(int argc, char** argv) {
+TEST(LaarhovenTest, CompleteTest) {
 	const string file_path = "C:\\Users\\geoff\\EMSE\\Projets Ecole\\"
-		"Projet Recherche\\implementation\\"
-		"grasp-mining\\instances\\";
-	string problem_name = "laar_test.txt";
+		"Projet Recherche\\implementation\\grasp-mining\\instances\\laar_test.txt";
 
 	Problem problem;
-	problem.LoadProblemFromFile(file_path, problem_name);
+	problem.LoadProblemFromFile(file_path);
 
 	// construction d'une solution optimisable
 	Solution solution(problem);
@@ -65,11 +65,9 @@ int main(int argc, char** argv) {
 	LaarhovenSearch local_search;
     local_search.ResourcesAlloc(problem);
 	local_search(problem, solution);
-	
-	//if (true) {
-	//	std::cout << 'n';
-	//	return 0;
-	//}
-	//else return 1;
-	return 0;
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

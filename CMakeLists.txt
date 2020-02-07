@@ -6,6 +6,8 @@ project(grasp-mining
 )
 
 find_package(Boost)
+find_package(GTest REQUIRED)
+enable_testing()
 
 add_executable(grasp
 	src/main.cpp
@@ -29,19 +31,18 @@ target_include_directories(grasp
     PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
-#[[
+
 add_executable(laarhoven_test
-	src/tests/laarhoven_test.cpp
+	tests/laarhoven_test.cpp
 	src/data/problem.cpp
 	src/data/solution.cpp
 	src/local-search/laarhoven_search.cpp
 )
 
-target_compile_features(laarhoven_test
-	PRIVATE cxx_std_11
-)
-
 target_include_directories(laarhoven_test
 	PUBLIC src/
+    PUBLIC ${Boost_INCLUDE_DIRS}
 )
-]]
+
+target_link_libraries(laarhoven_test GTest::GTest GTest::Main)
+add_test(NAME example_test COMMAND laarhoven_test)
