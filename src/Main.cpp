@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 	for (const string& problem_name: instances) {
 		file << "problem name : " << problem_name << '\n';
 		// extraction des données
-		problem.LoadProblemFromFile(file_path + problem_name);
+		problem.LoadProblemFromPath(file_path + problem_name);
 		Solution best_sol(problem);
 		best_sol.makespan = std::numeric_limits<int>::max();
 		Solution sol(problem);

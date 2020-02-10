@@ -26,15 +26,16 @@ public:
 
 	Solution& operator=(const Solution& other);
 
-	Solution& operator=(Solution&& other);
+	Solution& operator=(Solution&& other) noexcept;
 
 	void AddOperation(int oid, int start, int end, int parent, bool is_on_mac);
 
 	void SwapOperations(int parent, int child);
 
 	void DoChanges(
-        vector<unsigned>& new_start_date, vector<unsigned>& new_end_date,
-	    vector<bool>& new_is_crit_mac, vector<OpUpdate>& is_changed);
+        unsigned new_critical, unsigned new_makespan,
+        vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date, 
+        vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac);
 
 	const Problem& problem;
 

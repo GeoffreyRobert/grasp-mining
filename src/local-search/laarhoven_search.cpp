@@ -25,11 +25,10 @@ Solution& LaarhovenSearch::operator()(const Problem& pb, Solution& sol) {
 		}
 		else if (CheckAndSwap(pb, sol, parent, operation)) {
             // on inverse deux ops. sur le chemin critique si réduction du makespan
-			sol.criticalOp = tmp_critical;
-			sol.makespan = tmp_makespan;
-			sol.DoChanges(new_start_date, new_end_date, new_is_crit_mac, is_changed);
+			sol.DoChanges(tmp_critical, tmp_makespan, is_changed,
+                new_start_date, new_end_date, new_is_crit_mac);
             std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
-			hit_count++;
+			hit_count++;            // TODO: sous preproc. pour debug
 			operation = sol.criticalOp;
 		}
 		else {
@@ -204,7 +203,7 @@ bool LaarhovenSearch::CheckAndSwap(
 		}
 	}
 
-    tmp_makespan = 0, tmp_critical = -1;
+    tmp_makespan = 0;
     for (int jid = 0, last_op; jid < pb.nJob; ++jid) {
         last_op = pb.operationNumber[jid].back();
         if (is_changed[last_op] >= OpUpdate::Changed) {

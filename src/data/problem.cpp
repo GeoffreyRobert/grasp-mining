@@ -1,5 +1,6 @@
 #include <fstream>
 #include <limits>
+#include <numeric>
 
 #include "problem.h"
 
@@ -10,40 +11,96 @@
 	
 */
 
-void Problem::LoadProblemFromFile(const string& file_path) {
+Problem::Problem() :
+    size(0), nJob(0), nMac(0), lowerBound(std::numeric_limits<int>::max()),
+    minTime(std::numeric_limits<int>::max()), maxTime(0)
+{
+}
+
+Problem::Problem(const string& file_path) {
+    LoadProblemFromPath(file_path);
+}
+
+void Problem::LoadProblemFromPath(const string& file_path) {
+
+    std::ifstream file(file_path, std::ios::in);
+    LoadProblemFromStream(file);
+
+    file.close(); // pas besoin de lire la suite
+}
+
+void Problem::LoadProblemFromStream(std::istream& input) {
 
 	// Nettoyage des structures de données
 	Clear();
 
-	std::ifstream file(file_path, std::ios::in);
-
 	// Taille du problème
-	file >> nJob;
-	file >> nMac;
-	file >> lowerBound;
-	size = nJob*nMac;
+	input >> nJob;
+    input >> nMac;
+    input >> lowerBound;
+	size = nJob * nMac;
 
 	// Initialisation des structures de données
 	Init();
 
+    // Initialisation des antécédents / successeurs
+    std::iota(prevOperation.begin(), prevOperation.end(), -1);
+    std::iota(nextOperation.begin(), nextOperation.end(), 1);
+
 	// Lecture des gammes+durées
+    int id = 0;     // id unique pour chaque opération
 	for (int jid=0; jid<nJob; jid++) {
-		prevOperation[jid*nMac] = -1;
-		for (int oid=0; oid<nMac; oid++) {
-			operationNumber[jid][oid] = jid * nMac + oid;
-			nextOperation[jid * nMac + oid]	= jid * nMac + oid + 1;
-			opToJob[operationNumber[jid][oid]]	= jid;
-			opToRank[operationNumber[jid][oid]] = oid;
-			file >> machineNumber[operationNumber[jid][oid]];
-			file >> timeOnMachine[operationNumber[jid][oid]];
+        prevOperation[id] = -1;             // 1ere op. du job sans antécédent
+		for (int oid=0; oid<nMac; oid++, id++) {
+			operationNumber[jid][oid] = id;
+			opToJob[id]	= jid;
+			opToRank[id] = oid;
+            input >> machineNumber[id];
+            input >> timeOnMachine[id];
+            if (timeOnMachine[id] > maxTime) maxTime = timeOnMachine[id];
+            if (timeOnMachine[id] < minTime) minTime = timeOnMachine[id];
 		}
-		nextOperation[jid * nMac + nMac - 1] = -1;
-		for (int oid=1; oid<nMac; oid++) {
-			prevOperation[jid*nMac + oid] = jid*nMac + oid - 1;
-		}
+		nextOperation[id - 1] = -1;         // dernière op. sans successeur
 	}
-	
-	file.close(); // pas besoin de lire la suite
+}
+
+
+string Problem::ToString() const {
+    string res;
+
+    res += std::to_string(nJob) + ' ';
+    res += std::to_string(nMac) + ' ';
+    res += std::to_string(lowerBound) + '\n';
+
+    int tmp = nMac;
+    unsigned mac_digits = 0;
+    while (tmp != 0) { tmp /= 10; mac_digits++; }
+    tmp = maxTime;
+    unsigned dur_digits = 0;
+    while (tmp != 0) { tmp /= 10; dur_digits++; }
+
+    int id = 0;
+    int space_pad;
+    string tmp_number;
+    for (int jid = 0; jid < nJob; jid++) {
+        for (int oid = 0; oid < nMac; oid++, id++) {
+            tmp_number = std::to_string(machineNumber[id]);
+            space_pad = 4 + mac_digits - tmp_number.length();
+            res += string(space_pad, ' ') + tmp_number;
+            tmp_number = std::to_string(timeOnMachine[id]);
+            space_pad = 1 + dur_digits - tmp_number.length();
+            res += string(space_pad, ' ') + tmp_number;
+        }
+        res += '\n';
+    }
+
+    return res;
+}
+
+
+std::ostream& operator<<(std::ostream& output, const Problem& problem) {
+    output << problem.ToString();
+    return output;
 }
 
 

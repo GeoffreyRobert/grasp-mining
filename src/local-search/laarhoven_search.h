@@ -27,7 +27,7 @@ private:
     boost::circular_buffer<int> ops_to_move;
 
 	// stockage des modifications de la solution
-	unsigned tmp_critical, tmp_makespan;
+	unsigned tmp_critical = 0, tmp_makespan = 0;
 	vector<OpUpdate> is_changed;
 	vector<unsigned> new_start_date;
 	vector<unsigned> new_end_date;

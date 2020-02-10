@@ -13,8 +13,7 @@ OpUpdate& operator--(OpUpdate& up) {
 
 Solution::Solution(const Problem& problem) :
 	problem(problem), startDate(problem.size), endDate(problem.size),
-    macParent(problem.size), macChild(problem.size),
-    isCritMachine(problem.size)
+    macParent(problem.size), macChild(problem.size), isCritMachine(problem.size)
 {
 }
 
@@ -26,7 +25,7 @@ Solution::Solution(const Solution& other) :
 }
 
 // Move assignment operator.
-Solution& Solution::operator=(Solution&& other) {
+Solution& Solution::operator=(Solution&& other) noexcept {
 	if (this != &other && &problem == &other.problem) {
 		makespan = other.makespan;
 		criticalOp = other.criticalOp;
@@ -56,7 +55,8 @@ Solution& Solution::operator=(const Solution& other) {
 }
 
 
-void Solution::AddOperation(int oid, int start, int end, int parent, bool is_on_mac) {
+void Solution::AddOperation(
+        int oid, int start, int end, int parent, bool is_on_mac) {
 	startDate[oid] = start;
 	endDate[oid] = end;
 	macParent[oid] = parent;
@@ -70,8 +70,9 @@ void Solution::AddOperation(int oid, int start, int end, int parent, bool is_on_
 }
 
 void Solution::DoChanges(
-        vector<unsigned>& new_start_date, vector<unsigned>& new_end_date,
-		vector<bool>& new_is_crit_mac, vector<OpUpdate>& is_changed) {
+        unsigned new_critical, unsigned new_makespan,
+        vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date,
+        vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac) {
 	for (int oid = 0; oid < problem.size; ++oid) {
 		if (is_changed[oid] == OpUpdate::Changed) {
 			startDate[oid] = new_start_date[oid];
