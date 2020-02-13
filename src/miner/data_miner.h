@@ -11,7 +11,8 @@ using std::vector;
 
 class DataMiner : public SolverModule {
 public:
-	virtual void operator()(const Problem&, const vector<Solution>&) = 0;
-	virtual vector<int> ProposePattern(const Problem&, int operation, double support) = 0;
+    using SolverModule::SolverModule;
+	virtual void operator()(const vector<Solution>&) = 0;
+	virtual vector<int> ProposePattern(int operation, double support) = 0;
 };
 #endif // DATA_MINER_H_

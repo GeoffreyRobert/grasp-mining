@@ -43,8 +43,8 @@ public:
 	unsigned int makespan = 0;
 	unsigned int criticalOp = 0;
 
-	vector<unsigned int> startDate;				// date de début de chaque opération
-    vector<unsigned int> endDate;				// date de fin de chaque operation
+	vector<unsigned> startDate;				// date de début de chaque opération
+    vector<unsigned> endDate;				// date de fin de chaque operation
 
     vector<int> macParent;						// parent sur la machine
     vector<bool> isCritMachine;					// parent critique sur la machine

@@ -4,18 +4,11 @@
 
 using std::vector; using std::pair;
 
-BinatoHeuristic::BinatoHeuristic() :
-	generator(std::random_device()())
-{
-}
-
-BinatoHeuristic::BinatoHeuristic(double alpha) :
-	generator(std::random_device()())
+BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha) :
+    ConstHeuristic(problem), generator(std::random_device()())
 {
 	this->alpha = alpha;
-}
 
-void BinatoHeuristic::ResourcesAlloc(const Problem& problem) {
     // Gestion des contraintes de dépendance
     last_op_on_mac.resize(problem.nMac, -1);	// dernière op. traitée par mach.
     num_ops_of_job.resize(problem.nJob, 0);	// nombre d'op. traitées par job
@@ -30,7 +23,8 @@ void BinatoHeuristic::ResourcesAlloc(const Problem& problem) {
     tmp_is_on_mac.resize(problem.nJob, false);
 }
 
-Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution) {
+Solution& BinatoHeuristic::operator()(Solution& solution)
+{
 	// index des operations, job ID, operation ID, mach. ID
     int jid, oid, mid;
 
@@ -41,21 +35,21 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 	int min_makespan, max_makespan, split_value;
     int chosen_job;									// index et job tiré de la RCL
 
-	for (int idx = 0; idx < problem.size; ++idx) {		// pour chaque operation
+	for (int idx = 0; idx < ref_pb.size; ++idx) {		// pour chaque operation
 		min_makespan = std::numeric_limits<int>::max();
 		max_makespan = 0;
 
 		// reinitialisation pour stockage des données
-		for (jid = 0; jid < problem.nJob; ++jid) {		// pour chaque job 
+		for (jid = 0; jid < ref_pb.nJob; ++jid) {		// pour chaque job 
 
-			if (num_ops_of_job[jid] < problem.nMac) {	// on ne prend pas les jobs terminés
-				oid = problem.operationNumber[jid][num_ops_of_job[jid]];
-				mid = problem.machineNumber[oid];
+			if (num_ops_of_job[jid] < ref_pb.nMac) {	// on ne prend pas les jobs terminés
+				oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
+				mid = ref_pb.machineNumber[oid];
 
                 // initialisations durées+parent
                 parent = -1; date = 0;
 				if (num_ops_of_job[jid] != 0) {		// parent et date hors debut de job
-					parent = problem.prevOperation[oid];
+					parent = ref_pb.prevOperation[oid];
 					date = solution.endDate[parent];
 				}
 
@@ -76,7 +70,7 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
 
 				// parent et date de fin de l'operation
 				tmp_parent_list[jid] = parent;
-				tmp_mkspan_list[jid] = date + problem.timeOnMachine[oid];
+				tmp_mkspan_list[jid] = date + ref_pb.timeOnMachine[oid];
 				candidate_jobs.push_back(jid);
 
 				if (min_makespan > tmp_mkspan_list[jid]) {
@@ -104,8 +98,8 @@ Solution& BinatoHeuristic::operator()(const Problem& problem, Solution& solution
         chosen_job = rc_list[uni(generator)];
 
 		// récupération des identifiants operation, machine et parent
-		oid = problem.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
-		mid = problem.machineNumber[oid];
+		oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
+		mid = ref_pb.machineNumber[oid];
 
 		// construction de la solution
 		if (tmp_parent_list[chosen_job] == -1) {

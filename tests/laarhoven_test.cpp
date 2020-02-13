@@ -68,7 +68,6 @@ protected:
 };
 
 TEST_F(SolutionTest, Laarhoven) {
-	LaarhovenSearch local_search;
-    local_search.ResourcesAlloc(problem);
-	local_search(problem, solution);
+	LaarhovenSearch local_search(problem);
+	local_search(solution);
 }

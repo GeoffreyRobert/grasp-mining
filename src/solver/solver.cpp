@@ -23,17 +23,8 @@ Solver::Solver(Solver&& other) :
     runtime(other.runtime), populationSize(other.populationSize)
 {}
 
-void Solver::ModulesResourcesAlloc(const Problem& problem) {
-	initHeuristic.ResourcesAlloc(problem);
-	constHeuristic.ResourcesAlloc(problem);
-	localSearch.ResourcesAlloc(problem);
-	dataMiner.ResourcesAlloc(problem);
-}
-
-Solution Solver::Solve(const Problem& problem) {
-	// allocation des ressources pour les différents modules du solver
-	ModulesResourcesAlloc(problem);
-
+Solution Solver::Solve(const Problem& problem)
+{
 	// solutions manipulées dans l'algo
 	Solution best_solution(problem);
 	vector<Solution> solution_set(populationSize, best_solution);
@@ -46,10 +37,10 @@ Solution Solver::Solve(const Problem& problem) {
 
 	/*while (populationSize++< populationSize && best_solution.makespan > problem.lowerBound && time cond) {*/
 	for (Solution& sol : solution_set)  {
-		initHeuristic(problem, sol);
+		initHeuristic(sol);
 
 		localSearch.hit_count = 0;
-		localSearch(problem, sol);
+		localSearch(sol);
 		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée
@@ -58,13 +49,13 @@ Solution Solver::Solve(const Problem& problem) {
 		}
 	}
 
-	dataMiner(problem, solution_set);
+	dataMiner(solution_set);
 
 	for (Solution& sol : solution_set) {
-		constHeuristic(problem, sol);
+		constHeuristic(sol);
 
 		localSearch.hit_count = 0;
-		localSearch(problem, sol);
+		localSearch(sol);
 		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée

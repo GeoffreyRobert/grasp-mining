@@ -4,35 +4,35 @@
 
 using std::vector;
 
-RandomPlacement::RandomPlacement() :
-	generator(std::random_device()())
+RandomPlacement::RandomPlacement(const Problem& problem) :
+	ConstHeuristic(problem), generator(std::random_device()())
 {
 }
 
-Solution& RandomPlacement::operator()(const Problem& problem, Solution& solution) {
+Solution& RandomPlacement::operator()(Solution& solution) {
 	int idx, jid, oid, mid;				// index des operations, job ID, operation ID, mach. ID
 
 	// Gestion des contraintes de dépendance
-	vector<int> last_op_on_mac(problem.nMac, -1);	// dernière op. traitée par mach.
-	vector<int> num_ops_of_job(problem.nJob, 0);	// nombre d'op. traitées par job
-	vector<int> jobs_left(problem.nJob);			// jobs restant à ajouter à la sol.
+	vector<int> last_op_on_mac(ref_pb.nMac, -1);	// dernière op. traitée par mach.
+	vector<int> num_ops_of_job(ref_pb.nJob, 0);	// nombre d'op. traitées par job
+	vector<int> jobs_left(ref_pb.nJob);			// jobs restant à ajouter à la sol.
 	iota(jobs_left.begin(), jobs_left.end(), 0);
 
 	int date, date_disj, parent, parent_disj;
 	bool is_on_mac;
 
-	for (idx = 0; idx < problem.size; ++idx) {
+	for (idx = 0; idx < ref_pb.size; ++idx) {
 		jid = ChooseRandomJob(jobs_left);			// generation d'un entier aléatoire
 
 		// récupération des identifiants operation, machine et parent
-		oid = problem.operationNumber[jid][num_ops_of_job[jid]];
-		mid = problem.machineNumber[oid];
+		oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
+		mid = ref_pb.machineNumber[oid];
 
 		// initialisations durées+parent
 		date = 0; parent = -1; parent_disj = -1; date_disj = 0;
 
 		if (num_ops_of_job[jid] != 0) {		// parent et date hors debut de job
-			parent = problem.prevOperation[oid];
+			parent = ref_pb.prevOperation[oid];
 			date = solution.endDate[parent];
 		}
 
@@ -51,13 +51,13 @@ Solution& RandomPlacement::operator()(const Problem& problem, Solution& solution
 		}
 
 		// construction de la solution
-		solution.AddOperation(oid, date, date + problem.timeOnMachine[oid],
+		solution.AddOperation(oid, date, date + ref_pb.timeOnMachine[oid],
 			last_op_on_mac[mid], is_on_mac);
 
 		// stockage des dépendances
 		last_op_on_mac[mid] = oid;
 		num_ops_of_job[jid] ++;
-		if (num_ops_of_job[jid] == problem.nMac) {
+		if (num_ops_of_job[jid] == ref_pb.nMac) {
 			jobs_left[jid] = jobs_left.back();			// on recupère le nombre de machines d'un job non terminé
 			jobs_left.pop_back();
 		}

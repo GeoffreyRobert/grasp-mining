@@ -7,9 +7,11 @@
 
 class LocalSearch : public SolverModule {
 public:
-	virtual Solution& operator()(const Problem& problem, Solution& solution) = 0;
+    using SolverModule::SolverModule;
+	virtual Solution& operator()(Solution& solution) = 0;
 
-	int hit_count;
+    // TODO: cacher avec preproc. pour debug
+    unsigned hit_count = 0;
 };
 
 #endif // LOCAL_SEARCH_H_

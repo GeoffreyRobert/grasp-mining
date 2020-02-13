@@ -7,8 +7,8 @@
 
 class RandomPlacement : public ConstHeuristic {
 public:
-	RandomPlacement();
-	Solution& operator()(const Problem&, Solution&);
+	RandomPlacement(const Problem&);
+	Solution& operator()(Solution&);
 
 private:
 	std::mt19937 generator;

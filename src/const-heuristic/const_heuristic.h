@@ -7,6 +7,7 @@
 
 class ConstHeuristic : public SolverModule {
 public:
-	virtual Solution& operator()(const Problem&, Solution&) = 0;
+    using SolverModule::SolverModule;
+	virtual Solution& operator()(Solution&) = 0;
 };
 #endif // CONST_HEURITIC_H_

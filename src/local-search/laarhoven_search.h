@@ -11,17 +11,21 @@
 
 using std::deque; using std::vector;
 
+// TODO: introduce policy for CheckAndSwap and erase the type
+// template<class OpsMover>
 class LaarhovenSearch : public LocalSearch {
 public:
-	void ResourcesAlloc(const Problem&);
+	LaarhovenSearch(const Problem&);
 
 	// Recherche locale le long du chemin critique
-	Solution& operator()(const Problem& problem, Solution& solution);
-
-	int hit_count = 0;
+	Solution& operator()(Solution& solution) override;
 
 private:
-    bool CheckAndSwap(const Problem&, Solution&, int parent, int child);
+    bool SwapAndEvaluate(Solution&, int parent, int child);
+    void SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child);
+    void CancelSwap(Solution& sol, unsigned parent, unsigned child);
+    void UpdateOp(const Solution& sol, unsigned oid);
+    void AddSuccessors(const Solution& sol, unsigned oid);
 
 	// stockage des operations à déplacer
     boost::circular_buffer<int> ops_to_move;

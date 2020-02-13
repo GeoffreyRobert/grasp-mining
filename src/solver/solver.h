@@ -16,9 +16,6 @@ public:
 
 	Solver(Solver&&);
 
-	// Allocation des ressources pour les modules
-	void ModulesResourcesAlloc(const Problem&);
-
 	// Resout une instance de JSSP et retourne une solution
 	Solution Solve(const Problem&);
 

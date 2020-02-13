@@ -11,7 +11,7 @@ using std::string;
 
 class ProblemTest : public ::testing::Test {
 protected:
-    string input =
+    const string input =
         "6 6 55\n"
         "    2  1    0  3    1  6    3  7    5  3    4  6\n"
         "    1  8    2  5    4 10    5 10    0 10    3  4\n"
@@ -19,10 +19,10 @@ protected:
         "    1  5    0  5    2  5    3  3    4  8    5  9\n"
         "    2  9    1  3    4  5    5  4    0  3    3  1\n"
         "    1  3    3  3    5  9    0  7    4  4    2  1\n";
-    int size = 36;
-    int nJob = 6;
-    int nMac = 6;
-    int lowerBound = 55;
+    const int size = 36;
+    const int nJob = 6;
+    const int nMac = 6;
+    const int lowerBound = 55;
 
 };
 

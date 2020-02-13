@@ -1,5 +1,5 @@
 #include "empty_search.h"
 
-Solution& EmptySearch::operator() (const Problem& problem, Solution& solution) {
+Solution& EmptySearch::operator() (Solution& solution) {
 	return solution;
 }

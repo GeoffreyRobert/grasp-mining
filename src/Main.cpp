@@ -37,13 +37,6 @@ int main(int argc, char** argv) {
 	std::ofstream file(file_path + "_results.txt", std::ios::out);
 	int max_replications = 1; // TEMPORAIRE
 
-	// Construction du solver
-	BinatoHeuristic init_heuristic(0.5);
-	BinatoHeuristic const_heuristic;
-	LaarhovenSearch local_search;
-	EmptyMiner data_miner;
-	Solver solver(init_heuristic, const_heuristic, local_search, data_miner, 20);
-
 	for (const string& problem_name: instances) {
 		file << "problem name : " << problem_name << '\n';
 		// extraction des données
@@ -52,7 +45,14 @@ int main(int argc, char** argv) {
 		best_sol.makespan = std::numeric_limits<int>::max();
 		Solution sol(problem);
 
-		for (int i = 0; i < max_replications; ++i) {
+        // Construction du solver
+        BinatoHeuristic init_heuristic(problem, 0.5);
+        BinatoHeuristic const_heuristic(problem);
+        LaarhovenSearch local_search(problem);
+        EmptyMiner data_miner(problem);
+        Solver solver(init_heuristic, const_heuristic, local_search, data_miner, 20);
+
+        for (int i = 0; i < max_replications; ++i) {
 			sol = solver.Solve(problem);
 			if (sol.makespan < best_sol.makespan) {
 				best_sol = sol;

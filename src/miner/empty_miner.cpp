@@ -1,12 +1,8 @@
 #include "empty_miner.h"
 
-void EmptyMiner::operator()(const Problem& problem, const vector<Solution>& solution) {
+void EmptyMiner::operator()(const vector<Solution>& solution) {
 }
 
-vector<int> EmptyMiner::ProposePattern(const Problem& problem, int operation, double support) {
+vector<int> EmptyMiner::ProposePattern(int operation, double support) {
 	return vector<int>();
-}
-
-void EmptyMiner::ResourcesAlloc(const Problem& problem) {
-    return;
 }

@@ -5,9 +5,8 @@
 
 class EmptyMiner : public DataMiner {
 public:
-	void operator()(const Problem&, const vector<Solution>&);
-	vector<int> ProposePattern(const Problem&, int operation, double support);
-
-    void ResourcesAlloc(const Problem&);
+    using DataMiner::DataMiner;
+	void operator()(const vector<Solution>&);
+	vector<int> ProposePattern(int operation, double support);
 };
 #endif // EMPTY_MINER_H_

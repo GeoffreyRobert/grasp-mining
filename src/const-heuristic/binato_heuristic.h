@@ -8,12 +8,10 @@
 
 class BinatoHeuristic : public ConstHeuristic {
 public:
-	BinatoHeuristic();
-	BinatoHeuristic(double alpha);
-	void ResourcesAlloc(const Problem&);
+	BinatoHeuristic(const Problem&, double alpha = 0.5);
 
 	// construction greedy randomisée
-	Solution& operator()(const Problem&, Solution&);
+	Solution& operator()(Solution&);
 
 private:
 	double alpha = 0.5;

@@ -3,8 +3,10 @@
 
 class SolverModule {
 public:
-	virtual void ResourcesAlloc(const Problem&) = 0;
+	SolverModule(const Problem& problem) : ref_pb(problem) {};
+
+protected:
+    const Problem& ref_pb;
 };
 
 #endif // SOLVER_MODULE_H_
-

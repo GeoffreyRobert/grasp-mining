@@ -14,23 +14,23 @@
 Problem::Problem() :
     size(0), nJob(0), nMac(0), lowerBound(std::numeric_limits<int>::max()),
     minTime(std::numeric_limits<int>::max()), maxTime(0)
-{
-}
+{}
 
-Problem::Problem(const string& file_path) {
+Problem::Problem(const string& file_path)
+{
     LoadProblemFromPath(file_path);
 }
 
-void Problem::LoadProblemFromPath(const string& file_path) {
-
+void Problem::LoadProblemFromPath(const string& file_path)
+{
     std::ifstream file(file_path, std::ios::in);
     LoadProblemFromStream(file);
 
     file.close(); // pas besoin de lire la suite
 }
 
-void Problem::LoadProblemFromStream(std::istream& input) {
-
+void Problem::LoadProblemFromStream(std::istream& input)
+{
 	// Nettoyage des structures de données
 	Clear();
 
@@ -65,7 +65,8 @@ void Problem::LoadProblemFromStream(std::istream& input) {
 }
 
 
-string Problem::ToString() const {
+string Problem::ToString() const
+{
     string res;
 
     res += std::to_string(nJob) + ' ';
@@ -98,13 +99,15 @@ string Problem::ToString() const {
 }
 
 
-std::ostream& operator<<(std::ostream& output, const Problem& problem) {
+std::ostream& operator<<(std::ostream& output, const Problem& problem)
+{
     output << problem.ToString();
     return output;
 }
 
 
-void Problem::Init() {
+void Problem::Init()
+{
 	operationNumber.resize(nJob);
 	for (vector<int>& v: operationNumber) v.resize(nMac);
 	prevOperation.resize(size);
@@ -116,7 +119,8 @@ void Problem::Init() {
 }
 
 
-void Problem::Clear() {
+void Problem::Clear()
+{
 	operationNumber.clear();
 	prevOperation.clear();
 	nextOperation.clear();

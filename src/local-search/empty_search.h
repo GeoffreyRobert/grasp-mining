@@ -5,6 +5,6 @@
 
 class EmptySearch : public LocalSearch {
 public:
-	Solution& operator()(const Problem&, Solution&);
+	Solution& operator()(Solution&);
 };
 #endif // !EMPTY_SEARCH_H_
