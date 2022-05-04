@@ -6,4 +6,3 @@ let
     ];
   };
 in pkgs.grasp-mining
-

@@ -1,4 +1,11 @@
-{ stdenv, lib, boost, cmake, gtest, static ? false }:
+{ lib, stdenv, boost, gtest
+, cmake
+, enableRelease ? true
+, enableDebug ? false
+, enableShared ? true
+, enableStatic ? !enableShared
+, ...
+}:
 
 stdenv.mkDerivation {
   name = "grasp-mining";
@@ -8,8 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ boost ];
   checkInputs = [ gtest ];
   cmakeFlags = [
-    (lib.optional static "-DBUILD_STATIC=1")
-    (lib.optional (!static) "-DENABLE_TESTS=1")
+    (lib.optional enableStatic "-DBUILD_STATIC=1")
+    (lib.optional (!enableStatic) "-DENABLE_TESTS=1")
   ];
   makeTarget = "grasp";
   enableParallelBuilding = true;
