@@ -1,0 +1,22 @@
+#003 [ tool ] Create an autosetup with envrc
+Req:
+  - All build and tests commands are accessible upon directory entry
+  - Document the tooling setup
+Task:
+  - Find the actual name of the tool
+
+#004 [ tool ] Setup nix for development
+Req:
+  - Have a command to start a build + tests
+Tasks:
+  - Split in to smaller tasks
+
+#005 [ test ] Run the program
+Req:
+  - Run to completion with no errors
+  - Produce results
+
+#006 [ code ] Cleanup obvious code smells
+Req:
+  - All files were inspected
+  - Code was simplified for better readability

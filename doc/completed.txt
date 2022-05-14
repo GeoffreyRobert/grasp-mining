@@ -1,0 +1,7 @@
+#001 [ tool ] Build the repository manually
+Req:
+  - Written document describing the best possible procedure without nix
+  - Written document on what is missing to complete a build
+Tasks:
+  - Find the usual cmake build commands
+Notes: cf doc/manual-build.md
