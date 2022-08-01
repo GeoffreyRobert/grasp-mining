@@ -2,27 +2,19 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/21.05";
-
-    utils.url = "github:numtide/flake-utils";
-    utils.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, utils }: utils.lib.eachDefaultSystem (system:
-    let pkgs = import nixpkgs {
-        system = "x86_64-linux";
-      };
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+      version = builtins.substring 0 0 self.lastModifiedDate;
     in {
-      devShell = pkgs.mkShell rec {
-        name = "grasp-mining";
-
-        packages = with pkgs; [
-          cmake
-          gtest
-        ];
-
-      defaultPackage = pkgs.callPackage ./derivation.nix {};
-
+      packages.${system}.default = pkgs.callPackage ./derivation.nix {
+        src = self;
+        inherit version;
+        stdenv = pkgs.gccStdenv;
       };
-    });
+    };
 }

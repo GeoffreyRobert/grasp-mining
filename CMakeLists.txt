@@ -5,6 +5,20 @@ project(grasp-mining
   LANGUAGES CXX
 )
 
+#############
+## Options ##
+#############
+
+option(ENABLE_INSTALL
+  "Should ${PROJECT_NAME} be added to the install list? Useful in included using add_subdirectory." ON)
+
+set(${PROJECT_NAME}_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+  CACHE STRING "Path to install ${PROJECT_NAME} Config*.cmake files to.")
+
+##################
+## Dependencies ##
+##################
+
 find_package(Boost)
 find_package(GTest REQUIRED)
 enable_testing()
@@ -27,7 +41,7 @@ target_compile_features(grasp
 )
 
 target_include_directories(grasp
-  PUBLIC src/
+  PRIVATE src/
   PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
@@ -48,3 +62,20 @@ target_include_directories(full_test
 
 target_link_libraries(full_test GTest::GTest GTest::Main)
 add_test(NAME full_test COMMAND laarhoven_test)
+
+###############
+## Packaging ##
+###############
+
+if(ENABLE_INSTALL)
+  install(
+    TARGETS grasp
+    EXPORT ${PROJECT_NAME}_Targets
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+  install(
+    EXPORT ${PROJECT_NAME}_Targets
+    NAMESPACE ${PROJECT_NAME}::
+    FILE ${PROJECT_NAME}Targets.cmake
+    DESTINATION ${${PROJECT_NAME}_INSTALL_CMAKEDIR})
+endif()

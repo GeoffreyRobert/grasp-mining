@@ -1,3 +1,8 @@
+#002 [ tool ] Build the project with nix flake
+Req:
+  - Written document describing a working procedure from clone
+Notes: cf doc/nix-build.md
+
 #001 [ tool ] Build the repository manually
 Req:
   - Written document describing the best possible procedure without nix
