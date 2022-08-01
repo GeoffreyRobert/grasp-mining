@@ -1,3 +1,10 @@
+#004 [ tool ] Setup nix for development
+Req:
+  - Have a command to start a build + tests
+Tasks:
+  - Split in to smaller tasks
+Notes: cf doc/dev-build.md
+
 #002 [ tool ] Build the project with nix flake
 Req:
   - Written document describing a working procedure from clone
