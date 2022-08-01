@@ -15,10 +15,19 @@ From the repo dir, do:
 direnv allow
 ```
 
+# ccls Setup
+You need to generate a `complile_commands.json` for ccls to be able to index the project.
+This file has to be at the root of the project. To generate the file, add
+`-DCMAKE_EXPORT_COMPILE_COMMANDS=1` when generating the build with cmake.
+Then, you should create a simlink at the root of your project pointing to that file:
+```
+ln -s ./build/compile_commands.json
+```
+
 # Regular build
 ```
 mkdir build && cd build
-cmake .. -G Ninja
+cmake -G Ninja ..
 cmake --build .
 ```
 

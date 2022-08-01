@@ -2,10 +2,11 @@
 build/
 result
 
-# Dev tools directories
+# Dev tools directories and files
 .vs/
 .ccls-cache/
 .direnv/
+compile_commands.json
 
 # Ignore trash files
 TODO.txt

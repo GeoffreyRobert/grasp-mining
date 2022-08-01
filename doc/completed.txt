@@ -1,3 +1,5 @@
+#008 [ tool ] Setup ccls to index the project
+
 #003 [ tool ] Create an autosetup with envrc
 Req:
   - All build and tests commands are accessible upon directory entry
