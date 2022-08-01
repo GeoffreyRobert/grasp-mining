@@ -1,8 +1,11 @@
 # Ignore build folder
 build/
+result
 
-# Ignore VS folder
+# Dev tools directories
 .vs/
+.ccls-cache/
+.direnv/
 
 # Ignore trash files
 TODO.txt

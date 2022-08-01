@@ -1,10 +1,3 @@
-#003 [ tool ] Create an autosetup with envrc
-Req:
-  - All build and tests commands are accessible upon directory entry
-  - Document the tooling setup
-Task:
-  - Find the actual name of the tool
-
 #005 [ test ] Run the program
 Req:
   - Run to completion with no errors

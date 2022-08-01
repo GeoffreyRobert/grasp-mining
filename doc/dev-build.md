@@ -2,6 +2,18 @@
 ```
 nix develop
 ```
+You can check that you properly droped in the dev shell using:
+```
+env | grep NIX
+```
+If you get a bunch of results, you should be ok.
+
+## Enable direnv
+You should automatically drop in the dev shell if you allow it in the repo.
+From the repo dir, do:
+```
+direnv allow
+```
 
 # Regular build
 ```
