@@ -21,6 +21,4 @@ Req:
   - No operations in the problem
   - 2-3 operations situations
 
-#015 [ code ] Fix test linter error
-
 #016

@@ -15,3 +15,8 @@ Call the following function in the command bar:
 ```
 lua vim.lsp.buf.formatting()
 ```
+
+# Missing includes
+We can't use ninja as our build manager since doing so will make cmake omit some includes.
+Those missing includes won't be added to the `compile_commands.json` and thus we will see
+errors using ccls.

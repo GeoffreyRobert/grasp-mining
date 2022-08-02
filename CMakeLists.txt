@@ -69,18 +69,10 @@ add_executable(full_test
   tests/main_test.cpp
   tests/laarhoven_test.cpp
   tests/problem_test.cpp
-  src/data/problem.cpp
-  src/data/solution.cpp
-  src/local-search/laarhoven_search.cpp
-)
-
-target_include_directories(full_test
-  PUBLIC src/
-  PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
 target_link_libraries(full_test
-  PRIVATE grasp-lib GTest::GTest GTest::Main)
+  PRIVATE grasp-lib GTest::gtest GTest::gtest_main)
 
 add_test(NAME full_test COMMAND laarhoven_test)
 
