@@ -24,6 +24,9 @@ Then, you should create a simlink at the root of your project pointing to that f
 ln -s ./build/compile_commands.json
 ```
 
+See `.config/nvim/lua/lsp.lua` for the configured mappings.
+See github.com/neovim/nvim-lspconfig#Suggested-configuration for details on the config.
+
 # Regular build
 ```
 mkdir build && cd build

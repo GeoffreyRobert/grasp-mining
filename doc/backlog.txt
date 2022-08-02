@@ -8,6 +8,11 @@ Req:
   - All files were inspected
   - Code was simplified for better readability
 
+#009 [ tool ] Setup clang format
+
+#010 [ algo ] Document the algorithms
+
 #007 [ test ] Fix the segfault in the tests
 Req:
   - Unit tests run to completion
+

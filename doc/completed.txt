@@ -1,3 +1,5 @@
+#011 [ tool ] Setup ccls shortcuts
+
 #008 [ tool ] Setup ccls to index the project
 
 #003 [ tool ] Create an autosetup with envrc
