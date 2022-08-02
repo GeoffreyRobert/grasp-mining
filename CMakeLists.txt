@@ -23,8 +23,11 @@ find_package(Boost)
 find_package(GTest REQUIRED)
 enable_testing()
 
-add_executable(grasp
-  src/main.cpp
+#############
+## Library ##
+#############
+
+add_library(grasp-lib
   src/const-heuristic/binato_heuristic.cpp
   src/const-heuristic/random_placement.cpp
   src/data/problem.cpp
@@ -36,14 +39,30 @@ add_executable(grasp
   src/solver/solver.cpp
 )
 
-target_compile_features(grasp
+target_compile_features(grasp-lib
   PRIVATE cxx_std_11
 )
 
-target_include_directories(grasp
-  PRIVATE src/
+target_include_directories(grasp-lib
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
   PUBLIC ${Boost_INCLUDE_DIRS}
 )
+
+################
+## Exexutable ##
+################
+
+add_executable(grasp
+  src/main.cpp
+)
+
+target_link_libraries(grasp
+  PRIVATE grasp-lib
+)
+
+################
+## Exexutable ##
+################
 
 # TODO: Link the tests to the library
 add_executable(full_test
@@ -60,7 +79,9 @@ target_include_directories(full_test
   PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
-target_link_libraries(full_test GTest::GTest GTest::Main)
+target_link_libraries(full_test
+  PRIVATE grasp-lib GTest::GTest GTest::Main)
+
 add_test(NAME full_test COMMAND laarhoven_test)
 
 ###############

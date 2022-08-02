@@ -1,3 +1,5 @@
+#014 [ code ] Extract the main as executable and create a lib
+
 #009 [ tool ] Setup clang format
 
 #011 [ tool ] Setup ccls shortcuts

@@ -14,3 +14,13 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
+#012 [ algo ] Use a global start and end operations to avoid bound tests
+
+#013 [ code ] Add unit tests for simple situations
+Req:
+  - No operations in the problem
+  - 2-3 operations situations
+
+#015 [ code ] Fix test linter error
+
+#016
