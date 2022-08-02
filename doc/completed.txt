@@ -1,3 +1,5 @@
+#009 [ tool ] Setup clang format
+
 #011 [ tool ] Setup ccls shortcuts
 
 #008 [ tool ] Setup ccls to index the project
