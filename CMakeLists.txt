@@ -15,6 +15,13 @@ option(ENABLE_INSTALL
 set(${PROJECT_NAME}_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
   CACHE STRING "Path to install ${PROJECT_NAME} Config*.cmake files to.")
 
+##############
+## Includes ##
+##############
+
+include(cmake/StandardProjectSettings.cmake)
+include(cmake/compiler.cmake)
+
 ##################
 ## Dependencies ##
 ##################
@@ -39,14 +46,13 @@ add_library(grasp-lib
   src/solver/solver.cpp
 )
 
-target_compile_features(grasp-lib
-  PRIVATE cxx_std_11
-)
-
 target_include_directories(grasp-lib
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
   PUBLIC ${Boost_INCLUDE_DIRS}
 )
+
+target_link_libraries(grasp-lib
+  PRIVATE compiler_settings)
 
 ################
 ## Exexutable ##
@@ -57,7 +63,7 @@ add_executable(grasp
 )
 
 target_link_libraries(grasp
-  PRIVATE grasp-lib
+  PRIVATE grasp-lib compiler_settings
 )
 
 ################
@@ -80,7 +86,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/instances/laar_test.txt ${CMAKE_BINARY_DIR}/instances/laar_test.txt)
 
 target_link_libraries(full_test
-  PRIVATE grasp-lib GTest::gtest GTest::gtest_main)
+  PRIVATE grasp-lib GTest::gtest GTest::gtest_main compiler_settings)
 
 add_test(NAME full_test COMMAND laarhoven_test)
 

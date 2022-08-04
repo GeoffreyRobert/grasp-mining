@@ -17,4 +17,4 @@ Req:
   - No operations in the problem
   - 2-3 operations situations
 
-#017
+#018 [ code ] Fix warnings

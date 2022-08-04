@@ -1,3 +1,5 @@
+#017 [ tool ] Disable optimizations on debug build
+
 #007 [ test ] Fix the segfault in the tests
 Req:
   - Unit tests run to completion
