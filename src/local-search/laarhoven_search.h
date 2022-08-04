@@ -22,7 +22,7 @@ public:
   Solution& operator()(Solution& solution) override;
 
 private:
-  bool SwapAndEvaluate(Solution&, int parent, int child);
+  std::pair<int, int> SwapAndEvaluate(Solution&, int parent, int child);
   void SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child);
   void CancelSwap(Solution& sol, unsigned parent, unsigned child);
   void UpdateOp(const Solution& sol, unsigned oid);
@@ -32,7 +32,6 @@ private:
   boost::circular_buffer<int> ops_to_move;
 
   // stockage des modifications de la solution
-  unsigned tmp_critical = 0, tmp_makespan = 0;
   vector<OpUpdate> is_changed;
   vector<unsigned> new_start_date;
   vector<unsigned> new_end_date;
