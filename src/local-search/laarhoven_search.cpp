@@ -57,18 +57,22 @@ bool LaarhovenSearch::SwapAndEvaluate(Solution& sol, int parent, int child)
   // inversion des 2 opérations sur le chemin critique
   SwapAndUpdateOps(sol, parent, child);
 
-  // initialisation des successeurs à traiter
-  if (ref_pb.nextOperation[parent] != -1) {
-    ops_to_move.push_back(ref_pb.nextOperation[parent]);
-    is_changed[ref_pb.nextOperation[parent]] = OpUpdate::ToChange;
+  // successeurs des operation swappees a traiter
+  int next_from_parent = ref_pb.nextOperation[parent];
+  if (next_from_parent != -1) {
+    ops_to_move.push_back(next_from_parent);
+    is_changed[next_from_parent] = OpUpdate::ToChange;
   }
-  if (sol.macChild[child] != -1) { // nécessairement child sur le chemin critique
-    ops_to_move.push_back(sol.macChild[child]);
-    is_changed[sol.macChild[child]] = OpUpdate::ToChange;
+  int next_from_child = ref_pb.nextOperation[child];
+  if (next_from_child != -1) {
+    ops_to_move.push_back(next_from_child);
+    is_changed[next_from_child] = OpUpdate::ToChange;
   }
-  if (ref_pb.nextOperation[child] != -1) {
-    ops_to_move.push_back(ref_pb.nextOperation[child]);
-    is_changed[ref_pb.nextOperation[child]] = OpUpdate::ToChange;
+  // operation suivante sur la machine des operations swappees
+  int next_on_machine = sol.macChild[parent];
+  if (next_on_machine != -1) {
+    ops_to_move.push_back(next_on_machine);
+    is_changed[next_on_machine] = OpUpdate::ToChange;
   }
 
   unsigned oid;
