@@ -32,7 +32,6 @@ int main(int argc, char** argv) {
 		file.close();
 	}
 
-	Problem problem;	// Déclaration d'un problème et d'un vecteur
 	//OutJS res;			// Structure de stockage des résultats
 	std::ofstream file(file_path + "_results.txt", std::ios::out);
 	int max_replications = 1; // TEMPORAIRE
@@ -40,7 +39,7 @@ int main(int argc, char** argv) {
 	for (const string& problem_name: instances) {
 		file << "problem name : " << problem_name << '\n';
 		// extraction des données
-		problem.LoadProblemFromPath(file_path + problem_name);
+		auto problem = LoadProblemFromPath(file_path + problem_name);
 		Solution best_sol(problem);
 		best_sol.makespan = std::numeric_limits<int>::max();
 		Solution sol(problem);
@@ -61,8 +60,6 @@ int main(int argc, char** argv) {
 		file << "problem: " << problem.lowerBound << " -- solution: "
 			<< best_sol.makespan << std::endl;
 		//writeGANTT_SVG(problem, b, problem_name);
-		
-		problem.Clear();
 	}
 
 	return 0;

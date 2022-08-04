@@ -29,8 +29,7 @@ protected:
 TEST_F(ProblemTest, StringStreamTest) {
 
     std::istringstream stream(input);
-    Problem problem;
-    problem.LoadProblemFromStream(stream);
+    Problem problem = LoadProblemFromStream(stream);
 
     EXPECT_EQ(problem.size, size);
     EXPECT_EQ(problem.nJob, nJob);
@@ -41,9 +40,8 @@ TEST_F(ProblemTest, StringStreamTest) {
 
 TEST_F(ProblemTest, FilePathTest) {
     const string file_path =
-        "C:\\Users\\geoff\\EMSE\\Projets Ecole\\Projet Recherche\\"
-        "implementation\\grasp-mining\\instances\\laar_test.txt";
-    Problem problem(file_path);
+        "BINARY_DIR/instances/laar_test.txt";
+    Problem problem = LoadProblemFromPath(file_path);
 
     EXPECT_EQ(problem.size, size);
     EXPECT_EQ(problem.nJob, nJob);

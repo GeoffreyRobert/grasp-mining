@@ -71,6 +71,14 @@ add_executable(full_test
   tests/problem_test.cpp
 )
 
+# Copy test files to output directory
+target_compile_definitions(full_test
+  PRIVATE BINARY_DIR=${CMAKE_BINARY_DIR})
+add_custom_command(
+  TARGET full_test POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/instances
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/instances/laar_test.txt ${CMAKE_BINARY_DIR}/instances/laar_test.txt)
+
 target_link_libraries(full_test
   PRIVATE grasp-lib GTest::gtest GTest::gtest_main)
 

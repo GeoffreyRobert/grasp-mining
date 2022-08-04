@@ -12,7 +12,17 @@ using std::string;
 class SolutionTest : public ::testing::Test {
 protected:
 
-    SolutionTest() : problem(file_path), solution(problem) {}
+    SolutionTest()
+      : problem(6, 6, 55,
+          std::vector<std::pair<int, int>> {
+            {2, 1},  {0, 3},  {1, 6},  {3, 7},  {5, 3},  {4, 6},
+            {1, 8},  {2, 5},  {4,10},  {5,10},  {0,10},  {3, 4},
+            {2, 5},  {3, 4},  {5, 8},  {0, 9},  {1, 1},  {4, 7},
+            {1, 5},  {0, 5},  {2, 5},  {3, 3},  {4, 8},  {5, 9}, 
+            {2, 9},  {1, 3},  {4, 5},  {5, 4},  {0, 3},  {3, 1},
+            {1, 3},  {3, 3},  {5, 9},  {0, 7},  {4, 4},  {2, 1},
+          })
+      , solution(problem) {}
 
     void SetUp() override {
         solution.startDate =
@@ -59,9 +69,6 @@ protected:
         solution.makespan = 70;
     }
 
-    const string file_path = 
-        "C:\\Users\\geoff\\EMSE\\Projets Ecole\\Projet Recherche\\"
-        "implementation\\grasp-mining\\instances\\laar_test.txt";
 	Problem problem;
 	Solution solution;
 
