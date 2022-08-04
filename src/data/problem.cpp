@@ -88,23 +88,26 @@ string Problem::ToString() const
   std::ostringstream res;
 
   res
-    << std::to_string(nJob) << ' '
-    << std::to_string(nMac) << ' '
-    << std::to_string(lowerBound) << '\n';
+    << ' ' << std::to_string(nJob)
+    << ' ' << std::to_string(nMac)
+    << ' ' << std::to_string(lowerBound) << '\n';
 
   unsigned mac_digits = std::to_string(nMac - 1).length();
   unsigned dur_digits = std::to_string(maxTime).length();
 
   int id = 0;
-  string space_pad = "    ";
   for (int jid = 0; jid < nJob; jid++) {
     for (int oid = 0; oid < nMac; oid++, id++) {
       res
-        << space_pad
+        << ' '
         << std::setw(mac_digits) << machineNumber[id] << ' '
         << std::setw(dur_digits) << timeOnMachine[id];
+      if (oid != nMac-1) {
+        res << ' ';
+      } else {
+        res << '\n';
+      }
     }
-    res << '\n';
   }
 
   return res.str();

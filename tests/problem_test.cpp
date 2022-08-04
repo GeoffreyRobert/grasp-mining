@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include <fstream>
 #include <sstream>
 #include <iostream>
 #include <string>
@@ -10,24 +11,21 @@
 
 using std::string;
 
-class ProblemTest : public ::testing::Test {
-protected:
+namespace {
+
+TEST(ProblemTest, StringStreamTest) {
     const string input =
-        "6 6 55\n"
-        "    2  1    0  3    1  6    3  7    5  3    4  6\n"
-        "    1  8    2  5    4 10    5 10    0 10    3  4\n"
-        "    2  5    3  4    5  8    0  9    1  1    4  7\n"
-        "    1  5    0  5    2  5    3  3    4  8    5  9\n"
-        "    2  9    1  3    4  5    5  4    0  3    3  1\n"
-        "    1  3    3  3    5  9    0  7    4  4    2  1\n";
+        " 6 6 55\n"
+        " 2  1  0  3  1  6  3  7  5  3  4  6\n"
+        " 1  8  2  5  4 10  5 10  0 10  3  4\n"
+        " 2  5  3  4  5  8  0  9  1  1  4  7\n"
+        " 1  5  0  5  2  5  3  3  4  8  5  9\n"
+        " 2  9  1  3  4  5  5  4  0  3  3  1\n"
+        " 1  3  3  3  5  9  0  7  4  4  2  1\n";
     const int size = 36;
     const int nJob = 6;
     const int nMac = 6;
     const int lowerBound = 55;
-
-};
-
-TEST_F(ProblemTest, StringStreamTest) {
 
     std::istringstream stream(input);
     Problem problem = LoadProblemFromStream(stream);
@@ -39,14 +37,15 @@ TEST_F(ProblemTest, StringStreamTest) {
     ASSERT_EQ(problem.ToString(), input);
 }
 
-TEST_F(ProblemTest, FilePathTest) {
+TEST(ProblemTest, FilePathTest) {
     const string file_path =
         string(BINARY_DIR) + "/instances/laar_test.txt";
-    Problem problem = LoadProblemFromPath(file_path);
+    std::stringstream stream_input;
+    stream_input << std::ifstream(file_path, std::ios::in).rdbuf();
 
-    EXPECT_EQ(problem.size, size);
-    EXPECT_EQ(problem.nJob, nJob);
-    EXPECT_EQ(problem.nMac, nMac);
-    EXPECT_EQ(problem.lowerBound, lowerBound);
-    ASSERT_EQ(problem.ToString(), input);
+    auto problem = LoadProblemFromStream(stream_input);
+
+    ASSERT_EQ(problem.ToString(), stream_input.str());
 }
+
+} // namespace
