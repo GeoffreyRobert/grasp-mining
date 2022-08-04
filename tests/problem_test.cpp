@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <sstream>
+#include <iostream>
 #include <string>
 
 #include "data/problem.h"
@@ -40,7 +41,7 @@ TEST_F(ProblemTest, StringStreamTest) {
 
 TEST_F(ProblemTest, FilePathTest) {
     const string file_path =
-        "BINARY_DIR/instances/laar_test.txt";
+        string(BINARY_DIR) + "/instances/laar_test.txt";
     Problem problem = LoadProblemFromPath(file_path);
 
     EXPECT_EQ(problem.size, size);

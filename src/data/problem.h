@@ -20,7 +20,7 @@ class Problem {
   // JOB SHOP BASE	********************************************************
   // *************************************************************************
 public:
-  Problem(int nJob, int nMac, int lowerBound, std::vector<std::pair<int, int>> operationSpecs);
+  Problem(int nJob, int nMac, int lowerBound, vector<std::pair<int, int>> operationSpecs);
 
   string ToString() const;
 

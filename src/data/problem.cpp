@@ -1,4 +1,6 @@
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <limits>
 #include <numeric>
 
@@ -72,12 +74,10 @@ Problem LoadProblemFromStream(std::istream& input)
   int size = nJob * nMac;
 
   // Lecture des gammes+durées
-  auto operationsSpecs = std::vector<std::pair<int ,int>>();
-  operationsSpecs.resize(size);
-  for (auto operationSpecs : operationsSpecs) {
-    int machineNumber, timeOnMachine;
-    input >> machineNumber;
-    input >> timeOnMachine;
+  auto operationsSpecs = std::vector<std::pair<int ,int>>(size);
+  for (auto& operationSpecs : operationsSpecs) {
+    input >> operationSpecs.first;
+    input >> operationSpecs.second;
   }
 
   return Problem(nJob, nMac, lowerBound, operationsSpecs);
@@ -85,41 +85,29 @@ Problem LoadProblemFromStream(std::istream& input)
 
 string Problem::ToString() const
 {
-  string res;
+  std::ostringstream res;
 
-  res += std::to_string(nJob) + ' ';
-  res += std::to_string(nMac) + ' ';
-  res += std::to_string(lowerBound) + '\n';
+  res
+    << std::to_string(nJob) << ' '
+    << std::to_string(nMac) << ' '
+    << std::to_string(lowerBound) << '\n';
 
-  int tmp = nMac;
-  unsigned mac_digits = 0;
-  while (tmp != 0) {
-    tmp /= 10;
-    mac_digits++;
-  }
-  tmp = maxTime;
-  unsigned dur_digits = 0;
-  while (tmp != 0) {
-    tmp /= 10;
-    dur_digits++;
-  }
+  unsigned mac_digits = std::to_string(nMac - 1).length();
+  unsigned dur_digits = std::to_string(maxTime).length();
 
   int id = 0;
-  int space_pad;
-  string tmp_number;
+  string space_pad = "    ";
   for (int jid = 0; jid < nJob; jid++) {
     for (int oid = 0; oid < nMac; oid++, id++) {
-      tmp_number = std::to_string(machineNumber[id]);
-      space_pad = 4 + mac_digits - tmp_number.length();
-      res += string(space_pad, ' ') + tmp_number;
-      tmp_number = std::to_string(timeOnMachine[id]);
-      space_pad = 1 + dur_digits - tmp_number.length();
-      res += string(space_pad, ' ') + tmp_number;
+      res
+        << space_pad
+        << std::setw(mac_digits) << machineNumber[id] << ' '
+        << std::setw(dur_digits) << timeOnMachine[id];
     }
-    res += '\n';
+    res << '\n';
   }
 
-  return res;
+  return res.str();
 }
 
 std::ostream& operator<<(std::ostream& output, const Problem& problem)

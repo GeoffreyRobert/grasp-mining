@@ -8,10 +8,6 @@ Req:
   - All files were inspected
   - Code was simplified for better readability
 
-#007 [ test ] Fix the segfault in the tests
-Req:
-  - Unit tests run to completion
-
 #010 [ algo ] Document the algorithms
 
 #012 [ algo ] Use a global start and end operations to avoid bound tests

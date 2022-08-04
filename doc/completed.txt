@@ -1,3 +1,7 @@
+#007 [ test ] Fix the segfault in the tests
+Req:
+  - Unit tests run to completion
+
 #016 [ code ] Make the problem class testable
 
 #015 [ code ] Fix test files google test headers errors

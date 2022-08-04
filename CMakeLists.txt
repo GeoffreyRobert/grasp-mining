@@ -73,7 +73,7 @@ add_executable(full_test
 
 # Copy test files to output directory
 target_compile_definitions(full_test
-  PRIVATE BINARY_DIR=${CMAKE_BINARY_DIR})
+  PRIVATE BINARY_DIR=\"${CMAKE_BINARY_DIR}\")
 add_custom_command(
   TARGET full_test POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/instances
