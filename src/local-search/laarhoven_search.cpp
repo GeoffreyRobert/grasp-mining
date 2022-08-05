@@ -26,14 +26,12 @@ Solution& LaarhovenSearch::operator()(Solution& sol)
       // on ignore deux ops. dans le meme job
       operation = ref_pb.prevOperation[operation];
     } else {
-      auto [new_critical, new_makespan] = SwapAndEvaluate(sol, parent, operation);
+      auto [updated_critical, updated_makespan] = SwapAndEvaluate(sol, parent, operation);
       // on inverse deux ops. sur le chemin critique si réduction du makespan
-      if (new_critical != -1 && new_makespan <= sol.makespan) {
-        sol.DoChanges(new_critical, new_makespan, is_changed,
-          new_start_date, new_end_date, new_is_crit_mac);
+      if (updated_critical != -1 && updated_makespan < sol.makespan) {
+        operation = sol.DoChanges(is_changed, new_start_date, new_end_date, new_is_crit_mac);
         std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
         hit_count++; // TODO: sous preproc. pour debug
-        operation = sol.criticalOp;
       } else {
         // on continue sur le chemin critique
         operation = parent;
@@ -45,6 +43,7 @@ Solution& LaarhovenSearch::operator()(Solution& sol)
 }
 
 /** En charge de la sélection des opérations à examiner
+ *  Returns the id of the operation that was updated and is scheduled the latest
  **/
 std::pair<int, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, int parent, int child)
 {
@@ -53,12 +52,12 @@ std::pair<int, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, int parent, 
     return {-1, sol.makespan};
   }
 
-  // initialisation de l'op. crit. et du makespan
-  unsigned new_critical = sol.criticalOp;
-  unsigned new_makespan = sol.makespan;
-
   // inversion des 2 opérations sur le chemin critique
   SwapAndUpdateOps(sol, parent, child);
+
+  // initialisation de l'op. crit. et du makespan
+  unsigned updated_critical = parent; // "rightmost" operation among all updated
+  unsigned updated_makespan = new_end_date[parent];
 
   // successeurs des operation swappees a traiter
   int next_from_parent = ref_pb.nextOperation[parent];
@@ -90,10 +89,10 @@ std::pair<int, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, int parent, 
 
     // vérification que la nouvelle solution reste sub-critique
     if (ref_pb.nextOperation[oid] == -1 && sol.macChild[oid] == -1) {
-      if (new_end_date[oid] >= new_makespan) {
-        new_critical = oid;
-        new_makespan = new_end_date[oid];
-        if (new_makespan >= sol.makespan) {
+      if (new_end_date[oid] >= updated_makespan) {
+        updated_critical = oid;
+        updated_makespan = new_end_date[oid];
+        if (updated_makespan >= sol.makespan) {
           CancelSwap(sol, parent, child);
           break;
         }
@@ -101,7 +100,7 @@ std::pair<int, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, int parent, 
     }
     AddSuccessors(sol, oid);
   }
-  return {new_critical, new_makespan};
+  return {updated_critical, updated_makespan};
 }
 
 void LaarhovenSearch::SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child)

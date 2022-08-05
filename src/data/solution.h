@@ -32,8 +32,7 @@ public:
 
 	void SwapOperations(int parent, int child);
 
-	void DoChanges(
-        unsigned new_critical, unsigned new_makespan,
+	unsigned DoChanges(
         vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date, 
         vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac);
 

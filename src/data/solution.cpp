@@ -69,8 +69,7 @@ void Solution::AddOperation(
 	}
 }
 
-void Solution::DoChanges(
-        unsigned new_critical, unsigned new_makespan,
+unsigned Solution::DoChanges(
         vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date,
         vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac) {
 	for (int oid = 0; oid < problem.size; ++oid) {
@@ -79,8 +78,20 @@ void Solution::DoChanges(
 			endDate[oid] = new_end_date[oid];
 			isCritMachine[oid] = new_is_crit_mac[oid];
 		}
-        // throw une exception ici s'il reste des opérations non traitées ?
 	}
+  
+  // Search the new critical op
+  unsigned last_op_of_job = problem.nMac - 1;
+  makespan = 0;
+  for (unsigned j = 0; j < problem.nJob; ++j) {
+    if (endDate[last_op_of_job] > makespan) {
+      makespan = endDate[last_op_of_job];
+      criticalOp = last_op_of_job;
+    }
+    last_op_of_job += problem.nMac;
+  }
+
+  return criticalOp;
 }
 
 void Solution::SwapOperations(int parent, int child) {
