@@ -12,7 +12,7 @@
                     - à modifier pour rendre plus generique
 */
 
-Problem::Problem(int nJob, int nMac, int lowerBound, std::vector<std::pair<int , int>> operationsSpecs)
+Problem::Problem(unsigned nJob, unsigned nMac, int lowerBound, std::vector<std::pair<unsigned, int>> operationsSpecs)
   : size(nJob * nMac)
   , nJob(nJob)
   , nMac(nMac)
@@ -22,7 +22,7 @@ Problem::Problem(int nJob, int nMac, int lowerBound, std::vector<std::pair<int ,
 {
   // Initialisation des structures de données
   operationNumber.resize(nJob);
-  for (vector<int>& v : operationNumber)
+  for (auto& v : operationNumber)
     v.resize(nMac);
   prevOperation.resize(size);
   nextOperation.resize(size);
@@ -36,10 +36,10 @@ Problem::Problem(int nJob, int nMac, int lowerBound, std::vector<std::pair<int ,
   std::iota(nextOperation.begin(), nextOperation.end(), 1);
 
   // Lecture des gammes+durées
-  int id = 0; // id unique pour chaque opération
-  for (int jid = 0; jid < nJob; jid++) {
+  unsigned id = 0; // id unique pour chaque opération
+  for (unsigned jid = 0; jid < nJob; jid++) {
     prevOperation[id] = -1; // 1ere op. du job sans antécédent
-    for (int oid = 0; oid < nMac; oid++, id++) {
+    for (unsigned oid = 0; oid < nMac; oid++, id++) {
       operationNumber[jid][oid] = id;
       opToJob[id] = jid;
       opToRank[id] = oid;
@@ -67,14 +67,15 @@ Problem LoadProblemFromPath(const string& file_path)
 Problem LoadProblemFromStream(std::istream& input)
 {
   // Taille du problème
-  int nJob, nMac, lowerBound;
+  unsigned nJob, nMac;
+  int lowerBound;
   input >> nJob;
   input >> nMac;
   input >> lowerBound;
-  int size = nJob * nMac;
+  unsigned size = nJob * nMac;
 
   // Lecture des gammes+durées
-  auto operationsSpecs = std::vector<std::pair<int ,int>>(size);
+  auto operationsSpecs = std::vector<std::pair<unsigned ,int>>(size);
   for (auto& operationSpecs : operationsSpecs) {
     input >> operationSpecs.first;
     input >> operationSpecs.second;
@@ -92,12 +93,12 @@ string Problem::ToString() const
     << ' ' << std::to_string(nMac)
     << ' ' << std::to_string(lowerBound) << '\n';
 
-  unsigned mac_digits = std::to_string(nMac - 1).length();
-  unsigned dur_digits = std::to_string(maxTime).length();
+  int mac_digits = static_cast<int>(std::to_string(nMac - 1).length());
+  int dur_digits = static_cast<int>(std::to_string(maxTime).length());
 
-  int id = 0;
-  for (int jid = 0; jid < nJob; jid++) {
-    for (int oid = 0; oid < nMac; oid++, id++) {
+  unsigned id = 0;
+  for (unsigned jid = 0; jid < nJob; jid++) {
+    for (unsigned oid = 0; oid < nMac; oid++, id++) {
       res
         << ' '
         << std::setw(mac_digits) << machineNumber[id] << ' '

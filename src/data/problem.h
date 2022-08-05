@@ -20,7 +20,7 @@ class Problem {
   // JOB SHOP BASE	********************************************************
   // *************************************************************************
 public:
-  Problem(int nJob, int nMac, int lowerBound, vector<std::pair<int, int>> operationSpecs);
+  Problem(unsigned nJob, unsigned nMac, int lowerBound, vector<std::pair<unsigned, int>> operationSpecs);
 
   string ToString() const;
 
@@ -29,11 +29,11 @@ public:
   unsigned size; // taille du problème
   unsigned nJob; // nombre de jobs
   unsigned nMac; // nombre de machines
-  unsigned lowerBound; // borne inf du problème
+  int lowerBound; // borne inf du problème
 
   // caractéristiques des jobs
-  unsigned minTime;
-  unsigned maxTime;
+  int minTime;
+  int maxTime;
 
   vector<vector<unsigned>> operationNumber; // numéro du sommet traité (job, op)
   vector<int> prevOperation; // numéro de l'op. suivante dans le job
