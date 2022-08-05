@@ -199,6 +199,7 @@ void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
   // nouvelles valeurs
   new_start_date[oid] = date_par;
   new_end_date[oid] = date_par + ref_pb.timeOnMachine[oid];
+  is_changed[oid] = OpUpdate::Changed;
 }
 
 void LaarhovenSearch::AddSuccessors(const Solution& sol, unsigned oid)
