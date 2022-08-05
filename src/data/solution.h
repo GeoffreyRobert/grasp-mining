@@ -28,7 +28,7 @@ public:
 
 	Solution& operator=(Solution&& other) noexcept;
 
-	void AddOperation(int oid, int start, int end, int parent, bool is_on_mac);
+	void AddOperation(unsigned oid, int start, int end, int parent, bool is_on_mac);
 
 	void SwapOperations(int parent, int child);
 
@@ -42,8 +42,8 @@ public:
 	unsigned int makespan = 0;
 	unsigned int criticalOp = 0;
 
-	vector<unsigned> startDate;				// date de début de chaque opération
-    vector<unsigned> endDate;				// date de fin de chaque operation
+	vector<int> startDate;				// date de début de chaque opération
+    vector<int> endDate;				// date de fin de chaque operation
 
     vector<int> macParent;						// parent sur la machine
     vector<bool> isCritMachine;					// parent critique sur la machine

@@ -2,122 +2,112 @@
 
 #include "binato_heuristic.h"
 
-using std::vector; using std::pair;
+using std::pair;
+using std::vector;
 
-BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha) :
-    ConstHeuristic(problem), generator(std::random_device()())
+BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha)
+  : ConstHeuristic(problem)
+  , _alpha(alpha)
+  , generator(std::random_device()())
 {
-	this->alpha = alpha;
+  // Gestion des contraintes de dépendance
+  last_op_on_mac.resize(problem.nMac, -1); // dernière op. traitée par mach.
+  num_ops_of_job.resize(problem.nJob, 0); // nombre d'op. traitées par job
 
-    // Gestion des contraintes de dépendance
-    last_op_on_mac.resize(problem.nMac, -1);	// dernière op. traitée par mach.
-    num_ops_of_job.resize(problem.nJob, 0);	// nombre d'op. traitées par job
+  // Gestion de la Restricted Candidate List
+  rc_list.resize(problem.nJob); // Restricted Candidate List
 
-    // Gestion de la Restricted Candidate List
-    rc_list.resize(problem.nJob);				// Restricted Candidate List
-
-    // Gestion des candidats à la RCL, de leur parent et du makespan
-    candidate_jobs.resize(problem.nJob);
-    tmp_parent_list.resize(problem.nJob);
-    tmp_mkspan_list.resize(problem.nJob);
-    tmp_is_on_mac.resize(problem.nJob, false);
+  // Gestion des candidats à la RCL, de leur parent et du makespan
+  candidate_jobs.resize(problem.nJob);
+  tmp_parent_list.resize(problem.nJob);
+  tmp_mkspan_list.resize(problem.nJob);
+  tmp_is_on_mac.resize(problem.nJob, false);
 }
 
 Solution& BinatoHeuristic::operator()(Solution& solution)
 {
-	// index des operations, job ID, operation ID, mach. ID
-    int jid, oid, mid;
+  for (unsigned idx = 0; idx < ref_pb.size; ++idx) { // pour chaque operation
+    int min_makespan = std::numeric_limits<int>::max();
+    int max_makespan = 0;
 
-	// Gestion des candidats à la RCL, de leur parent et du makespan
-	int parent, parent_mac, date, date_disj;
+    // reinitialisation pour stockage des données
+    for (unsigned jid = 0; jid < ref_pb.nJob; ++jid) { // pour chaque job
 
-	// Gestion de la distribution des makespans
-	int min_makespan, max_makespan, split_value;
-    int chosen_job;									// index et job tiré de la RCL
+      if (num_ops_of_job[jid] < ref_pb.nMac) { // on ne prend pas les jobs terminés
+        unsigned oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
+        unsigned mid = ref_pb.machineNumber[oid];
 
-	for (int idx = 0; idx < ref_pb.size; ++idx) {		// pour chaque operation
-		min_makespan = std::numeric_limits<int>::max();
-		max_makespan = 0;
+        // initialisations durées+parent
+        int parent = -1;
+        int date = 0;
+        if (num_ops_of_job[jid] != 0) { // parent et date hors debut de job
+          parent = ref_pb.prevOperation[oid];
+          date = solution.endDate[parent];
+        }
 
-		// reinitialisation pour stockage des données
-		for (jid = 0; jid < ref_pb.nJob; ++jid) {		// pour chaque job 
+        int parent_mac = -1;
+        int date_disj = 0;
+        if (last_op_on_mac[mid] != -1) { // recuperation parent et date disj.
+          parent_mac = last_op_on_mac[mid];
+          date_disj = solution.endDate[parent_mac];
+        }
 
-			if (num_ops_of_job[jid] < ref_pb.nMac) {	// on ne prend pas les jobs terminés
-				oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
-				mid = ref_pb.machineNumber[oid];
+        if (date < date_disj) { // si la date disj est superieure
+          date = date_disj; // on retient date disj
+          parent = parent_mac; // on retient le parent
+          tmp_is_on_mac[jid] = true;
+        } else {
+          tmp_is_on_mac[jid] = false;
+        }
 
-                // initialisations durées+parent
-                parent = -1; date = 0;
-				if (num_ops_of_job[jid] != 0) {		// parent et date hors debut de job
-					parent = ref_pb.prevOperation[oid];
-					date = solution.endDate[parent];
-				}
+        // parent et date de fin de l'operation
+        tmp_parent_list[jid] = parent;
+        tmp_mkspan_list[jid] = date + ref_pb.timeOnMachine[oid];
+        candidate_jobs.push_back(jid);
 
-                parent_mac = -1; date_disj = 0;
-				if (last_op_on_mac[mid] != -1) {	// recuperation parent et date disj.			
-					parent_mac = last_op_on_mac[mid];
-					date_disj = solution.endDate[parent_mac];
-				}
+        if (min_makespan > tmp_mkspan_list[jid]) {
+          min_makespan = tmp_mkspan_list[jid];
+        }
 
-				if (date < date_disj) {				// si la date disj est superieure
-					date = date_disj;				// on retient date disj
-					parent = parent_mac;			// on retient le parent
-					tmp_is_on_mac[jid] = true;
-				}
-				else {
-					tmp_is_on_mac[jid] = false;
-				}
+        if (max_makespan < tmp_mkspan_list[jid]) {
+          max_makespan = tmp_mkspan_list[jid];
+        }
+      }
+    }
 
-				// parent et date de fin de l'operation
-				tmp_parent_list[jid] = parent;
-				tmp_mkspan_list[jid] = date + ref_pb.timeOnMachine[oid];
-				candidate_jobs.push_back(jid);
+    // on choisit une zone de coupe par rapport au paramètre alpha
+    int split_value = min_makespan + static_cast<int>(_alpha * static_cast<double>(max_makespan - min_makespan));
 
-				if (min_makespan > tmp_mkspan_list[jid]) {
-					min_makespan = tmp_mkspan_list[jid];
-				}
+    // construction de la RCL à partir de la splitValue précédente
+    for (unsigned c_job : candidate_jobs) {
+      if (tmp_mkspan_list[c_job] <= split_value) {
+        rc_list.push_back(c_job);
+      }
+    }
 
-				if (max_makespan < tmp_mkspan_list[jid]) {
-					max_makespan = tmp_mkspan_list[jid];
-				}
-			}
-		}
+    // choix d'un job aléatoirement dans la RCL
+    std::uniform_int_distribution<int> uni(0, static_cast<int>(rc_list.size()) - 1);
+    unsigned chosen_job = rc_list[uni(generator)];
 
-		// on choisit une zone de coupe par rapport au paramètre alpha
-		split_value = min_makespan + static_cast<int>(alpha * static_cast<double>(max_makespan - min_makespan));
+    // récupération des identifiants operation, machine et parent
+    unsigned oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
+    unsigned mid = ref_pb.machineNumber[oid];
 
-		// construction de la RCL à partir de la splitValue précédente
-		for (int c_job : candidate_jobs) {
-			if (tmp_mkspan_list[c_job] <= split_value) {
-				rc_list.push_back(c_job);
-			}
-		}
+    // construction de la solution
+    int date = 0;
+    if (tmp_parent_list[chosen_job] != -1) {
+      date = solution.endDate[tmp_parent_list[chosen_job]];
+    }
+    solution.AddOperation(oid, date, tmp_mkspan_list[chosen_job], last_op_on_mac[mid],
+      tmp_is_on_mac[chosen_job]);
 
-		// choix d'un job aléatoirement dans la RCL 
-        std::uniform_int_distribution<int> uni(0, static_cast<int>(rc_list.size()) - 1);
-        chosen_job = rc_list[uni(generator)];
+    // stockage des dépendances
+    last_op_on_mac[mid] = oid;
+    ++num_ops_of_job[chosen_job];
 
-		// récupération des identifiants operation, machine et parent
-		oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
-		mid = ref_pb.machineNumber[oid];
-
-		// construction de la solution
-		if (tmp_parent_list[chosen_job] == -1) {
-			date = 0;
-		}
-		else {
-			date = solution.endDate[tmp_parent_list[chosen_job]];
-		}
-		solution.AddOperation(oid, date, tmp_mkspan_list[chosen_job], last_op_on_mac[mid], 
-			tmp_is_on_mac[chosen_job]);
-
-		// stockage des dépendances
-		last_op_on_mac[mid] = oid;
-		++num_ops_of_job[chosen_job];
-
-		// reinitialisation des structures de données
-		candidate_jobs.clear();
-		rc_list.clear();
-	}
-	return solution;
+    // reinitialisation des structures de données
+    candidate_jobs.clear();
+    rc_list.clear();
+  }
+  return solution;
 }

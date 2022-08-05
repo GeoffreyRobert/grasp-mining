@@ -56,7 +56,7 @@ Solution& Solution::operator=(const Solution& other) {
 
 
 void Solution::AddOperation(
-        int oid, int start, int end, int parent, bool is_on_mac) {
+        unsigned oid, int start, int end, int parent, bool is_on_mac) {
 	startDate[oid] = start;
 	endDate[oid] = end;
 	macParent[oid] = parent;
