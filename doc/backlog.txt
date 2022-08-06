@@ -10,6 +10,4 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees
-
 #021

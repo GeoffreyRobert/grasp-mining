@@ -59,24 +59,6 @@ std::pair<OperationId, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, Oper
   unsigned updated_critical = parent; // "rightmost" operation among all updated
   int updated_makespan = new_end_date[parent];
 
-  // successeurs des operation swappees a traiter
-  OperationId next_from_parent = ref_pb.nextOperation[parent];
-  if (next_from_parent != Problem::InvalidOp) {
-    ops_to_move.push_back(next_from_parent);
-    is_changed[next_from_parent] = OpUpdate::ToChange;
-  }
-  OperationId next_from_child = ref_pb.nextOperation[child];
-  if (next_from_child != Problem::InvalidOp) {
-    ops_to_move.push_back(next_from_child);
-    is_changed[next_from_child] = OpUpdate::ToChange;
-  }
-  // operation suivante sur la machine des operations swappees
-  OperationId next_on_machine = sol.macChild[parent];
-  if (next_on_machine != Problem::InvalidOp) {
-    ops_to_move.push_back(next_on_machine);
-    is_changed[next_on_machine] = OpUpdate::ToChange;
-  }
-
   unsigned oid;
   // stack vs queue en termes de perfs ? stack: localité, queue: moins de doubles accès
   while (!ops_to_move.empty()) {
@@ -94,68 +76,23 @@ std::pair<OperationId, int> LaarhovenSearch::SwapAndEvaluate(Solution& sol, Oper
         updated_makespan = new_end_date[oid];
         if (updated_makespan >= sol.makespan) {
           CancelSwap(sol, parent, child);
-          break;
+          ops_to_move.clear();
         }
       }
     }
-    AddSuccessors(sol, oid);
   }
   return {updated_critical, updated_makespan};
 }
 
 void LaarhovenSearch::SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child)
 {
-  // intialisation des dates pour le successeur
-  int date_job;
-  if (ref_pb.prevOperation[child] != Problem::InvalidOp) {
-    date_job = sol.endDate[ref_pb.prevOperation[child]];
-  } else {
-    date_job = 0;
-  }
-  int date_mac;
-  if (sol.macParent[parent] != Problem::InvalidOp) {
-    date_mac = sol.endDate[sol.macParent[parent]];
-  } else {
-    date_mac = 0;
-  }
-  int date_par;
-  if (date_job < date_mac) {
-    date_par = date_mac;
-    new_is_crit_mac[child] = true;
-  } else {
-    date_par = date_job;
-    new_is_crit_mac[child] = false;
-  }
-  new_start_date[child] = date_par;
-  new_end_date[child] = date_par + ref_pb.timeOnMachine[child];
-  is_changed[child] = OpUpdate::Changed;
-
-  // intialisation des dates pour le parent
-  if (ref_pb.prevOperation[parent] != Problem::InvalidOp) {
-    date_job = sol.endDate[ref_pb.prevOperation[parent]];
-  } else {
-    date_job = 0;
-  }
-  date_mac = new_end_date[child];
-  if (date_job < date_mac) {
-    date_par = date_mac;
-    new_is_crit_mac[parent] = true;
-  } else {
-    date_par = date_job;
-    new_is_crit_mac[parent] = false;
-  }
-  new_start_date[parent] = date_par;
-  new_end_date[parent] = date_par + ref_pb.timeOnMachine[parent];
-  is_changed[parent] = OpUpdate::Changed;
-
   // inversion parent / successeur dans l'ordre sur les machines
   sol.SwapOperations(parent, child);
-}
 
-void LaarhovenSearch::CancelSwap(Solution& sol, unsigned parent, unsigned child)
-{
-  sol.SwapOperations(child, parent);
-  std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
+  // intialisation des dates pour le successeur
+  // always update the predecessor before the successor
+  UpdateOp(sol, child);
+  UpdateOp(sol, parent);
 }
 
 void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
@@ -193,21 +130,23 @@ void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
   new_start_date[oid] = date_par;
   new_end_date[oid] = date_par + ref_pb.timeOnMachine[oid];
   is_changed[oid] = OpUpdate::Changed;
+
+  // add successors of the current op to be updated
+  // ajout des successeurs à traiter
+  if (sol.macChild[oid] != Problem::InvalidOp
+      && is_changed[sol.macChild[oid]] % 2 != OpUpdate::ToChange) {
+    ops_to_move.push_back(sol.macChild[oid]);
+    ++is_changed[sol.macChild[oid]]; // Unchanged -> ToChange and Changed -> ChangedToChange
+  }
+  if (ref_pb.nextOperation[oid] != Problem::InvalidOp
+      && is_changed[ref_pb.nextOperation[oid]] % 2 != OpUpdate::ToChange) {
+    ops_to_move.push_back(ref_pb.nextOperation[oid]);
+    ++is_changed[ref_pb.nextOperation[oid]];
+  }
 }
 
-void LaarhovenSearch::AddSuccessors(const Solution& sol, unsigned oid)
+void LaarhovenSearch::CancelSwap(Solution& sol, unsigned parent, unsigned child)
 {
-  // ajout des successeurs à traiter
-  if (sol.macChild[oid] != Problem::InvalidOp) {
-    if (is_changed[sol.macChild[oid]] % 2 != OpUpdate::ToChange) {
-      ops_to_move.push_back(sol.macChild[oid]);
-      ++is_changed[sol.macChild[oid]]; // Unchanged -> ToChange and Changed -> ChangedToChange
-    }
-  }
-  if (ref_pb.nextOperation[oid] != Problem::InvalidOp) {
-    if (is_changed[ref_pb.nextOperation[oid]] % 2 != OpUpdate::ToChange) {
-      ops_to_move.push_back(ref_pb.nextOperation[oid]);
-      ++is_changed[ref_pb.nextOperation[oid]];
-    }
-  }
+  sol.SwapOperations(child, parent);
+  std::fill(is_changed.begin(), is_changed.end(), OpUpdate::Unchanged);
 }

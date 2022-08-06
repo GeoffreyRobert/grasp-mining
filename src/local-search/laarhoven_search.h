@@ -26,7 +26,6 @@ private:
   void SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child);
   void CancelSwap(Solution& sol, unsigned parent, unsigned child);
   void UpdateOp(const Solution& sol, unsigned oid);
-  void AddSuccessors(const Solution& sol, unsigned oid);
 
   // stockage des operations à déplacer
   boost::circular_buffer<OperationId> ops_to_move;
