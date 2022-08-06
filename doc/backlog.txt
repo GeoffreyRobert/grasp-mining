@@ -15,8 +15,6 @@ Req:
   - No operations in the problem
   - 2-3 operations situations
 
-#018 [ code ] Fix warnings
-
 #020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees
 
 #021

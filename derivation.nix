@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ boost gtest ];
 
+  # Remove warnings during debug builds
+  hardeningDisable = ["fortify"];
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     (lib.optional enableStatic "-DBUILD_STATIC=1")

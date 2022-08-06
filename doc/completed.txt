@@ -1,3 +1,5 @@
+#018 [ code ] Fix warnings related to hardening
+
 #012 [ algo ] Use usigned operations with invalid op being std::max
 
 #019 [ algo ] Laar:65 should be macChild[parent] since there was a swap
