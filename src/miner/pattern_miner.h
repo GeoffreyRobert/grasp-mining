@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "data_miner.h"
-#include "data/problem.h"
 
 using std::list; using std::pair;
 
@@ -13,11 +12,9 @@ class PatternMiner : public DataMiner {
 public:
 	PatternMiner();
 
-	~PatternMiner();
+	virtual void operator()(const vector<Solution>& solutions);
 
-	void operator()(const Problem& problem, const vector<Solution>& solutions);
-
-	vector<int> ProposePattern(const Problem& problem, int oid, double support);
+	virtual vector<int> ProposePattern(OperationId oid, double support);
 
 private:
 	class PatternNode {

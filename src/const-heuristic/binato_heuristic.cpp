@@ -9,45 +9,43 @@ BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha)
   : ConstHeuristic(problem)
   , _alpha(alpha)
   , generator(std::random_device()())
+  , last_op_on_mac(problem.nMac, Problem::InvalidOp)
+  , num_ops_of_job(problem.nJob, 0)
+  , rc_list(0)
+  , candidate_jobs(problem.nJob)
+  , tmp_parent_list(problem.nJob)
+  , tmp_mkspan_list(problem.nJob)
+  , tmp_is_on_mac(problem.nJob, false)
 {
-  // Gestion des contraintes de dépendance
-  last_op_on_mac.resize(problem.nMac, -1); // dernière op. traitée par mach.
-  num_ops_of_job.resize(problem.nJob, 0); // nombre d'op. traitées par job
-
-  // Gestion de la Restricted Candidate List
-  rc_list.resize(problem.nJob); // Restricted Candidate List
-
-  // Gestion des candidats à la RCL, de leur parent et du makespan
-  candidate_jobs.resize(problem.nJob);
-  tmp_parent_list.resize(problem.nJob);
-  tmp_mkspan_list.resize(problem.nJob);
-  tmp_is_on_mac.resize(problem.nJob, false);
+  // the restricted candidate list starts empty but can fill up
+  rc_list.reserve(problem.nJob);
 }
 
 Solution& BinatoHeuristic::operator()(Solution& solution)
 {
-  for (unsigned idx = 0; idx < ref_pb.size; ++idx) { // pour chaque operation
+  for (OperationId counter = 0; counter < ref_pb.size; ++counter) { // pour chaque operation
     int min_makespan = std::numeric_limits<int>::max();
     int max_makespan = 0;
 
     // reinitialisation pour stockage des données
-    for (unsigned jid = 0; jid < ref_pb.nJob; ++jid) { // pour chaque job
+    for (JobId jid = 0; jid < ref_pb.nJob; ++jid) { // pour chaque job
 
-      if (num_ops_of_job[jid] < ref_pb.nMac) { // on ne prend pas les jobs terminés
-        unsigned oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
-        unsigned mid = ref_pb.machineNumber[oid];
+      OperationRank rank = num_ops_of_job[jid];
+      if (rank < ref_pb.nMac) { // on ne prend pas les jobs terminés
+        OperationId oid = ref_pb.operationNumber[jid][rank];
+        MachineId mid = ref_pb.machineNumber[oid];
 
         // initialisations durées+parent
-        int parent = -1;
+        OperationId parent = Problem::InvalidOp;
         int date = 0;
-        if (num_ops_of_job[jid] != 0) { // parent et date hors debut de job
+        if (rank != 0) { // parent et date hors debut de job
           parent = ref_pb.prevOperation[oid];
           date = solution.endDate[parent];
         }
 
-        int parent_mac = -1;
+        OperationId parent_mac = Problem::InvalidOp;
         int date_disj = 0;
-        if (last_op_on_mac[mid] != -1) { // recuperation parent et date disj.
+        if (last_op_on_mac[mid] != Problem::InvalidOp) { // recuperation parent et date disj.
           parent_mac = last_op_on_mac[mid];
           date_disj = solution.endDate[parent_mac];
         }
@@ -79,23 +77,23 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
     int split_value = min_makespan + static_cast<int>(_alpha * static_cast<double>(max_makespan - min_makespan));
 
     // construction de la RCL à partir de la splitValue précédente
-    for (unsigned c_job : candidate_jobs) {
+    for (JobId c_job : candidate_jobs) {
       if (tmp_mkspan_list[c_job] <= split_value) {
         rc_list.push_back(c_job);
       }
     }
 
     // choix d'un job aléatoirement dans la RCL
-    std::uniform_int_distribution<int> uni(0, static_cast<int>(rc_list.size()) - 1);
-    unsigned chosen_job = rc_list[uni(generator)];
+    std::uniform_int_distribution<unsigned long> uni(0, rc_list.size()-1);
+    JobId chosen_job = rc_list[uni(generator)];
 
     // récupération des identifiants operation, machine et parent
-    unsigned oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
+    OperationId oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
     unsigned mid = ref_pb.machineNumber[oid];
 
     // construction de la solution
     int date = 0;
-    if (tmp_parent_list[chosen_job] != -1) {
+    if (tmp_parent_list[chosen_job] != Problem::InvalidOp) {
       date = solution.endDate[tmp_parent_list[chosen_job]];
     }
     solution.AddOperation(oid, date, tmp_mkspan_list[chosen_job], last_op_on_mac[mid],

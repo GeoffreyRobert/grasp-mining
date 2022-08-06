@@ -4,15 +4,17 @@
 #include <vector>
 
 #include "data/problem.h"
-#include "data/solution.h"
 #include "solver/solver_module.h"
 
 using std::vector;
 
+class Solution;
+
 class DataMiner : public SolverModule {
 public:
-    using SolverModule::SolverModule;
-	virtual void operator()(const vector<Solution>&) = 0;
-	virtual vector<int> ProposePattern(int operation, double support) = 0;
+  using SolverModule::SolverModule;
+  virtual ~DataMiner() {};
+  virtual void operator()(const vector<Solution>&) = 0;
+  virtual vector<int> ProposePattern(OperationId operation, double support) = 0;
 };
 #endif // DATA_MINER_H_

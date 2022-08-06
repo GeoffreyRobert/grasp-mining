@@ -10,8 +10,6 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#012 [ algo ] Use a global start and end operations to avoid bound tests
-
 #013 [ code ] Add unit tests for simple situations
 Req:
   - No operations in the problem
@@ -19,4 +17,6 @@ Req:
 
 #018 [ code ] Fix warnings
 
-#020
+#020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees
+
+#021

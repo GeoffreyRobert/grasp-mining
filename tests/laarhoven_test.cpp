@@ -11,10 +11,12 @@ using std::string;
 
 namespace {
 
+static constexpr OperationId Na = Problem::InvalidOp;
+
 TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 {
   Problem problem(2, 2, 55,
-    std::vector<std::pair<int, int>> {
+    std::vector<std::pair<MachineId, int>> {
       { 1, 1 }, { 0, 1 },
       { 0, 1 }, { 1, 1 },
     });
@@ -29,12 +31,12 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
     3, 4,
   };
   solution.macParent = {
-    -1, -1,
+    Na, Na,
     1, 0,
   };
   solution.macChild = {
     3, 2,
-    -1, -1,
+    Problem::InvalidOp, Problem::InvalidOp,
   };
   solution.isCritMachine = {
     0, 0,
@@ -56,7 +58,7 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 TEST(LaarhovenTest, LargeProblem)
 {
   Problem problem(6, 6, 55,
-    std::vector<std::pair<int, int>> {
+    std::vector<std::pair<MachineId, int>> {
       { 2, 1 }, { 0, 3 }, { 1, 6 }, { 3, 7 }, { 5, 3 }, { 4, 6 },
       { 1, 8 }, { 2, 5 }, { 4, 10 }, { 5, 10 }, { 0, 10 }, { 3, 4 },
       { 2, 5 }, { 3, 4 }, { 5, 8 }, { 0, 9 }, { 1, 1 }, { 4, 7 },
@@ -81,19 +83,19 @@ TEST(LaarhovenTest, LargeProblem)
     15, 26, 58, 66, 69, 70,
     3, 6, 15, 22, 62, 63 };
   solution.macParent = {
-    -1, -1, 30, 13, 32, -1,
+    Na, Na, 30, 13, 32, Na,
     2, 24, 5, 14, 15, 21,
     0, 6, 4, 19, 25, 8,
     6, 33, 7, 3, 17, 9,
     12, 18, 22, 23, 10, 11,
-    -1, -1, -1, 1, 26, 20 };
+    Na, Na, Na, 1, 26, 20 };
   solution.macChild = {
     12, 33, 6, 21, 14, 8,
     18, 20, 17, 23, 28, 29,
-    24, 3, 9, 10, -1, 22,
+    24, 3, 9, 10, Na, 22,
     25, 15, 35, 11, 26, 27,
-    7, 16, 34, -1, -1, -1,
-    2, 13, 4, 19, -1, -1 };
+    7, 16, 34, Na, Na, Na,
+    2, 13, 4, 19, Na, Na };
   solution.isCritMachine = {
     0, 0, 0, 0, 0, 0,
     1, 0, 1, 0, 0, 0,

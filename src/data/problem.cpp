@@ -12,11 +12,11 @@
                     - à modifier pour rendre plus generique
 */
 
-Problem::Problem(unsigned nJob, unsigned nMac, int lowerBound, std::vector<std::pair<unsigned, int>> operationsSpecs)
-  : size(nJob * nMac)
-  , nJob(nJob)
-  , nMac(nMac)
-  , lowerBound(lowerBound)
+Problem::Problem(JobId nJob_, MachineId nMac_, int lowerBound_, std::vector<std::pair<MachineId, int>> operationsSpecs)
+  : nJob(nJob_)
+  , nMac(nMac_)
+  , size(nJob * nMac)
+  , lowerBound(lowerBound_)
   , minTime(std::numeric_limits<int>::max())
   , maxTime(0)
 {
@@ -28,21 +28,17 @@ Problem::Problem(unsigned nJob, unsigned nMac, int lowerBound, std::vector<std::
   nextOperation.resize(size);
   machineNumber.resize(size);
   timeOnMachine.resize(size);
-  opToJob.resize(size);
-  opToRank.resize(size);
 
   // Initialisation des antécédents / successeurs
   std::iota(prevOperation.begin(), prevOperation.end(), -1);
   std::iota(nextOperation.begin(), nextOperation.end(), 1);
 
   // Lecture des gammes+durées
-  unsigned id = 0; // id unique pour chaque opération
+  OperationId id = 0; // id unique pour chaque opération
   for (unsigned jid = 0; jid < nJob; jid++) {
-    prevOperation[id] = -1; // 1ere op. du job sans antécédent
+    prevOperation[id] = Problem::InvalidOp; // 1ere op. du job sans antécédent
     for (unsigned oid = 0; oid < nMac; oid++, id++) {
       operationNumber[jid][oid] = id;
-      opToJob[id] = jid;
-      opToRank[id] = oid;
       auto operationSpecs = operationsSpecs[id];
       machineNumber[id] = operationSpecs.first;
       timeOnMachine[id] = operationSpecs.second;
@@ -51,7 +47,7 @@ Problem::Problem(unsigned nJob, unsigned nMac, int lowerBound, std::vector<std::
       if (timeOnMachine[id] < minTime)
         minTime = timeOnMachine[id];
     }
-    nextOperation[id - 1] = -1; // dernière op. sans successeur
+    nextOperation[id - 1] = Problem::InvalidOp; // dernière op. sans successeur
   }
 }
 

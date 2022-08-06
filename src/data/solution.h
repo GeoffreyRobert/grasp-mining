@@ -28,25 +28,25 @@ public:
 
 	Solution& operator=(Solution&& other) noexcept;
 
-	void AddOperation(unsigned oid, int start, int end, int parent, bool is_on_mac);
+	void AddOperation(OperationId oid, int start, int end, OperationId parent, bool is_on_mac);
 
-	void SwapOperations(int parent, int child);
+	void SwapOperations(OperationId parent, OperationId child);
 
 	unsigned DoChanges(
-        vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date, 
-        vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac);
+        vector<OpUpdate>& is_changed, vector<int>& new_start_date, 
+        vector<int>& new_end_date, vector<bool>& new_is_crit_mac);
 
 	const Problem& problem;
 
 	// Plannification de la solution
-	unsigned int makespan = 0;
-	unsigned int criticalOp = 0;
+	int makespan = 0;
+	OperationId criticalOp = 0;
 
 	vector<int> startDate;				// date de début de chaque opération
     vector<int> endDate;				// date de fin de chaque operation
 
-    vector<int> macParent;						// parent sur la machine
+    vector<OperationId> macParent;						// parent sur la machine
+    vector<OperationId> macChild;						// successeur(s) sur la machine
     vector<bool> isCritMachine;					// parent critique sur la machine
-    vector<int> macChild;						// successeur(s) sur la machine
 };
 #endif

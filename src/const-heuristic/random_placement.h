@@ -12,6 +12,6 @@ public:
 
 private:
 	std::mt19937 generator;
-	int ChooseRandomJob(vector<int>& jobs_left);
+	JobId ChooseRandomJob(const vector<JobId>& jobs_left);
 };
 #endif // !RANDOM_PLACEMENT_H_

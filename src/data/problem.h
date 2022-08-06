@@ -3,6 +3,7 @@
 
 #include <istream>
 #include <ostream>
+#include <limits>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,33 +16,38 @@ using std::vector;
     informations du problème
 */
 
+using OperationId = unsigned;
+using JobId = unsigned;
+using MachineId = unsigned;
+using OperationRank = unsigned;
+
 class Problem {
   // *************************************************************************
   // JOB SHOP BASE	********************************************************
   // *************************************************************************
 public:
-  Problem(unsigned nJob, unsigned nMac, int lowerBound, vector<std::pair<unsigned, int>> operationSpecs);
+  Problem(JobId nJob, MachineId nMac, int lowerBound, vector<std::pair<unsigned, int>> operationSpecs);
 
   string ToString() const;
 
   void Clear();
 
-  unsigned size; // taille du problème
-  unsigned nJob; // nombre de jobs
-  unsigned nMac; // nombre de machines
+  static constexpr OperationId InvalidOp = std::numeric_limits<OperationId>::max();
+  JobId nJob; // nombre de jobs
+  MachineId nMac; // nombre de machines
+  OperationId size; // taille du problème
   int lowerBound; // borne inf du problème
 
   // caractéristiques des jobs
   int minTime;
   int maxTime;
 
-  vector<vector<unsigned>> operationNumber; // numéro du sommet traité (job, op)
-  vector<int> prevOperation; // numéro de l'op. suivante dans le job
-  vector<int> nextOperation; // numéro de l'op. préc. dans le job
-  vector<unsigned> machineNumber; // numéro de machine qui exec. l'op
+  vector<vector<OperationId>> operationNumber; // numéro du sommet traité (job, op)
+
+  vector<OperationId> prevOperation; // numéro de l'op. suivante dans le job
+  vector<OperationId> nextOperation; // numéro de l'op. préc. dans le job
+  vector<MachineId> machineNumber; // numéro de machine qui exec. l'op
   vector<int> timeOnMachine; // durée à passer sur la machine
-  vector<unsigned> opToJob; // job associé à un numéro d'opération
-  vector<unsigned> opToRank; // rang d'une opération dans un job
 };
 
 std::ostream& operator<<(std::ostream&, const Problem&);

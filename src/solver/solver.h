@@ -5,14 +5,15 @@
 #include <memory>
 #include <ratio>
 
-#include "const-heuristic/const_heuristic.h"
-#include "data/problem.h"
-#include "local-search/local_search.h"
-#include "miner/data_miner.h"
+class Problem;
+class Solution;
+class ConstHeuristic;
+class LocalSearch;
+class DataMiner;
 
 class Solver {
 public:
-	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, DataMiner&, int pop_size);
+	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, DataMiner&, unsigned pop_size);
 
 	Solver(Solver&&);
 
@@ -29,7 +30,7 @@ public:
 	DataMiner& dataMiner;
 
 	// Size of the population of one batch
-	int populationSize = 500;
+	unsigned populationSize = 500;
 
 	// Timer
 	std::chrono::duration<double, std::micro> runtime;

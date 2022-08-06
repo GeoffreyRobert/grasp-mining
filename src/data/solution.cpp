@@ -11,8 +11,8 @@ OpUpdate& operator--(OpUpdate& up) {
     return up = static_cast<OpUpdate>(static_cast<int>(up) - 1);
 }
 
-Solution::Solution(const Problem& problem) :
-	problem(problem), startDate(problem.size), endDate(problem.size),
+Solution::Solution(const Problem& problem_) :
+	problem(problem_), startDate(problem.size), endDate(problem.size),
     macParent(problem.size), macChild(problem.size), isCritMachine(problem.size)
 {
 }
@@ -56,12 +56,12 @@ Solution& Solution::operator=(const Solution& other) {
 
 
 void Solution::AddOperation(
-        unsigned oid, int start, int end, int parent, bool is_on_mac) {
+        OperationId oid, int start, int end, OperationId parent, bool is_on_mac) {
 	startDate[oid] = start;
 	endDate[oid] = end;
 	macParent[oid] = parent;
 	isCritMachine[oid] = is_on_mac;
-	if (parent != -1)
+	if (parent != Problem::InvalidOp)
 		macChild[parent] = oid;
 	if (endDate[oid] > makespan) {
 		criticalOp = oid;
@@ -70,9 +70,9 @@ void Solution::AddOperation(
 }
 
 unsigned Solution::DoChanges(
-        vector<OpUpdate>& is_changed, vector<unsigned>& new_start_date,
-        vector<unsigned>& new_end_date, vector<bool>& new_is_crit_mac) {
-	for (int oid = 0; oid < problem.size; ++oid) {
+        vector<OpUpdate>& is_changed, vector<int>& new_start_date,
+        vector<int>& new_end_date, vector<bool>& new_is_crit_mac) {
+	for (OperationId oid = 0; oid < problem.size; ++oid) {
 		if (is_changed[oid] == OpUpdate::Changed) {
 			startDate[oid] = new_start_date[oid];
 			endDate[oid] = new_end_date[oid];
@@ -81,9 +81,9 @@ unsigned Solution::DoChanges(
 	}
   
   // Search the new critical op
-  unsigned last_op_of_job = problem.nMac - 1;
+  OperationId last_op_of_job = problem.nMac - 1;
   makespan = 0;
-  for (unsigned j = 0; j < problem.nJob; ++j) {
+  for (JobId j = 0; j < problem.nJob; ++j) {
     if (endDate[last_op_of_job] > makespan) {
       makespan = endDate[last_op_of_job];
       criticalOp = last_op_of_job;
@@ -94,14 +94,14 @@ unsigned Solution::DoChanges(
   return criticalOp;
 }
 
-void Solution::SwapOperations(int parent, int child) {
+void Solution::SwapOperations(OperationId parent, OperationId child) {
 	// inversion des deux operations
 	macParent[child] = macParent[parent];
-	if (macParent[parent] != -1)
+	if (macParent[parent] != Problem::InvalidOp)
 		macChild[macParent[parent]] = child;
 
 	macChild[parent] = macChild[child];
-	if (macChild[child] != -1)
+	if (macChild[child] != Problem::InvalidOp)
 		macParent[macChild[child]] = parent;
 
 	macParent[parent] = child;

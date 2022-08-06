@@ -10,37 +10,35 @@ RandomPlacement::RandomPlacement(const Problem& problem) :
 }
 
 Solution& RandomPlacement::operator()(Solution& solution) {
-	int idx, jid, oid, mid;				// index des operations, job ID, operation ID, mach. ID
-
 	// Gestion des contraintes de dépendance
-	vector<int> last_op_on_mac(ref_pb.nMac, -1);	// dernière op. traitée par mach.
-	vector<int> num_ops_of_job(ref_pb.nJob, 0);	// nombre d'op. traitées par job
-	vector<int> jobs_left(ref_pb.nJob);			// jobs restant à ajouter à la sol.
+	vector<OperationId> last_op_on_mac(ref_pb.nMac, Problem::InvalidOp);	// dernière op. traitée par mach.
+	vector<JobId> num_ops_of_job(ref_pb.nJob, 0);	// nombre d'op. traitées par job
+	vector<JobId> jobs_left(ref_pb.nJob);			// jobs restant à ajouter à la sol.
 	iota(jobs_left.begin(), jobs_left.end(), 0);
 
-	int date, date_disj, parent, parent_disj;
-	bool is_on_mac;
-
-	for (idx = 0; idx < ref_pb.size; ++idx) {
-		jid = ChooseRandomJob(jobs_left);			// generation d'un entier aléatoire
+	for (OperationId counter = 0; counter < ref_pb.size; ++counter) {
+		JobId jid = ChooseRandomJob(jobs_left);			// generation d'un entier aléatoire
 
 		// récupération des identifiants operation, machine et parent
-		oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
-		mid = ref_pb.machineNumber[oid];
+		OperationId oid = ref_pb.operationNumber[jid][num_ops_of_job[jid]];
+		MachineId mid = ref_pb.machineNumber[oid];
 
 		// initialisations durées+parent
-		date = 0; parent = -1; parent_disj = -1; date_disj = 0;
-
+    OperationId parent = Problem::InvalidOp;
+		int date = 0;
 		if (num_ops_of_job[jid] != 0) {		// parent et date hors debut de job
 			parent = ref_pb.prevOperation[oid];
 			date = solution.endDate[parent];
 		}
 
-		if (last_op_on_mac[mid] != -1) {	// recuperation parent et date disj.			
+    OperationId parent_disj = Problem::InvalidOp;
+    int date_disj = 0;
+		if (last_op_on_mac[mid] != Problem::InvalidOp) {	// recuperation parent et date disj.
 			parent_disj = last_op_on_mac[mid];
 			date_disj = solution.endDate[parent_disj];
 		}
 
+    bool is_on_mac;
 		if (date < date_disj) {				// si la date disj est superieure
 			date = date_disj;				// on retient date disj
 			parent = parent_disj;			// on retient le parent
@@ -65,7 +63,7 @@ Solution& RandomPlacement::operator()(Solution& solution) {
 	return solution;
 }
 
-int RandomPlacement::ChooseRandomJob(vector<int>& jobs_left) {
-	std::uniform_int_distribution<int> uni(0, static_cast<int>(jobs_left.size()));
-	return (int)jobs_left[uni(generator)];
+JobId RandomPlacement::ChooseRandomJob(const vector<JobId>& jobs_left) {
+	std::uniform_int_distribution<unsigned long> uni(0, jobs_left.size());
+	return jobs_left[uni(generator)];
 }

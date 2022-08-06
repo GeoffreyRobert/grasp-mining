@@ -7,20 +7,21 @@
 #include "const-heuristic/random_placement.h"
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
+#include "miner/data_miner.h"
 
 using std::chrono::high_resolution_clock; using std::cout;
 
 Solver::Solver(ConstHeuristic& init_heuristic, ConstHeuristic& const_heuristic,
-			   LocalSearch& local_search, DataMiner& data_miner, int pop_size) :
-	constHeuristic(const_heuristic), initHeuristic(init_heuristic),
-	localSearch(local_search), dataMiner(data_miner), runtime(0.), 
-	populationSize(pop_size)
+			   LocalSearch& local_search, DataMiner& data_miner, unsigned pop_size) :
+	initHeuristic(init_heuristic), constHeuristic(const_heuristic),
+	localSearch(local_search), dataMiner(data_miner), 
+	populationSize(pop_size), runtime(0.)
 {}
 
 Solver::Solver(Solver&& other) :
-	constHeuristic(other.constHeuristic), initHeuristic(other.initHeuristic),
+	initHeuristic(other.initHeuristic), constHeuristic(other.constHeuristic),
 	localSearch(other.localSearch), dataMiner(other.dataMiner),
-    runtime(other.runtime), populationSize(other.populationSize)
+  populationSize(other.populationSize), runtime(other.runtime)
 {}
 
 Solution Solver::Solve(const Problem& problem)

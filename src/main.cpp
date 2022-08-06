@@ -19,6 +19,8 @@ using std::vector; using std::string; using std::cout;
 */
 
 int main(int argc, char** argv) {
+  (void)argc;
+  (void)argv;
 
 	// Récupération des instances à traiter
 	const string file_path = "C:\\Users\\geoff\\EMSE\\Projets Ecole\\"
