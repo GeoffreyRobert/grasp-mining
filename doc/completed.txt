@@ -1,3 +1,8 @@
+#013 [ code ] Add unit tests for simple situations
+Req:
+  - No operations in the problem
+  - 2-3 operations situations
+
 #018 [ code ] Fix warnings related to hardening
 
 #012 [ algo ] Use usigned operations with invalid op being std::max

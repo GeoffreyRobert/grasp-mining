@@ -10,11 +10,6 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#013 [ code ] Add unit tests for simple situations
-Req:
-  - No operations in the problem
-  - 2-3 operations situations
-
 #020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees
 
 #021

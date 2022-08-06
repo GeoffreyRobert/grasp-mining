@@ -15,6 +15,10 @@ static constexpr OperationId Na = Problem::InvalidOp;
 
 TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 {
+  /*
+   * 0  01
+   * 1 0  1
+   */
   Problem problem(2, 2, 55,
     std::vector<std::pair<MachineId, int>> {
       { 1, 1 }, { 0, 1 },
@@ -36,7 +40,7 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
   };
   solution.macChild = {
     3, 2,
-    Problem::InvalidOp, Problem::InvalidOp,
+    Na, Na,
   };
   solution.isCritMachine = {
     0, 0,
@@ -47,6 +51,99 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 
   const int final_makespan = 2;
   const int final_criticalOp = 1;
+
+  LaarhovenSearch local_search(problem);
+  local_search(solution);
+
+  EXPECT_EQ(solution.makespan, final_makespan);
+  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+}
+
+TEST(LaarhovenTest, NoImprovement)
+{
+  /*
+   * 0 01
+   * 1  01
+   */
+  Problem problem(2, 2, 3,
+    std::vector<std::pair<MachineId, int>> {
+      { 0, 1 }, { 1, 1 },
+      { 0, 1 }, { 1, 1 },
+    });
+
+  Solution solution(problem);
+  solution.startDate = {
+    0, 1,
+    1, 2,
+  };
+  solution.endDate = {
+    1, 2,
+    2, 3,
+  };
+  solution.macParent = {
+    Na, Na,
+    0, 1,
+  };
+  solution.macChild = {
+    2, 3,
+    Na, Na,
+  };
+  solution.isCritMachine = {
+    0, 0,
+    1, 1,
+  };
+  solution.criticalOp = 3;
+  solution.makespan = 3;
+
+  const int final_makespan = 3;
+  const int final_criticalOp = 3;
+
+  LaarhovenSearch local_search(problem);
+  local_search(solution);
+
+  EXPECT_EQ(solution.makespan, final_makespan);
+  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+}
+
+TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
+{
+  /*
+   * 0  01
+   * 1 1 0
+   * 2 0  1
+   */
+  Problem problem(2, 3, 4,
+    std::vector<std::pair<MachineId, int>> {
+      { 2, 1 }, { 0, 1 }, { 1, 1 },
+      { 1, 1 }, { 0, 1 }, { 2, 1 },
+    });
+
+  Solution solution(problem);
+  solution.startDate = {
+    0, 1, 2,
+    0, 2, 3,
+  };
+  solution.endDate = {
+    1, 2, 3,
+    1, 3, 4,
+  };
+  solution.macParent = {
+    Na, Na, 3,
+    Na, 1, 0,
+  };
+  solution.macChild = {
+    5, 4, Na,
+    2, Na, Na,
+  };
+  solution.isCritMachine = {
+    0, 0, 0,
+    0, 1, 0,
+  };
+  solution.criticalOp = 5;
+  solution.makespan = 4;
+
+  const int final_criticalOp = 5;
+  const int final_makespan = 4;
 
   LaarhovenSearch local_search(problem);
   local_search(solution);
