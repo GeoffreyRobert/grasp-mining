@@ -152,6 +152,111 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
   EXPECT_EQ(solution.criticalOp, final_criticalOp);
 }
 
+TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
+{
+  /*
+   * 0  012
+   * 1 0
+   */
+  Problem problem(3, 2, 3,
+    std::vector<std::pair<MachineId, int>> {
+      { 0, 1 }, { 1, 1 },
+      { 0, 0 }, { 1, 1 },
+      { 0, 0 }, { 1, 1 },
+    });
+
+  Solution solution(problem);
+  solution.startDate = {
+    0, 1,
+    0, 2,
+    0, 3,
+  };
+  solution.endDate = {
+    1, 2,
+    0, 3,
+    0, 4,
+  };
+  solution.macParent = {
+    2, Na,
+    4,  1,
+    Na, 3,
+  };
+  solution.macChild = {
+    Na, 3,
+     0, 5,
+     2, Na,
+  };
+  solution.isCritMachine = {
+    1, 0,
+    1, 1,
+    0, 1,
+  };
+  solution.criticalOp = 5;
+  solution.makespan = 4;
+
+  const int final_criticalOp = 5;
+  const int final_makespan = 3;
+
+  LaarhovenSearch local_search(problem);
+  local_search(solution);
+
+  EXPECT_EQ(solution.makespan, final_makespan);
+  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+}
+
+TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
+{
+  /*
+   * 0 1 200
+   * 1 02   1
+   * 2  0 21
+   */
+  Problem problem(3, 3, 5,
+    std::vector<std::pair<MachineId, int>> {
+      { 1, 1 }, { 2, 1 }, { 0, 2 },
+      { 0, 1 }, { 2, 1 }, { 1, 1 },
+      { 1, 1 }, { 0, 1 }, { 2, 1 },
+    });
+
+  Solution solution(problem);
+  solution.startDate = {
+    0, 1, 3,
+    0, 4, 5,
+    1, 2, 3,
+  };
+  solution.endDate = {
+    1, 2, 5,
+    1, 5, 6,
+    2, 3, 4,
+  };
+  solution.macParent = {
+    Na, Na, 7,
+    Na,  8, 6,
+     0,  3, 1,
+  };
+  solution.macChild = {
+    6,  8, Na,
+    7, Na, Na,
+    5,  2,  4,
+  };
+  solution.isCritMachine = {
+    0, 0, 1,
+    0, 1, 0,
+    1, 0, 0,
+  };
+  solution.criticalOp = 5;
+  solution.makespan = 6;
+
+  const int final_criticalOp = 2;
+  const int final_makespan = 5;
+
+  LaarhovenSearch local_search(problem);
+  local_search(solution);
+
+  EXPECT_EQ(solution.makespan, final_makespan);
+  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+}
+
 TEST(LaarhovenTest, LargeProblem)
 {
   Problem problem(6, 6, 55,
