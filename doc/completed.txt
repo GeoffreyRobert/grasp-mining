@@ -1,3 +1,5 @@
+#021 [ code ] Fix command line interface of grasp
+
 #020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees
 
 #013 [ code ] Add unit tests for simple situations

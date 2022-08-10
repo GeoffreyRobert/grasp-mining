@@ -26,7 +26,7 @@ include(cmake/compiler.cmake)
 ## Dependencies ##
 ##################
 
-find_package(Boost)
+find_package(Boost COMPONENTS program_options)
 find_package(GTest REQUIRED)
 enable_testing()
 
@@ -48,11 +48,10 @@ add_library(grasp-lib
 
 target_include_directories(grasp-lib
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>
-  PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
 target_link_libraries(grasp-lib
-  PRIVATE compiler_settings)
+  PRIVATE Boost::headers compiler_settings)
 
 ################
 ## Exexutable ##
@@ -63,8 +62,7 @@ add_executable(grasp
 )
 
 target_link_libraries(grasp
-  PRIVATE grasp-lib compiler_settings
-)
+  PRIVATE grasp-lib Boost::program_options compiler_settings)
 
 ################
 ## Exexutable ##
