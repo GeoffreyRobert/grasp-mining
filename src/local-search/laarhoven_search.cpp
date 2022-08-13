@@ -98,23 +98,8 @@ void LaarhovenSearch::SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned 
 void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
 {
   // récupération des nouvelles dates parent / parent disj
-  int date_mac;
-  if (sol.macParent[oid] == Problem::InvalidOp) {
-    date_mac = 0;
-  } else if (is_changed[sol.macParent[oid]] >= OpUpdate::Changed) {
-    date_mac = new_end_date[sol.macParent[oid]];
-  } else {
-    date_mac = sol.endDate[sol.macParent[oid]];
-  }
-
-  int date_job;
-  if (ref_pb.prevOperation[oid] == Problem::InvalidOp) {
-    date_job = 0;
-  } else if (is_changed[ref_pb.prevOperation[oid]] >= OpUpdate::Changed) {
-    date_job = new_end_date[ref_pb.prevOperation[oid]];
-  } else {
-    date_job = sol.endDate[ref_pb.prevOperation[oid]];
-  }
+  int date_mac = GetEndDate(sol, sol.macParent[oid]);
+  int date_job = GetEndDate(sol, ref_pb.prevOperation[oid]);
 
   // date critique
   int date_par;
@@ -133,16 +118,32 @@ void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
 
   // add successors of the current op to be updated
   // ajout des successeurs à traiter
-  if (sol.macChild[oid] != Problem::InvalidOp
-      && is_changed[sol.macChild[oid]] % 2 != OpUpdate::ToChange) {
-    ops_to_move.push_back(sol.macChild[oid]);
-    ++is_changed[sol.macChild[oid]]; // Unchanged -> ToChange and Changed -> ChangedToChange
+  OperationId child_on_mac = sol.macChild[oid];
+  if (child_on_mac != Problem::InvalidOp
+      && is_changed[child_on_mac] % 2 != OpUpdate::ToChange) {
+    ops_to_move.push_back(child_on_mac);
+    ++is_changed[child_on_mac]; // Unchanged -> ToChange and Changed -> ChangedToChange
   }
-  if (ref_pb.nextOperation[oid] != Problem::InvalidOp
-      && is_changed[ref_pb.nextOperation[oid]] % 2 != OpUpdate::ToChange) {
-    ops_to_move.push_back(ref_pb.nextOperation[oid]);
-    ++is_changed[ref_pb.nextOperation[oid]];
+
+  OperationId child_in_job = ref_pb.nextOperation[oid];
+  if (child_in_job != Problem::InvalidOp
+      && is_changed[child_in_job] % 2 != OpUpdate::ToChange) {
+    ops_to_move.push_back(child_in_job);
+    ++is_changed[child_in_job];
   }
+}
+
+int LaarhovenSearch::GetEndDate(const Solution& sol, OperationId oid)
+{
+  int end_date;
+  if (oid == Problem::InvalidOp) {
+    end_date = 0;
+  } else if (is_changed[oid] >= OpUpdate::Changed) {
+    end_date = new_end_date[oid];
+  } else {
+    end_date = sol.endDate[oid];
+  }
+  return end_date;
 }
 
 void LaarhovenSearch::CancelSwap(Solution& sol, unsigned parent, unsigned child)

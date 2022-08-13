@@ -10,4 +10,8 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#022
+#022 [ code ] Unit test binato heuristic
+
+#023 [ code ] Use first and last ops
+
+#024
