@@ -37,6 +37,7 @@ int main(int argc, char** argv)
   // Récupération des instances à traiter
   const fs::path file_path = fs::absolute(varmap["input-file"].as<string>());
   const unsigned max_replications = varmap["replications"].as<unsigned>();
+  const double alpha = varmap["alpha"].as<double>();
 
   if (max_replications < 1)
     return 0;
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
   Solution sol(problem);
 
   // Construction du solver
-  BinatoHeuristic init_heuristic(problem, 0.5);
+  BinatoHeuristic init_heuristic(problem, alpha);
   BinatoHeuristic const_heuristic(problem);
   LaarhovenSearch local_search(problem);
   EmptyMiner data_miner(problem);
@@ -72,7 +73,8 @@ boost::program_options::variables_map ParseArgs(int argc, char* argv[])
   po::options_description visible_opts("Allowed options");
   visible_opts.add_options()
     ("help", "produce help message")
-    ("replications,r", po::value<unsigned>()->default_value(1), "number of replications of the same solver run");
+    ("replications,r", po::value<unsigned>()->default_value(1), "number of replications of the same solver run")
+    ("alpha,a", po::value<double>()->default_value(0.5), "alpha parameter of the binato heuristic");
 
   po::options_description hidden_opts("Hidden options");
   hidden_opts.add_options()
