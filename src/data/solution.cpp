@@ -1,6 +1,8 @@
 #include <cassert>
+#include <limits>
+#include <stdexcept>
 
-#include "solution.h"
+#include "data/solution.h"
 
 using std::vector;
 
@@ -13,14 +15,22 @@ OpUpdate& operator--(OpUpdate& up)
   return up = static_cast<OpUpdate>(static_cast<int>(up) - 1);
 }
 
+
+IncompatibleScheduling::IncompatibleScheduling()
+  : std::logic_error("Ordering on machine and start dates are inverted")
+{}
+
+
 Solution::Solution(const Problem& problem_)
   : problem(problem_)
-  , startDate(problem_.size)
-  , endDate(problem_.size)
+  , startDate(problem_.size, std::numeric_limits<int>::max())
+  , endDate(problem_.size, std::numeric_limits<int>::max())
   , macParent(problem_.size, problem.OriginOp)
   , macChild(problem_.size, problem.FinalOp)
   , isCritMachine(problem_.size)
 {
+  startDate[problem.OriginOp] = 0;
+  endDate[problem.OriginOp] = 0;
 }
 
 Solution::Solution(const Solution& other)
@@ -65,6 +75,53 @@ Solution& Solution::operator=(const Solution& other)
   return *this;
 }
 
+void Solution::Initialize(
+    vector<int>&& startDate_
+  , vector<int>&& endDate_
+  , vector<OperationId>&& macParent_
+  , vector<OperationId>&& macChild_
+  , vector<bool>&& isCritMachine_)
+{
+  startDate = std::move(startDate_);
+  endDate_ = std::move(endDate);
+  macParent_ = std::move(macParent);
+  macChild_ = std::move(macChild);
+  isCritMachine_ = std::move(isCritMachine);
+}
+
+OperationId Solution::ParentOnMachine(OperationId oid) const
+{
+  // to remove
+  OperationId parent_on_machine = macParent[oid];
+  int parent_end_date = endDate[parent_on_machine];
+  int current_start_date = startDate[oid];
+  if (current_start_date < parent_end_date)
+  {
+    throw IncompatibleScheduling();
+  }
+
+  return macParent[oid];
+}
+
+OperationId Solution::ChildOnMachine(OperationId oid) const
+{
+  // to remove
+  OperationId child_on_machine = macChild[oid];
+  int child_start_date = startDate[child_on_machine];
+  int current_end_date = endDate[oid];
+  if (child_start_date < current_end_date)
+  {
+    throw IncompatibleScheduling();
+  }
+
+  return macChild[oid];
+}
+
+bool Solution::IsCriticalOnMachine(OperationId oid) const
+{
+  return isCritMachine[oid];
+}
+
 std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId oid)
 {
   // initialisations durées+parent
@@ -95,14 +152,21 @@ std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId 
 
 void Solution::AddOperation(OperationId oid)
 {
+  // to remove
+  OperationId parent_on_machine = macParent[oid];
+  int parent_end_date = endDate[parent_on_machine];
+  int current_end_date = endDate[oid];
+  if (current_end_date < parent_end_date)
+  {
+    throw IncompatibleScheduling();
+  }
+
   macChild[macParent[oid]] = oid;
 
   if (endDate[oid] > makespan) {
     criticalOp = oid;
     makespan = endDate[oid];
     macParent[problem.FinalOp] = criticalOp;
-    startDate[problem.FinalOp] = makespan;
-    endDate[problem.FinalOp] = makespan;
   }
 
   // update all operations on the same machine that were not yet added to the solution
@@ -124,6 +188,19 @@ unsigned Solution::DoChanges(
       startDate[oid] = new_start_date[oid];
       endDate[oid] = new_end_date[oid];
       isCritMachine[oid] = new_is_crit_mac[oid];
+    }
+  }
+
+  // to remove
+  for (OperationId oid = 0; oid < problem.size; ++oid) {
+    if (is_changed[oid] == OpUpdate::Changed) {
+      OperationId parent_on_machine = macParent[oid];
+      int parent_end_date = endDate[parent_on_machine];
+      int current_end_date = endDate[oid];
+      if (current_end_date < parent_end_date)
+      {
+        throw IncompatibleScheduling();
+      }
     }
   }
 

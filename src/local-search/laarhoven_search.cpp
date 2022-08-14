@@ -18,11 +18,11 @@ LaarhovenSearch::LaarhovenSearch(const Problem& problem)
 Solution& LaarhovenSearch::operator()(Solution& sol)
 {
   OperationId operation = sol.criticalOp; // op. considérée pour relocation
-  OperationId parent = sol.macParent[operation]; // parent de l'operation
+  OperationId parent = sol.ParentOnMachine(operation); // parent de l'operation
 
   // remonter le chemin critique
   do {
-    if (!sol.isCritMachine[operation]) {
+    if (!sol.IsCriticalOnMachine(operation)) {
       // on ignore deux ops. dans le meme job
       operation = ref_pb.prevOperation[operation];
     } else {
@@ -37,7 +37,7 @@ Solution& LaarhovenSearch::operator()(Solution& sol)
         operation = parent;
       }
     }
-    parent = sol.macParent[operation];
+    parent = sol.ParentOnMachine(operation);
   } while (parent != ref_pb.OriginOp);
   return sol;
 }
@@ -69,7 +69,7 @@ int LaarhovenSearch::SwapAndEvaluate(Solution& sol, OperationId parent, Operatio
     UpdateOp(sol, oid);
 
     // vérification que la nouvelle solution reste sub-critique
-    if (ref_pb.nextOperation[oid] == ref_pb.FinalOp && sol.macChild[oid] == ref_pb.FinalOp) {
+    if (ref_pb.nextOperation[oid] == ref_pb.FinalOp && sol.ChildOnMachine(oid) == ref_pb.FinalOp) {
       if (new_end_date[oid] >= updated_makespan) {
         updated_makespan = new_end_date[oid];
         if (updated_makespan >= sol.makespan) {
@@ -96,7 +96,7 @@ void LaarhovenSearch::SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned 
 void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
 {
   // récupération des nouvelles dates parent / parent disj
-  int date_mac = GetEndDate(sol, sol.macParent[oid]);
+  int date_mac = GetEndDate(sol, sol.ParentOnMachine(oid));
   int date_job = GetEndDate(sol, ref_pb.prevOperation[oid]);
 
   // date critique
@@ -116,7 +116,7 @@ void LaarhovenSearch::UpdateOp(const Solution& sol, unsigned oid)
 
   // add successors of the current op to be updated
   // ajout des successeurs à traiter
-  OperationId child_on_mac = sol.macChild[oid];
+  OperationId child_on_mac = sol.ChildOnMachine(oid);
   if (child_on_mac != ref_pb.FinalOp
       && is_changed[child_on_mac] % 2 != OpUpdate::ToChange) {
     ops_to_move.push_back(child_on_mac);

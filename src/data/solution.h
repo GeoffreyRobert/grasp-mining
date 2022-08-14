@@ -18,12 +18,29 @@ enum OpUpdate {
 OpUpdate& operator++(OpUpdate&);
 OpUpdate& operator--(OpUpdate&);
 
+class IncompatibleScheduling : std::logic_error {
+public:
+  IncompatibleScheduling();
+};
+
 class Solution {
 public:
   Solution(const Problem& problem);
   Solution(const Solution& other);
   Solution& operator=(const Solution& other);
   Solution& operator=(Solution&& other) noexcept;
+
+  void Initialize(
+      vector<int>&& startDate
+    , vector<int>&& endDate
+    , vector<OperationId>&& macParent
+    , vector<OperationId>&& macChild
+    , vector<bool>&& isCritMachine);
+
+  // Getters
+  OperationId ParentOnMachine(OperationId oid) const;
+  OperationId ChildOnMachine(OperationId oid) const;
+  bool IsCriticalOnMachine(OperationId oid) const;
 
   // Get a scheduling for the operation and cache it
   tuple<OperationId, int, bool> GetOperationScheduling(OperationId oid);
@@ -41,10 +58,10 @@ public:
   int makespan = 0;
   OperationId criticalOp = 0;
 
-public:
   vector<int> startDate; // date de début de chaque opération
   vector<int> endDate; // date de fin de chaque operation
 
+private:
   vector<OperationId> macParent; // parent sur la machine
   vector<OperationId> macChild; // successeur(s) sur la machine
   vector<bool> isCritMachine; // parent critique sur la machine

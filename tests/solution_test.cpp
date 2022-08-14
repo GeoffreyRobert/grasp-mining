@@ -20,8 +20,8 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Operation)
 
   EXPECT_EQ(start_date, solution.startDate[oid]);
   EXPECT_EQ(end_date, solution.endDate[oid]);
-  EXPECT_EQ(parent_on_mac, solution.macParent[oid]);
-  EXPECT_EQ(child_on_mac, solution.macChild[oid]);
+  EXPECT_EQ(parent_on_mac, solution.ParentOnMachine(oid));
+  EXPECT_EQ(child_on_mac, solution.ChildOnMachine(oid));
 }
 
 TEST(SolutionTest, AddOperation_Should_Update_Child_On_Machine_Of_Parent_And_Makespan)
@@ -41,8 +41,8 @@ TEST(SolutionTest, AddOperation_Should_Update_Child_On_Machine_Of_Parent_And_Mak
   solution.GetOperationScheduling(tested_oid);
   solution.AddOperation(tested_oid);
 
-  EXPECT_EQ(parent_child_on_mac, solution.macChild[parent_oid]);
-  EXPECT_EQ(child_parent_on_mac, solution.macParent[child_oid]);
+  EXPECT_EQ(parent_child_on_mac, solution.ChildOnMachine(parent_oid));
+  EXPECT_EQ(child_parent_on_mac, solution.ParentOnMachine(child_oid));
   EXPECT_EQ(makespan, solution.makespan);
   EXPECT_EQ(critical_op, solution.criticalOp);
 }
@@ -68,8 +68,8 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Job_Operations)
 
   EXPECT_EQ(start_date, solution.startDate[tested_oid]);
   EXPECT_EQ(end_date, solution.endDate[tested_oid]);
-  EXPECT_EQ(parent_on_mac, solution.macParent[tested_oid]);
-  EXPECT_EQ(child_on_mac, solution.macChild[tested_oid]);
+  EXPECT_EQ(parent_on_mac, solution.ParentOnMachine(tested_oid));
+  EXPECT_EQ(child_on_mac, solution.ChildOnMachine(tested_oid));
 }
 
 TEST(SolutionTest, AddOperation_Should_Update_Children_On_Same_Machine)
@@ -94,9 +94,9 @@ TEST(SolutionTest, AddOperation_Should_Update_Children_On_Same_Machine)
   solution.GetOperationScheduling(tested_oid);
   solution.AddOperation(tested_oid);
 
-  EXPECT_EQ(parent_oid, solution.macParent[tested_oid]);
-  EXPECT_EQ(child2_parent_on_mac, solution.macParent[child2_oid]);
-  EXPECT_EQ(child3_parent_on_mac, solution.macParent[child3_oid]);
+  EXPECT_EQ(parent_oid, solution.ParentOnMachine(tested_oid));
+  EXPECT_EQ(child2_parent_on_mac, solution.ParentOnMachine(child2_oid));
+  EXPECT_EQ(child3_parent_on_mac, solution.ParentOnMachine(child3_oid));
   EXPECT_EQ(makespan, solution.makespan);
   EXPECT_EQ(critical_op, solution.criticalOp);
 }
@@ -126,9 +126,9 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Machine_Operati
 
   EXPECT_EQ(start_date, solution.startDate[tested_oid]);
   EXPECT_EQ(end_date, solution.endDate[tested_oid]);
-  EXPECT_EQ(parent_on_mac, solution.macParent[tested_oid]);
-  EXPECT_EQ(child_on_mac, solution.macChild[tested_oid]);
-  EXPECT_EQ(parent_child_on_mac, solution.macChild[parent_oid]);
+  EXPECT_EQ(parent_on_mac, solution.ParentOnMachine(tested_oid));
+  EXPECT_EQ(child_on_mac, solution.ChildOnMachine(tested_oid));
+  EXPECT_EQ(parent_child_on_mac, solution.ChildOnMachine(parent_oid));
   EXPECT_EQ(makespan, solution.makespan);
   EXPECT_EQ(critical_op, solution.criticalOp);
 }
