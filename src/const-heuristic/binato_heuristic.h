@@ -25,8 +25,6 @@ private:
 
   // Gestion des candidats à la RCL, de leur parent et du makespan
   vector<JobId> candidate_jobs;
-  vector<OperationId> tmp_parent_list;
   vector<int> tmp_mkspan_list;
-  vector<bool> tmp_is_on_mac;
 };
 #endif // !BINATO_HEURISTIC_H_

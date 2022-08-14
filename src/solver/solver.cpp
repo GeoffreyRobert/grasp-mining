@@ -1,15 +1,14 @@
 #include <limits>
 #include <chrono>
-#include <iostream>
 
-#include "solver.h"
+#include "solver/solver.h"
 #include "const-heuristic/binato_heuristic.h"
 #include "const-heuristic/random_placement.h"
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
 #include "miner/data_miner.h"
 
-using std::chrono::high_resolution_clock; using std::cout;
+using std::chrono::high_resolution_clock;
 
 Solver::Solver(ConstHeuristic& init_heuristic, ConstHeuristic& const_heuristic,
 			   LocalSearch& local_search, DataMiner& data_miner, unsigned pop_size) :
@@ -42,7 +41,6 @@ Solution Solver::Solve(const Problem& problem)
 
 		localSearch.hit_count = 0;
 		localSearch(sol);
-		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée
 		if (sol.makespan < best_solution.makespan) {
@@ -57,7 +55,6 @@ Solution Solver::Solve(const Problem& problem)
 
 		localSearch.hit_count = 0;
 		localSearch(sol);
-		cout << "local search improvement: " << localSearch.hit_count << std::endl;
 
 		// Mise à jour de la meilleure solution rencontrée
 		if (sol.makespan < best_solution.makespan) {

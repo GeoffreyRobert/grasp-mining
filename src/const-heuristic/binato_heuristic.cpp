@@ -1,6 +1,6 @@
-#include <utility>
+#include <cmath>
 
-#include "binato_heuristic.h"
+#include "const-heuristic/binato_heuristic.h"
 
 using std::pair;
 using std::vector;
@@ -11,12 +11,10 @@ BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha)
   , generator(std::random_device()())
   , num_ops_of_job(problem.nJob, 0)
   , rc_list(0)
-  , candidate_jobs(problem.nJob)
-  , tmp_parent_list(problem.nJob)
   , tmp_mkspan_list(problem.nJob)
-  , tmp_is_on_mac(problem.nJob, false)
 {
   // the restricted candidate list starts empty but can fill up
+  candidate_jobs.reserve(problem.nJob);
   rc_list.reserve(problem.nJob);
 }
 
@@ -30,30 +28,29 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
     for (JobId jid = 0; jid < ref_pb.nJob; ++jid) { // pour chaque job
 
       OperationRank rank = num_ops_of_job[jid];
-      if (rank >= ref_pb.nMac) // on ne ignore les jobs terminés
+      if (rank >= ref_pb.nMac) // ignore completely scheduled jobs
         continue;
 
       OperationId oid = ref_pb.operationNumber[jid][rank];
-
       auto [parent, start_date, is_on_mac] = solution.GetOperationScheduling(oid);
 
       // parent et date de fin de l'operation
-      tmp_parent_list[jid] = parent;
-      tmp_mkspan_list[jid] = start_date + ref_pb.timeOnMachine[oid];
-      tmp_is_on_mac[jid] = is_on_mac;
+      int tmp_makespan = start_date + ref_pb.timeOnMachine[oid];
+      tmp_mkspan_list[jid] = tmp_makespan;
       candidate_jobs.push_back(jid);
 
-      if (min_makespan > tmp_mkspan_list[jid]) {
-        min_makespan = tmp_mkspan_list[jid];
+      if (min_makespan > tmp_makespan) {
+        min_makespan = tmp_makespan;
       }
 
-      if (max_makespan < tmp_mkspan_list[jid]) {
-        max_makespan = tmp_mkspan_list[jid];
+      if (max_makespan < tmp_makespan) {
+        max_makespan = tmp_makespan;
       }
     }
 
     // on choisit une zone de coupe par rapport au paramètre alpha
-    int split_value = min_makespan + static_cast<int>(_alpha * static_cast<double>(max_makespan - min_makespan));
+    int offset = static_cast<int>(std::lround(_alpha * static_cast<double>(max_makespan - min_makespan)));
+    int split_value = min_makespan + offset;
 
     // construction de la RCL à partir de la splitValue précédente
     for (JobId c_job : candidate_jobs) {
@@ -67,7 +64,8 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
     JobId chosen_job = rc_list[uni(generator)];
 
     // récupération des identifiants operation, machine et parent
-    OperationId oid = ref_pb.operationNumber[chosen_job][num_ops_of_job[chosen_job]];
+    OperationRank rank = num_ops_of_job[chosen_job];
+    OperationId oid = ref_pb.operationNumber[chosen_job][rank];
 
     // construction de la solution
     solution.AddOperation(oid);
@@ -79,5 +77,7 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
     candidate_jobs.clear();
     rc_list.clear();
   }
+  std::fill(num_ops_of_job.begin(), num_ops_of_job.end(), 0);
+
   return solution;
 }

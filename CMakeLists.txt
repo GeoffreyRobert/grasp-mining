@@ -72,6 +72,7 @@ target_link_libraries(grasp
 add_executable(full_test
   tests/problem_test.cpp
   tests/solution_test.cpp
+  tests/binato_test.cpp
   tests/laarhoven_test.cpp
   tests/main_test.cpp
 )

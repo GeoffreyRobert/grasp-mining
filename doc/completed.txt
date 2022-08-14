@@ -1,3 +1,12 @@
+#022 [ code ] Unit test binato heuristic
+
+#005 [ test ] Run the program
+Req:
+  - Run to completion with no errors
+  - Produce results
+
+#027 [ algo ] Fix Laar infinite loop
+
 #028 [ code ] Unit test solution GetSched/AddOp
 
 #026 [ code ] Compute scheduling in solution object
