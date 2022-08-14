@@ -12,6 +12,8 @@ Req:
 
 #022 [ code ] Unit test binato heuristic
 
-#023 [ code ] Use first and last ops
+#024 [ code ] Use a draft solution in Laar with copy/move assign
 
-#024
+#025 [ code ] Use FinalOp as storage for makespan
+
+#027

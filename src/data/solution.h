@@ -9,44 +9,43 @@
 using std::vector;
 
 enum OpUpdate {
-    Unchanged = 0,
-    ToChange = 1,
-    Changed = 2,
-    ChangedToChange = 3
+  Unchanged = 0,
+  ToChange = 1,
+  Changed = 2,
+  ChangedToChange = 3
 };
 OpUpdate& operator++(OpUpdate&);
 OpUpdate& operator--(OpUpdate&);
 
-
 class Solution {
 public:
-	Solution(const Problem& problem);
+  Solution(const Problem& problem);
+  Solution(const Solution& other);
+  Solution& operator=(const Solution& other);
+  Solution& operator=(Solution&& other) noexcept;
 
-	Solution(const Solution& other);
+  // Get a scheduling for the operation and cache it
+  std::tuple<OperationId, int, bool> GetOperationScheduling(OperationId oid);
 
-	Solution& operator=(const Solution& other);
+  void AddOperation(OperationId oid);
+  void SwapOperations(OperationId parent, OperationId child);
 
-	Solution& operator=(Solution&& other) noexcept;
+  unsigned DoChanges(
+    vector<OpUpdate>& is_changed, vector<int>& new_start_date,
+    vector<int>& new_end_date, vector<bool>& new_is_crit_mac);
 
-	void AddOperation(OperationId oid, int start, int end, OperationId parent, bool is_on_mac);
+  const Problem& problem;
 
-	void SwapOperations(OperationId parent, OperationId child);
+  // Plannification de la solution
+  int makespan = 0;
+  OperationId criticalOp = 0;
 
-	unsigned DoChanges(
-        vector<OpUpdate>& is_changed, vector<int>& new_start_date, 
-        vector<int>& new_end_date, vector<bool>& new_is_crit_mac);
+public:
+  vector<int> startDate; // date de début de chaque opération
+  vector<int> endDate; // date de fin de chaque operation
 
-	const Problem& problem;
-
-	// Plannification de la solution
-	int makespan = 0;
-	OperationId criticalOp = 0;
-
-	vector<int> startDate;				// date de début de chaque opération
-    vector<int> endDate;				// date de fin de chaque operation
-
-    vector<OperationId> macParent;						// parent sur la machine
-    vector<OperationId> macChild;						// successeur(s) sur la machine
-    vector<bool> isCritMachine;					// parent critique sur la machine
+  vector<OperationId> macParent; // parent sur la machine
+  vector<OperationId> macChild; // successeur(s) sur la machine
+  vector<bool> isCritMachine; // parent critique sur la machine
 };
 #endif

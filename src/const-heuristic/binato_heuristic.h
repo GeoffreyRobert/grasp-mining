@@ -8,26 +8,26 @@
 
 class BinatoHeuristic : public ConstHeuristic {
 public:
-	BinatoHeuristic(const Problem&, double alpha = 0.5);
+  BinatoHeuristic(const Problem&, double alpha = 0.5);
 
-	// construction greedy randomisée
-	Solution& operator()(Solution&);
+  // construction greedy randomisée
+  Solution& operator()(Solution&);
 
 private:
   double _alpha = 0.5;
   std::mt19937 generator;
 
-    // Gestion des contraintes de dépendance
-    vector<OperationId> last_op_on_mac;	// dernière op. traitée par mach.
-    vector<MachineId> num_ops_of_job;	// nombre d'op. traitées par job
+  // Gestion des contraintes de dépendance
+  vector<OperationId> last_op_on_mac; // dernière op. traitée par mach.
+  vector<MachineId> num_ops_of_job; // nombre d'op. traitées par job
 
-    // Gestion de la Restricted Candidate List
-    vector<JobId> rc_list;				// Restricted Candidate List
+  // Gestion de la Restricted Candidate List
+  vector<JobId> rc_list; // Restricted Candidate List
 
-    // Gestion des candidats à la RCL, de leur parent et du makespan
-    vector<JobId> candidate_jobs;
-    vector<OperationId> tmp_parent_list;
-    vector<int> tmp_mkspan_list;
-    vector<bool> tmp_is_on_mac;
+  // Gestion des candidats à la RCL, de leur parent et du makespan
+  vector<JobId> candidate_jobs;
+  vector<OperationId> tmp_parent_list;
+  vector<int> tmp_mkspan_list;
+  vector<bool> tmp_is_on_mac;
 };
 #endif // !BINATO_HEURISTIC_H_

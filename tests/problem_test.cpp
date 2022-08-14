@@ -22,7 +22,8 @@ TEST(ProblemTest, StringStreamTest) {
         " 1  5  0  5  2  5  3  3  4  8  5  9\n"
         " 2  9  1  3  4  5  5  4  0  3  3  1\n"
         " 1  3  3  3  5  9  0  7  4  4  2  1\n";
-    const int size = 36;
+    const int opNum = 36;
+    const int size = opNum + 2;
     const int nJob = 6;
     const int nMac = 6;
     const int lowerBound = 55;
@@ -30,6 +31,7 @@ TEST(ProblemTest, StringStreamTest) {
     std::istringstream stream(input);
     Problem problem = LoadProblemFromStream(stream);
 
+    EXPECT_EQ(problem.opNum, opNum);
     EXPECT_EQ(problem.size, size);
     EXPECT_EQ(problem.nJob, nJob);
     EXPECT_EQ(problem.nMac, nMac);

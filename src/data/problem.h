@@ -28,21 +28,28 @@ class Problem {
 public:
   Problem(JobId nJob, MachineId nMac, int lowerBound, vector<std::pair<unsigned, int>> operationSpecs);
 
+  const vector<OperationId>& OperationsOnMachine(MachineId machine) const;
+
   string ToString() const;
 
   void Clear();
 
-  static constexpr OperationId InvalidOp = std::numeric_limits<OperationId>::max();
-  JobId nJob; // nombre de jobs
-  MachineId nMac; // nombre de machines
-  OperationId size; // taille du problème
-  int lowerBound; // borne inf du problème
+  const JobId nJob; // nombre de jobs
+  const MachineId nMac; // nombre de machines
+  const OperationId opNum; // total number of schedulable operations excluding origin/final
+  const OperationId size; // total number of operations including origin/final
+
+  // One "origin" op and one "termination" op
+  const OperationId OriginOp = 0;
+  const OperationId FinalOp;
 
   // caractéristiques des jobs
+  const int lowerBound; // borne inf du problème
   int minTime;
   int maxTime;
 
-  vector<vector<OperationId>> operationNumber; // numéro du sommet traité (job, op)
+  vector<vector<OperationId>> operationNumber; // numero du sommet traité (job, op)
+  vector<vector<OperationId>> operationsOnMachine; // for each machine, for each job, operation on the machine
 
   vector<OperationId> prevOperation; // numéro de l'op. suivante dans le job
   vector<OperationId> nextOperation; // numéro de l'op. préc. dans le job

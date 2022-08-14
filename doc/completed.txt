@@ -1,3 +1,7 @@
+#026 [ code ] Compute scheduling in solution object
+
+#023 [ code ] Use first and last ops
+
 #021 [ code ] Fix command line interface of grasp
 
 #020 [ algo ] Laar: use UpdateOp in SwapAndUpdateOps because of potentially Changed swappees

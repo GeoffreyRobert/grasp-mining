@@ -11,8 +11,6 @@ using std::string;
 
 namespace {
 
-static constexpr OperationId Na = Problem::InvalidOp;
-
 TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 {
   /*
@@ -25,32 +23,45 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
       { 0, 1 }, { 1, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
+    0,
     0, 1,
     2, 3,
+    4,
   };
   solution.endDate = {
+    0,
     1, 2,
     3, 4,
+    4,
   };
   solution.macParent = {
-    Na, Na,
-    1, 0,
+    Or,
+    Or, Or,
+     2,  1,
+     4,
   };
   solution.macChild = {
-    3, 2,
-    Na, Na,
+     1,
+     4,  3,
+    Fn, Fn,
+    Fn,
   };
   solution.isCritMachine = {
+    0,
     0, 0,
     1, 0,
+    1,
   };
-  solution.criticalOp = 3;
   solution.makespan = 4;
+  solution.criticalOp = 4;
 
   const int final_makespan = 2;
-  const int final_criticalOp = 1;
+  const int final_criticalOp = 2;
 
   LaarhovenSearch local_search(problem);
   local_search(solution);
@@ -71,32 +82,45 @@ TEST(LaarhovenTest, NoImprovement)
       { 0, 1 }, { 1, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
+    0,
     0, 1,
     1, 2,
+    3,
   };
   solution.endDate = {
+    0,
     1, 2,
     2, 3,
+    3,
   };
   solution.macParent = {
-    Na, Na,
-    0, 1,
+    Or,
+    Or, Or,
+     1,  2,
+     4,
   };
   solution.macChild = {
-    2, 3,
-    Na, Na,
+     1,
+     3,  4,
+    Fn, Fn,
+    Fn,
   };
   solution.isCritMachine = {
+    0,
     0, 0,
     1, 1,
+    1,
   };
-  solution.criticalOp = 3;
   solution.makespan = 3;
+  solution.criticalOp = 4;
 
   const int final_makespan = 3;
-  const int final_criticalOp = 3;
+  const int final_criticalOp = 4;
 
   LaarhovenSearch local_search(problem);
   local_search(solution);
@@ -118,31 +142,44 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
       { 1, 1 }, { 0, 1 }, { 2, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
+    0,
     0, 1, 2,
     0, 2, 3,
+    4,
   };
   solution.endDate = {
+    0,
     1, 2, 3,
     1, 3, 4,
+    4,
   };
   solution.macParent = {
-    Na, Na, 3,
-    Na, 1, 0,
+    Or,
+    Or, Or, 4,
+    Or,  2, 1,
+     6,
   };
   solution.macChild = {
-    5, 4, Na,
-    2, Na, Na,
+     1,
+     6,  5, Fn,
+     3, Fn, Fn,
+    Fn,
   };
   solution.isCritMachine = {
+    0,
     0, 0, 0,
     0, 1, 0,
+    1,
   };
-  solution.criticalOp = 5;
+  solution.criticalOp = 6;
   solution.makespan = 4;
 
-  const int final_criticalOp = 5;
+  const int final_criticalOp = 6;
   const int final_makespan = 4;
 
   LaarhovenSearch local_search(problem);
@@ -165,36 +202,49 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
       { 0, 0 }, { 1, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
+    0,
     0, 1,
     0, 2,
     0, 3,
+    4,
   };
   solution.endDate = {
+    0,
     1, 2,
     0, 3,
     0, 4,
+    4,
   };
   solution.macParent = {
-    2, Na,
-    4,  1,
-    Na, 3,
+    Or,
+     3, Or,
+     5,  2,
+    Or,  4,
+     6,
   };
   solution.macChild = {
-    Na, 3,
-     0, 5,
-     2, Na,
+    1,
+    Fn,  4,
+     1,  6,
+     3, Fn,
+    Fn,
   };
   solution.isCritMachine = {
+    0,
     1, 0,
     1, 1,
     0, 1,
+    1,
   };
-  solution.criticalOp = 5;
+  solution.criticalOp = 6;
   solution.makespan = 4;
 
-  const int final_criticalOp = 5;
+  const int final_criticalOp = 6;
   const int final_makespan = 3;
 
   LaarhovenSearch local_search(problem);
@@ -218,36 +268,49 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
       { 1, 1 }, { 0, 1 }, { 2, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
+    0,
     0, 1, 3,
     0, 4, 5,
     1, 2, 3,
+    6,
   };
   solution.endDate = {
+    0,
     1, 2, 5,
     1, 5, 6,
     2, 3, 4,
+    6,
   };
   solution.macParent = {
-    Na, Na, 7,
-    Na,  8, 6,
-     0,  3, 1,
+    Or,
+    Or, Or, 8,
+    Or,  9, 7,
+     1,  4, 2,
+     6,
   };
   solution.macChild = {
-    6,  8, Na,
-    7, Na, Na,
-    5,  2,  4,
+     1,
+     7,  9, Fn,
+     8, Fn, Fn,
+     6,  3,  5,
+    Fn,
   };
   solution.isCritMachine = {
+    0,
     0, 0, 1,
     0, 1, 0,
     1, 0, 0,
+    1,
   };
-  solution.criticalOp = 5;
+  solution.criticalOp = 6;
   solution.makespan = 6;
 
-  const int final_criticalOp = 2;
+  const int final_criticalOp = 3;
   const int final_makespan = 5;
 
   LaarhovenSearch local_search(problem);
@@ -269,43 +332,61 @@ TEST(LaarhovenTest, LargeProblem)
       { 1, 3 }, { 3, 3 }, { 5, 9 }, { 0, 7 }, { 4, 4 }, { 2, 1 },
     });
 
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+
   Solution solution(problem);
   solution.startDate = {
-    0, 1, 4, 10, 17, 20,
+     0,
+     0,  1,  4, 10, 17, 20,
     10, 18, 26, 36, 46, 56,
-    1, 6, 20, 28, 37, 38,
+     1,  6, 20, 28, 37, 38,
     18, 23, 28, 33, 45, 53,
-    6, 23, 53, 62, 66, 69,
-    0, 3, 6, 15, 58, 62 };
+     6, 23, 53, 62, 66, 69,
+     0,  3,  6, 15, 58, 62,
+    70,
+  };
   solution.endDate = {
-    1, 4, 10, 17, 20, 26,
+     0,
+     1,  4, 10, 17, 20, 26,
     18, 23, 36, 46, 56, 60,
-    6, 10, 28, 37, 38, 45,
+     6, 10, 28, 37, 38, 45,
     23, 28, 33, 36, 53, 62,
     15, 26, 58, 66, 69, 70,
-    3, 6, 15, 22, 62, 63 };
+     3,  6, 15, 22, 62, 63,
+    70,
+  };
   solution.macParent = {
-    Na, Na, 30, 13, 32, Na,
-    2, 24, 5, 14, 15, 21,
-    0, 6, 4, 19, 25, 8,
-    6, 33, 7, 3, 17, 9,
-    12, 18, 22, 23, 10, 11,
-    Na, Na, Na, 1, 26, 20 };
+    Or,
+    Or, Or, 31, 14, 33, Or,
+     3, 25,  6, 15, 16, 22,
+     1,  7,  5, 20, 26,  9,
+     7, 34,  8,  4, 18, 10,
+    13, 19, 23, 24, 11, 12,
+    Or, Or, Or,  2, 27, 21,
+    30,
+  };
   solution.macChild = {
-    12, 33, 6, 21, 14, 8,
-    18, 20, 17, 23, 28, 29,
-    24, 3, 9, 10, Na, 22,
-    25, 15, 35, 11, 26, 27,
-    7, 16, 34, Na, Na, Na,
-    2, 13, 4, 19, Na, Na };
+     1,
+    13, 34,  7, 22, 15,  9,
+    19, 21, 18, 24, 29, 30,
+    25,  4, 10, 11, Fn, 23,
+    26, 16, 36, 12, 27, 28,
+     8, 17, 35, Fn, Fn, Fn,
+     3, 14,  5, 20, Fn, Fn,
+    Fn,
+  };
   solution.isCritMachine = {
+    0,
     0, 0, 0, 0, 0, 0,
     1, 0, 1, 0, 0, 0,
     1, 0, 1, 0, 0, 0,
     1, 0, 0, 0, 1, 0,
     1, 1, 1, 1, 0, 0,
-    0, 0, 0, 0, 1, 0 };
-  solution.criticalOp = 29;
+    0, 0, 0, 0, 1, 0,
+    1,
+  };
+  solution.criticalOp = 30;
   solution.makespan = 70;
 
   LaarhovenSearch local_search(problem);

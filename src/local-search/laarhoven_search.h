@@ -22,7 +22,7 @@ public:
   Solution& operator()(Solution& solution) override;
 
 private:
-  std::pair<OperationId, int> SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
+  int SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
   void SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child);
   void CancelSwap(Solution& sol, unsigned parent, unsigned child);
   void UpdateOp(const Solution& sol, unsigned oid);
