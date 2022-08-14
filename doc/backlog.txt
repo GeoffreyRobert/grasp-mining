@@ -16,4 +16,6 @@ Req:
 
 #025 [ code ] Use FinalOp as storage for makespan
 
-#027
+#027 [ algo ] Fix Laar infinite loop
+
+#029

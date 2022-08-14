@@ -68,26 +68,24 @@ Solution& Solution::operator=(const Solution& other)
 std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId oid)
 {
   // initialisations durées+parent
-  OperationId parent_job = problem.prevOperation[oid];
-  int date_job = endDate[parent_job];
+  OperationId parent_in_job = problem.prevOperation[oid];
+  int date_job = endDate[parent_in_job];
 
-  MachineId mid = problem.machineNumber[oid];
-  OperationId parent_mac = macParent[mid];
-  int date_mac = endDate[parent_mac];
+  OperationId parent_on_mac = macParent[oid];
+  int date_mac = endDate[parent_on_mac];
 
   OperationId parent;
   int start_date;
   bool is_on_mac;
   if (date_job < date_mac) { // si la date disj est superieure
-    parent = parent_mac;
+    parent = parent_on_mac;
     start_date = date_mac;
     is_on_mac = true;
   } else {
-    parent = parent_job;
+    parent = parent_in_job;
     start_date = date_job;
     is_on_mac = false;
   }
-  macParent[oid] = parent;
   startDate[oid] = start_date;
   endDate[oid] = start_date + problem.timeOnMachine[oid];
   isCritMachine[oid] = is_on_mac;
@@ -102,6 +100,9 @@ void Solution::AddOperation(OperationId oid)
   if (endDate[oid] > makespan) {
     criticalOp = oid;
     makespan = endDate[oid];
+    macParent[problem.FinalOp] = criticalOp;
+    startDate[problem.FinalOp] = makespan;
+    endDate[problem.FinalOp] = makespan;
   }
 
   // update all operations on the same machine that were not yet added to the solution
@@ -109,7 +110,7 @@ void Solution::AddOperation(OperationId oid)
   for (OperationId oid_updt : problem.operationsOnMachine[mac])
   {
     // test if the operation was added
-    if (oid_updt != oid && macChild[oid_updt != problem.FinalOp])
+    if (oid_updt != oid && macChild[oid_updt] == problem.FinalOp)
       macParent[oid_updt] = oid;
   }
 }

@@ -70,9 +70,10 @@ target_link_libraries(grasp
 
 # TODO: Link the tests to the library
 add_executable(full_test
-  tests/main_test.cpp
-  tests/laarhoven_test.cpp
   tests/problem_test.cpp
+  tests/solution_test.cpp
+  tests/laarhoven_test.cpp
+  tests/main_test.cpp
 )
 
 # Copy test files to output directory

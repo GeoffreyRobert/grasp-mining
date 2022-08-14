@@ -1,3 +1,5 @@
+#028 [ code ] Unit test solution GetSched/AddOp
+
 #026 [ code ] Compute scheduling in solution object
 
 #023 [ code ] Use first and last ops

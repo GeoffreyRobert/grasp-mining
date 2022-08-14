@@ -1,11 +1,12 @@
 #ifndef SOLUTION_
 #define SOLUTION_
 
-#include <functional>
+#include <tuple>
 #include <vector>
 
-#include "problem.h"
+#include "data/problem.h"
 
+using std::tuple;
 using std::vector;
 
 enum OpUpdate {
@@ -25,7 +26,7 @@ public:
   Solution& operator=(Solution&& other) noexcept;
 
   // Get a scheduling for the operation and cache it
-  std::tuple<OperationId, int, bool> GetOperationScheduling(OperationId oid);
+  tuple<OperationId, int, bool> GetOperationScheduling(OperationId oid);
 
   void AddOperation(OperationId oid);
   void SwapOperations(OperationId parent, OperationId child);

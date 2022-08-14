@@ -18,7 +18,6 @@ private:
   std::mt19937 generator;
 
   // Gestion des contraintes de dépendance
-  vector<OperationId> last_op_on_mac; // dernière op. traitée par mach.
   vector<MachineId> num_ops_of_job; // nombre d'op. traitées par job
 
   // Gestion de la Restricted Candidate List

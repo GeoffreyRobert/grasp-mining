@@ -1,13 +1,8 @@
 #include "gtest/gtest.h"
 
-#include <iostream>
-#include <string>
-
 #include "data/problem.h"
 #include "data/solution.h"
 #include "local-search/laarhoven_search.h"
-
-using std::string;
 
 namespace {
 
