@@ -133,4 +133,38 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Machine_Operati
   EXPECT_EQ(critical_op, solution.criticalOp);
 }
 
+TEST(SolutionTest, AddOperation_Should_Throw_If_Same_Operation_Added_Twice)
+{
+  Problem problem(3, 1, 3,
+    vector<std::pair<MachineId, int>> {
+      { 0, 1 },
+      { 0, 1 },
+      { 0, 1 },
+    });
+  Solution solution(problem);
+
+  const OperationId tested_oid = 1;
+  const OperationId second_oid = 2;
+  const OperationId third_oid = 3;
+
+  solution.GetOperationScheduling(tested_oid);
+  solution.AddOperation(tested_oid);
+  solution.GetOperationScheduling(second_oid);
+  solution.AddOperation(second_oid);
+  solution.GetOperationScheduling(third_oid);
+  solution.AddOperation(third_oid);
+
+  EXPECT_EQ(problem.OriginOp, solution.ParentOnMachine(tested_oid));
+  EXPECT_EQ(tested_oid, solution.ParentOnMachine(second_oid));
+  EXPECT_EQ(second_oid, solution.ParentOnMachine(third_oid));
+  EXPECT_EQ(second_oid, solution.ChildOnMachine(tested_oid));
+  EXPECT_EQ(third_oid, solution.ChildOnMachine(second_oid));
+  EXPECT_EQ(problem.FinalOp, solution.ChildOnMachine(third_oid));
+
+  // Should not throw since last on machine -> no problem
+  solution.AddOperation(third_oid);
+
+  EXPECT_THROW(solution.AddOperation(tested_oid), InvalidScheduling);
+}
+
 } // namespace

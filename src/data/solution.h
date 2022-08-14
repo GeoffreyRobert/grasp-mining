@@ -18,9 +18,9 @@ enum OpUpdate {
 OpUpdate& operator++(OpUpdate&);
 OpUpdate& operator--(OpUpdate&);
 
-class IncompatibleScheduling : std::logic_error {
+class InvalidScheduling : std::logic_error {
 public:
-  IncompatibleScheduling();
+  InvalidScheduling(const string& what);
 };
 
 class Solution {
@@ -62,6 +62,10 @@ public:
   vector<int> endDate; // date de fin de chaque operation
 
 private:
+  void CheckScheduling(OperationId oid) const;
+  void CheckCycle(OperationId oid) const;
+  void CheckNoChild(OperationId oid) const;
+
   vector<OperationId> macParent; // parent sur la machine
   vector<OperationId> macChild; // successeur(s) sur la machine
   vector<bool> isCritMachine; // parent critique sur la machine

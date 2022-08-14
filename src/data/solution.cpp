@@ -16,8 +16,8 @@ OpUpdate& operator--(OpUpdate& up)
 }
 
 
-IncompatibleScheduling::IncompatibleScheduling()
-  : std::logic_error("Ordering on machine and start dates are inverted")
+InvalidScheduling::InvalidScheduling(const string& what)
+  : std::logic_error(what)
 {}
 
 
@@ -91,29 +91,11 @@ void Solution::Initialize(
 
 OperationId Solution::ParentOnMachine(OperationId oid) const
 {
-  // to remove
-  OperationId parent_on_machine = macParent[oid];
-  int parent_end_date = endDate[parent_on_machine];
-  int current_start_date = startDate[oid];
-  if (current_start_date < parent_end_date)
-  {
-    throw IncompatibleScheduling();
-  }
-
   return macParent[oid];
 }
 
 OperationId Solution::ChildOnMachine(OperationId oid) const
 {
-  // to remove
-  OperationId child_on_machine = macChild[oid];
-  int child_start_date = startDate[child_on_machine];
-  int current_end_date = endDate[oid];
-  if (child_start_date < current_end_date)
-  {
-    throw IncompatibleScheduling();
-  }
-
   return macChild[oid];
 }
 
@@ -152,14 +134,9 @@ std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId 
 
 void Solution::AddOperation(OperationId oid)
 {
-  // to remove
-  OperationId parent_on_machine = macParent[oid];
-  int parent_end_date = endDate[parent_on_machine];
-  int current_end_date = endDate[oid];
-  if (current_end_date < parent_end_date)
-  {
-    throw IncompatibleScheduling();
-  }
+  // this is a necesary protection, if not fulfilled, could create nasty cycles
+  if (macChild[oid] != problem.FinalOp)
+    throw InvalidScheduling("Cannot add operation that was already added");
 
   macChild[macParent[oid]] = oid;
 
@@ -175,7 +152,9 @@ void Solution::AddOperation(OperationId oid)
   {
     // test if the operation was added
     if (oid_updt != oid && macChild[oid_updt] == problem.FinalOp)
+    {
       macParent[oid_updt] = oid;
+    }
   }
 }
 
@@ -188,19 +167,6 @@ unsigned Solution::DoChanges(
       startDate[oid] = new_start_date[oid];
       endDate[oid] = new_end_date[oid];
       isCritMachine[oid] = new_is_crit_mac[oid];
-    }
-  }
-
-  // to remove
-  for (OperationId oid = 0; oid < problem.size; ++oid) {
-    if (is_changed[oid] == OpUpdate::Changed) {
-      OperationId parent_on_machine = macParent[oid];
-      int parent_end_date = endDate[parent_on_machine];
-      int current_end_date = endDate[oid];
-      if (current_end_date < parent_end_date)
-      {
-        throw IncompatibleScheduling();
-      }
     }
   }
 
@@ -231,4 +197,40 @@ void Solution::SwapOperations(OperationId parent, OperationId child)
 
   macParent[parent] = child;
   macChild[child] = parent;
+}
+
+void Solution::CheckScheduling(OperationId oid) const
+{
+  OperationId parent_on_machine = macParent[oid];
+  int parent_end_date = endDate[parent_on_machine];
+  int current_end_date = endDate[oid];
+  if (current_end_date < parent_end_date)
+  {
+    throw InvalidScheduling("Machine ordering conflicts with date assignments");
+  }
+}
+
+void Solution::CheckCycle(OperationId oid) const
+{
+  OperationId parent = macParent[oid];
+  while (parent != problem.OriginOp)
+  {
+    if (parent == oid)
+      throw InvalidScheduling("Cycle detected");
+    parent = macParent[parent];
+  }
+
+  OperationId child = macChild[oid];
+  while (child != problem.FinalOp)
+  {
+    if (child == oid)
+      throw InvalidScheduling("Cycle detected");
+    child = macChild[child];
+  }
+}
+
+void Solution::CheckNoChild(OperationId oid) const
+{
+  if (oid != problem.OriginOp && macChild[oid] != problem.FinalOp)
+    throw InvalidScheduling("Operation should not have a child assigned here");
 }

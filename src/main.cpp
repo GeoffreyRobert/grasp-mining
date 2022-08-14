@@ -54,7 +54,7 @@ int main(int argc, char** argv)
   EmptyMiner data_miner(problem);
   Solver solver(init_heuristic, const_heuristic, local_search, data_miner, max_replications);
 
-  for (int i = 0; i < max_replications; ++i) {
+  for (unsigned i = 0; i < max_replications; ++i) {
     sol = solver.Solve(problem);
     if (sol.makespan < best_sol.makespan) {
       best_sol = sol;

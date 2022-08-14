@@ -48,20 +48,6 @@ Solution Solver::Solve(const Problem& problem)
 		}
 	}
 
-	dataMiner(solution_set);
-
-	for (Solution& sol : solution_set) {
-		constHeuristic(sol);
-
-		localSearch.hit_count = 0;
-		localSearch(sol);
-
-		// Mise à jour de la meilleure solution rencontrée
-		if (sol.makespan < best_solution.makespan) {
-			best_solution = sol;
-		}
-	}
-
 	// Timer
 	high_resolution_clock::time_point end = high_resolution_clock::now();
 	runtime = (end - init);
