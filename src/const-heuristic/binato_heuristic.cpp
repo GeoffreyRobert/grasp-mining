@@ -1,82 +1,80 @@
 #include <cmath>
 
+#include "data/problem.h"
+#include "data/solution.h"
 #include "const-heuristic/binato_heuristic.h"
 
 using std::pair;
 using std::vector;
 
-BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha)
-  : ConstHeuristic(problem)
+BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha, unsigned seed)
+  : CandidateHeuristic<BinCandidateJob>(problem, seed)
   , _alpha(alpha)
-  , generator(std::random_device()())
-  , num_ops_of_job(problem.nJob, 0)
-  , rc_list(0)
-  , tmp_mkspan_list(problem.nJob)
+  , rc_list(problem.nJob)
 {
-  // the restricted candidate list starts empty but can fill up
-  candidate_jobs.reserve(problem.nJob);
-  rc_list.reserve(problem.nJob);
+}
+
+void BinatoHeuristic::Init()
+{
+  CandidateHeuristic<BinCandidateJob>::Init();
+  rc_list.clear();
 }
 
 Solution& BinatoHeuristic::operator()(Solution& solution)
 {
+  Init();
+
   for (OperationId counter = 0; counter < ref_pb.opNum; ++counter) { // pour chaque operation
     int min_makespan = std::numeric_limits<int>::max();
     int max_makespan = 0;
 
-    // reinitialisation pour stockage des données
-    for (JobId jid = 0; jid < ref_pb.nJob; ++jid) { // pour chaque job
-
-      OperationRank rank = num_ops_of_job[jid];
-      if (rank >= ref_pb.nMac) // ignore completely scheduled jobs
-        continue;
-
-      OperationId oid = ref_pb.operationNumber[jid][rank];
+    for (auto& c_job : candidate_jobs) {
+      OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
       int end_date = solution.GetOperationScheduling(oid);
 
       // parent et date de fin de l'operation
-      tmp_mkspan_list[jid] = end_date;
-      candidate_jobs.push_back(jid);
+      c_job.makespan = end_date;
 
       if (min_makespan > end_date) {
         min_makespan = end_date;
       }
-
       if (max_makespan < end_date) {
         max_makespan = end_date;
       }
     }
 
     // on choisit une zone de coupe par rapport au paramètre alpha
-    int offset = static_cast<int>(std::lround(_alpha * static_cast<double>(max_makespan - min_makespan)));
+    int offset = static_cast<int>(
+        std::lround(_alpha * static_cast<double>(max_makespan - min_makespan)));
     int split_value = min_makespan + offset;
 
     // construction de la RCL à partir de la splitValue précédente
-    for (JobId c_job : candidate_jobs) {
-      if (tmp_mkspan_list[c_job] <= split_value) {
-        rc_list.push_back(c_job);
+    for (auto& c_job : candidate_jobs) {
+      if (c_job.makespan <= split_value) {
+        rc_list.push_back(&c_job);
       }
     }
 
-    // choix d'un job aléatoirement dans la RCL
-    std::uniform_int_distribution<unsigned long> uni(0, rc_list.size()-1);
-    JobId chosen_job = rc_list[uni(generator)];
-
-    // récupération des identifiants operation, machine et parent
-    OperationRank rank = num_ops_of_job[chosen_job];
-    OperationId oid = ref_pb.operationNumber[chosen_job][rank];
+    // random choice of a candidate in the RCL if contains more than one element
+    unsigned long job_idx = rc_list.size() - 1;
+    if (job_idx != 0) {
+      job_idx = std::uniform_int_distribution<unsigned long>(0, job_idx)(generator);
+    }
+    auto& c_job = *rc_list[job_idx];
 
     // construction de la solution
+    OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     solution.AddOperation(oid);
 
-    // stockage des dépendances
-    ++num_ops_of_job[chosen_job];
+    // increment operation rank and remove job from list if all ops scheduled
+    if (++c_job.rank == ref_pb.nMac) {
+      c_job = candidate_jobs.back();
+      candidate_jobs.pop_back();
+    }
 
     // reinitialisation des structures de données
-    candidate_jobs.clear();
     rc_list.clear();
   }
-  std::fill(num_ops_of_job.begin(), num_ops_of_job.end(), 0);
 
   return solution;
 }

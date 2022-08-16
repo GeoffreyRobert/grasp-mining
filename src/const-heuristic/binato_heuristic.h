@@ -4,27 +4,25 @@
 #include <random>
 #include <vector>
 
-#include "const_heuristic.h"
+#include "const-heuristic/const_heuristic.h"
 
-class BinatoHeuristic : public ConstHeuristic {
+struct BinCandidateJob : public CandidateJob {
+  int makespan;
+};
+
+class BinatoHeuristic : public CandidateHeuristic<BinCandidateJob> {
 public:
-  BinatoHeuristic(const Problem&, double alpha = 0.5);
+  BinatoHeuristic(const Problem&, double alpha = 0.5, unsigned seed = 0);
 
   // construction greedy randomisée
-  Solution& operator()(Solution&);
+  Solution& operator()(Solution&) override;
 
 private:
+  void virtual Init() override;
   double _alpha = 0.5;
-  std::mt19937 generator;
 
-  // Gestion des contraintes de dépendance
-  vector<MachineId> num_ops_of_job; // nombre d'op. traitées par job
-
-  // Gestion de la Restricted Candidate List
-  vector<JobId> rc_list; // Restricted Candidate List
-
-  // Gestion des candidats à la RCL, de leur parent et du makespan
-  vector<JobId> candidate_jobs;
-  vector<int> tmp_mkspan_list;
+  // Restricted Candidate List
+  vector<BinCandidateJob*> rc_list;
 };
+
 #endif // !BINATO_HEURISTIC_H_

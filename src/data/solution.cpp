@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "data/solution.h"
+#include "data/problem.h"
 
 using std::vector;
 

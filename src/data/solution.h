@@ -1,11 +1,14 @@
 #ifndef SOLUTION_
 #define SOLUTION_
 
+#include <string>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
-#include "data/problem.h"
+#include "data/typedefs.h"
 
+using std::string;
 using std::tuple;
 using std::vector;
 
@@ -17,6 +20,8 @@ enum OpUpdate {
 };
 OpUpdate& operator++(OpUpdate&);
 OpUpdate& operator--(OpUpdate&);
+
+class Problem;
 
 class InvalidScheduling : std::logic_error {
 public:

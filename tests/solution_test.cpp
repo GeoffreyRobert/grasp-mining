@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include "data/problem.h"
 #include "data/solution.h"
 
 namespace {

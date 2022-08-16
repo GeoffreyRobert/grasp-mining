@@ -1,17 +1,11 @@
 #ifndef RANDOM_PLACEMENT_H_
 #define RANDOM_PLACEMENT_H_
 
-#include <random>
+#include "const-heuristic/const_heuristic.h"
 
-#include "const_heuristic.h"
-
-class RandomPlacement : public ConstHeuristic {
+class RandomPlacement : public CandidateHeuristic<CandidateJob> {
 public:
-	RandomPlacement(const Problem&);
+	RandomPlacement(const Problem&, unsigned seed = 0);
 	Solution& operator()(Solution&);
-
-private:
-	std::mt19937 generator;
-	JobId ChooseRandomJob(const vector<JobId>& jobs_left);
 };
 #endif // !RANDOM_PLACEMENT_H_

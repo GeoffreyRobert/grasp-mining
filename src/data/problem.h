@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+#include "data/typedefs.h"
+
 using std::string;
 using std::vector;
 
@@ -15,17 +17,16 @@ using std::vector;
     informations du problème
 */
 
-using OperationId = unsigned;
-using JobId = unsigned;
-using MachineId = unsigned;
-using OperationRank = unsigned;
-
 class Problem {
   // *************************************************************************
   // JOB SHOP BASE	********************************************************
   // *************************************************************************
 public:
-  Problem(JobId nJob, MachineId nMac, int lowerBound, vector<std::pair<unsigned, int>> operationSpecs);
+  Problem(
+      JobId nJob
+    , MachineId nMac
+    , int lowerBound
+    , vector<std::pair<unsigned, int>> operationSpecs);
 
   const vector<OperationId>& OperationsOnMachine(MachineId machine) const;
 

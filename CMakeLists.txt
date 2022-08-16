@@ -35,6 +35,7 @@ enable_testing()
 #############
 
 add_library(grasp-lib
+  src/const-heuristic/const_heuristic.cpp
   src/const-heuristic/binato_heuristic.cpp
   src/const-heuristic/random_placement.cpp
   src/data/problem.cpp
