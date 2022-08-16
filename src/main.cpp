@@ -46,7 +46,6 @@ int main(int argc, char** argv)
   auto problem = LoadProblemFromPath(file_path);
   Solution best_sol(problem);
   best_sol.makespan = std::numeric_limits<int>::max();
-  Solution sol(problem);
 
   // Construction du solver
   BinatoHeuristic init_heuristic(problem, alpha);
@@ -55,12 +54,7 @@ int main(int argc, char** argv)
   EmptyMiner data_miner(problem);
   Solver solver(init_heuristic, const_heuristic, local_search, data_miner, max_replications);
 
-  for (unsigned i = 0; i < max_replications; ++i) {
-    sol = solver.Solve(problem);
-    if (sol.makespan < best_sol.makespan) {
-      best_sol = sol;
-    }
-  }
+  best_sol = solver.Solve(problem);
 
   std::cout << "problem: " << problem.lowerBound << " -- solution: "
         << best_sol.makespan << std::endl;
