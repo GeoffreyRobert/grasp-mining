@@ -5,8 +5,6 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#024 [ code ] Use a draft solution in Laar with copy/move assign
-
 #025 [ code ] Use FinalOp as storage for makespan
 
 #029 [ code ] Create a pretty printer for solution

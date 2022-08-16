@@ -27,6 +27,7 @@ class Solution {
 public:
   Solution(const Problem& problem);
   Solution(const Solution& other);
+  Solution(Solution&& other) noexcept;
   Solution& operator=(const Solution& other);
   Solution& operator=(Solution&& other) noexcept;
 
@@ -42,15 +43,13 @@ public:
   OperationId ChildOnMachine(OperationId oid) const;
   bool IsCriticalOnMachine(OperationId oid) const;
 
-  // Get a scheduling for the operation and cache it
-  tuple<OperationId, int, bool> GetOperationScheduling(OperationId oid);
+  // Get a scheduled end date for the operation and cache it
+  int GetOperationScheduling(OperationId oid);
 
   void AddOperation(OperationId oid);
-  void SwapOperations(OperationId parent, OperationId child);
-
-  unsigned DoChanges(
-    vector<OpUpdate>& is_changed, vector<int>& new_start_date,
-    vector<int>& new_end_date, vector<bool>& new_is_crit_mac);
+  int SwapOperations(OperationId parent, OperationId child);
+  int RescheduleOperation(OperationId oid);
+  bool TryResetOperation(OperationId oid);
 
   const Problem& problem;
 
@@ -62,6 +61,7 @@ public:
   vector<int> endDate; // date de fin de chaque operation
 
 private:
+  void UpdateMakespan();
   void CheckScheduling(OperationId oid) const;
   void CheckCycle(OperationId oid) const;
   void CheckNoChild(OperationId oid) const;

@@ -22,20 +22,15 @@ public:
   Solution& operator()(Solution& solution) override;
 
 private:
-  int SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
-  void SwapAndUpdateOps(Solution& sol, unsigned parent, unsigned child);
-  void CancelSwap(Solution& sol, unsigned parent, unsigned child);
-  void UpdateOp(const Solution& sol, unsigned oid);
-  int GetEndDate(const Solution& sol, unsigned oid);
+  bool SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
+  int SwapAndUpdateOps(unsigned parent, unsigned child);
+  int UpdateOperation(unsigned oid);
+
+  // temporary solution to try out swaps
+  Solution draft_solution;
 
   // stockage des operations à déplacer
   boost::circular_buffer<OperationId> ops_to_move;
-
-  // stockage des modifications de la solution
-  vector<OpUpdate> is_changed;
-  vector<int> new_start_date;
-  vector<int> new_end_date;
-  vector<bool> new_is_crit_mac;
 };
 
 #endif // LAARHOVEN_H_

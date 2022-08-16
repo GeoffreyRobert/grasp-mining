@@ -32,19 +32,18 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
         continue;
 
       OperationId oid = ref_pb.operationNumber[jid][rank];
-      auto [parent, start_date, is_on_mac] = solution.GetOperationScheduling(oid);
+      int end_date = solution.GetOperationScheduling(oid);
 
       // parent et date de fin de l'operation
-      int tmp_makespan = start_date + ref_pb.timeOnMachine[oid];
-      tmp_mkspan_list[jid] = tmp_makespan;
+      tmp_mkspan_list[jid] = end_date;
       candidate_jobs.push_back(jid);
 
-      if (min_makespan > tmp_makespan) {
-        min_makespan = tmp_makespan;
+      if (min_makespan > end_date) {
+        min_makespan = end_date;
       }
 
-      if (max_makespan < tmp_makespan) {
-        max_makespan = tmp_makespan;
+      if (max_makespan < end_date) {
+        max_makespan = end_date;
       }
     }
 

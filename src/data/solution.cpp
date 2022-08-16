@@ -35,6 +35,8 @@ Solution::Solution(const Problem& problem_)
 
 Solution::Solution(const Solution& other)
   : problem(other.problem)
+  , makespan(other.makespan)
+  , criticalOp(other.criticalOp)
   , startDate(other.startDate)
   , endDate(other.endDate)
   , macParent(other.macParent)
@@ -43,20 +45,16 @@ Solution::Solution(const Solution& other)
 {
 }
 
-// Move assignment operator.
-Solution& Solution::operator=(Solution&& other) noexcept
+Solution::Solution(Solution&& other) noexcept
+  : problem(other.problem)
+  , makespan(std::exchange(other.makespan, 0))
+  , criticalOp(std::exchange(other.criticalOp, 0))
+  , startDate(std::move(other.startDate))
+  , endDate(std::move(other.endDate))
+  , macParent(std::move(other.macParent))
+  , macChild(std::move(other.macChild))
+  , isCritMachine(std::move(other.isCritMachine))
 {
-  if (this != &other && &problem == &other.problem) {
-    makespan = other.makespan;
-    criticalOp = other.criticalOp;
-
-    startDate = std::move(other.startDate);
-    endDate = std::move(other.endDate);
-    macParent = std::move(other.macParent);
-    macChild = std::move(other.macChild);
-    isCritMachine = std::move(other.isCritMachine);
-  }
-  return *this;
 }
 
 // Copy assignment operator.
@@ -75,6 +73,22 @@ Solution& Solution::operator=(const Solution& other)
   return *this;
 }
 
+// Move assignment operator.
+Solution& Solution::operator=(Solution&& other) noexcept
+{
+  if (this != &other && &problem == &other.problem) {
+    makespan = std::exchange(other.makespan, 0);
+    criticalOp = std::exchange(other.criticalOp, 0);
+
+    startDate = std::move(other.startDate);
+    endDate = std::move(other.endDate);
+    macParent = std::move(other.macParent);
+    macChild = std::move(other.macChild);
+    isCritMachine = std::move(other.isCritMachine);
+  }
+  return *this;
+}
+
 void Solution::Initialize(
     vector<int>&& startDate_
   , vector<int>&& endDate_
@@ -83,10 +97,10 @@ void Solution::Initialize(
   , vector<bool>&& isCritMachine_)
 {
   startDate = std::move(startDate_);
-  endDate_ = std::move(endDate);
-  macParent_ = std::move(macParent);
-  macChild_ = std::move(macChild);
-  isCritMachine_ = std::move(isCritMachine);
+  endDate = std::move(endDate_);
+  macParent = std::move(macParent_);
+  macChild = std::move(macChild_);
+  isCritMachine = std::move(isCritMachine_);
 }
 
 OperationId Solution::ParentOnMachine(OperationId oid) const
@@ -104,7 +118,7 @@ bool Solution::IsCriticalOnMachine(OperationId oid) const
   return isCritMachine[oid];
 }
 
-std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId oid)
+int Solution::GetOperationScheduling(OperationId oid)
 {
   // initialisations durées+parent
   OperationId parent_in_job = problem.prevOperation[oid];
@@ -113,23 +127,22 @@ std::tuple<OperationId, int, bool> Solution::GetOperationScheduling(OperationId 
   OperationId parent_on_mac = macParent[oid];
   int date_mac = endDate[parent_on_mac];
 
-  OperationId parent;
   int start_date;
   bool is_on_mac;
   if (date_job < date_mac) { // si la date disj est superieure
-    parent = parent_on_mac;
     start_date = date_mac;
     is_on_mac = true;
   } else {
-    parent = parent_in_job;
     start_date = date_job;
     is_on_mac = false;
   }
+  int end_date = start_date + problem.timeOnMachine[oid];
+
   startDate[oid] = start_date;
-  endDate[oid] = start_date + problem.timeOnMachine[oid];
+  endDate[oid] = end_date;
   isCritMachine[oid] = is_on_mac;
 
-  return {parent, start_date, is_on_mac};
+  return end_date;
 }
 
 void Solution::AddOperation(OperationId oid)
@@ -156,35 +169,11 @@ void Solution::AddOperation(OperationId oid)
       macParent[oid_updt] = oid;
     }
   }
+
+  CheckCycle(oid);
 }
 
-unsigned Solution::DoChanges(
-  vector<OpUpdate>& is_changed, vector<int>& new_start_date,
-  vector<int>& new_end_date, vector<bool>& new_is_crit_mac)
-{
-  for (OperationId oid = 0; oid < problem.size; ++oid) {
-    if (is_changed[oid] == OpUpdate::Changed) {
-      startDate[oid] = new_start_date[oid];
-      endDate[oid] = new_end_date[oid];
-      isCritMachine[oid] = new_is_crit_mac[oid];
-    }
-  }
-
-  // Search the new critical op
-  OperationId last_op_of_job = problem.nMac;
-  makespan = 0;
-  for (JobId j = 0; j < problem.nJob; ++j) {
-    if (endDate[last_op_of_job] > makespan) {
-      makespan = endDate[last_op_of_job];
-      criticalOp = last_op_of_job;
-    }
-    last_op_of_job += problem.nMac;
-  }
-
-  return criticalOp;
-}
-
-void Solution::SwapOperations(OperationId parent, OperationId child)
+int Solution::SwapOperations(OperationId parent, OperationId child)
 {
   // inversion des deux operations
   OperationId swap_predecessor = macParent[parent]; // predecessor of both swapped ops on machine
@@ -197,6 +186,60 @@ void Solution::SwapOperations(OperationId parent, OperationId child)
 
   macParent[parent] = child;
   macChild[child] = parent;
+
+  // update schedule
+  GetOperationScheduling(child);
+  int end_date = GetOperationScheduling(parent);
+
+  CheckCycle(parent);
+  CheckCycle(child);
+
+  return end_date;
+}
+
+int Solution::RescheduleOperation(OperationId oid)
+{
+  int end_date = GetOperationScheduling(oid);
+
+  if (end_date > makespan) {
+    criticalOp = oid;
+    makespan = end_date;
+    macParent[problem.FinalOp] = criticalOp;
+  }
+  else if (oid == criticalOp && end_date < makespan) {
+    UpdateMakespan();
+  }
+
+  CheckCycle(oid);
+
+  return end_date;
+}
+
+bool Solution::TryResetOperation(OperationId oid)
+{
+  if (oid == problem.FinalOp)
+    return false;
+
+  // the "is set" invariant as per AddOperation
+  if (endDate[oid] == std::numeric_limits<int>::max())
+    return false;
+
+  endDate[oid] = std::numeric_limits<int>::max();
+  return true;
+}
+
+void Solution::UpdateMakespan()
+{
+  OperationRank last_rank = problem.nMac - 1;
+  makespan = 0;
+  for (JobId jid = 0; jid < problem.nJob; ++jid) {
+    OperationId oid = problem.operationNumber[jid][last_rank];
+    int end_date = endDate[oid];
+    if (end_date > makespan && end_date != std::numeric_limits<int>::max()) {
+      makespan = end_date;
+      criticalOp = oid;
+    }
+  }
 }
 
 void Solution::CheckScheduling(OperationId oid) const
