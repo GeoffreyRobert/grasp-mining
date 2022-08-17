@@ -8,13 +8,13 @@
 #include "local-search/laarhoven_search.h"
 #include "miner/data_miner.h"
 
-using std::chrono::high_resolution_clock;
+using namespace std::chrono;
 
 Solver::Solver(ConstHeuristic& init_heuristic, ConstHeuristic& const_heuristic,
 			   LocalSearch& local_search, DataMiner& data_miner, unsigned pop_size) :
 	initHeuristic(init_heuristic), constHeuristic(const_heuristic),
 	localSearch(local_search), dataMiner(data_miner), 
-	populationSize(pop_size), runtime(0.)
+	populationSize(pop_size), runtime(0)
 {}
 
 Solver::Solver(Solver&& other) :
@@ -33,7 +33,7 @@ Solution Solver::Solve(const Problem& problem)
 	best_solution.makespan = std::numeric_limits<int>::max();
 
 	// démarre le timer
-	high_resolution_clock::time_point init = high_resolution_clock::now();
+	auto init = high_resolution_clock::now();
 
 	/*while (populationSize++< populationSize && best_solution.makespan > problem.lowerBound && time cond) {*/
 	for (Solution& sol : solution_set)  {
@@ -49,8 +49,8 @@ Solution Solver::Solve(const Problem& problem)
 	}
 
 	// Timer
-	high_resolution_clock::time_point end = high_resolution_clock::now();
-	runtime = (end - init);
+	auto end = high_resolution_clock::now();
+	runtime = duration_cast<milliseconds>(end - init);
 
 	return best_solution;
 

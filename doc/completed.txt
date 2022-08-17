@@ -1,3 +1,5 @@
+#035 [ code ] Add the seed option
+
 #024 [ code ] Use a draft solution in Laar with copy/move assign
 
 #034 [ code ] Make solution members private and mutate using methods

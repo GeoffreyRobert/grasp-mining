@@ -36,28 +36,32 @@ int main(int argc, char** argv)
 
   // Récupération des instances à traiter
   const fs::path file_path = fs::absolute(varmap["input-file"].as<string>());
-  const unsigned max_replications = varmap["replications"].as<unsigned>();
+  const unsigned population_size = varmap["population"].as<unsigned>();
   const double alpha = varmap["alpha"].as<double>();
+  const unsigned seed = varmap["seed"].as<unsigned>();
 
-  if (max_replications < 1)
+  if (population_size < 1)
     return 0;
 
   // extraction des données
   auto problem = LoadProblemFromPath(file_path);
-  Solution best_sol(problem);
-  best_sol.makespan = std::numeric_limits<int>::max();
 
   // Construction du solver
-  BinatoHeuristic init_heuristic(problem, alpha);
-  BinatoHeuristic const_heuristic(problem);
+  BinatoHeuristic init_heuristic(problem, alpha, seed);
+  BinatoHeuristic const_heuristic(problem, alpha, seed);
   LaarhovenSearch local_search(problem);
   EmptyMiner data_miner(problem);
-  Solver solver(init_heuristic, const_heuristic, local_search, data_miner, max_replications);
+  Solver solver(init_heuristic, const_heuristic, local_search, data_miner, population_size);
 
-  best_sol = solver.Solve(problem);
+  Solution solution = solver.Solve(problem);
 
-  std::cout << "problem: " << problem.lowerBound << " -- solution: "
-        << best_sol.makespan << std::endl;
+  std::cout
+    << "problem: " << problem.lowerBound << " -- "
+    << "solution: " << solution.makespan << " -- ";
+  auto seconds = solver.runtime.count() / 1000;
+  auto milliseconds = solver.runtime.count() % 1000;
+  std::cout
+    << "runtime: " << seconds << '.' << milliseconds << 's' << '\n';
 
   return 0;
 }
@@ -67,12 +71,13 @@ boost::program_options::variables_map ParseArgs(int argc, char* argv[])
   po::options_description visible_opts("Allowed options");
   visible_opts.add_options()
     ("help", "produce help message")
-    ("replications,r", po::value<unsigned>()->default_value(1), "number of replications of the same solver run")
-    ("alpha,a", po::value<double>()->default_value(0.5), "alpha parameter of the binato heuristic");
+    ("population,p", po::value<unsigned>()->default_value(10), "number of population of the same solver run")
+    ("alpha,a", po::value<double>()->default_value(0.5), "alpha parameter of the binato heuristic")
+    ("seed,s", po::value<unsigned>()->default_value(0), "seed to be used by all random generators");
 
   po::options_description hidden_opts("Hidden options");
   hidden_opts.add_options()
-    ("input-file,i", po::value<string>(), "number of replications of the same solver run");
+    ("input-file,i", po::value<string>(), "file path of the problem definition");
 
   po::options_description opts;
   opts.add(visible_opts).add(hidden_opts);

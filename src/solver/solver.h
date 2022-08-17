@@ -33,7 +33,7 @@ public:
 	unsigned populationSize = 500;
 
 	// Timer
-	std::chrono::duration<double, std::micro> runtime;
+	std::chrono::milliseconds runtime;
 };
 
 #endif  // _SOLVER_H_
