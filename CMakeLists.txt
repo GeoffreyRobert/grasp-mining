@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(grasp-mining
   VERSION 0.0
-  LANGUAGES CXX
+  LANGUAGES C CXX
 )
 
 #############
@@ -29,6 +29,12 @@ include(cmake/compiler.cmake)
 find_package(Boost COMPONENTS program_options)
 find_package(GTest REQUIRED)
 enable_testing()
+
+#################
+## FIM Library ##
+#################
+
+add_subdirectory(src/otherfim)
 
 #############
 ## Library ##
