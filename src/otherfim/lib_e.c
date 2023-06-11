@@ -3,6 +3,8 @@
 #ifndef _lib_e_c_
 #define _lib_e_c_
 
+#include<stdlib.h>
+#include<string.h>
 
 /*  max, min  */
 #define MAX(a,b)      ((a)>(b)?a:b)
@@ -356,7 +358,7 @@ void ARY_del ( ARY *A, int num ){
 }
 
 void ARY_rm ( ARY *A, int num ){
-  if ( num<0 || num>=A->num ) err("ARY_rm: num is outside the array %d",num);
+  if ( num<0 || num>=A->num ) {printf("ARY_rm: num is outside the array %d\n",num);exit(1);}
   A->num--;
   memcpy ( ((char *)(A->h)) + num*A->unit,
        ((char *)(A->h)) + A->num*A->unit, A->unit );
