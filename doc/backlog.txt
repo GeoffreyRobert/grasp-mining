@@ -9,12 +9,16 @@ Req:
 
 #029 [ code ] Create a pretty printer for solution
 
-#030 [ algo ] Design a pattern miner
-
-#031 [ algo ] Implement pattern miner
-
 #032 [ expr ] Design experiment
 
 #033 [ code ] Instrument code for experiments
 
-#036
+#036 [ code ] Turn the lcm_maximal into library
+
+#037 [ code ] Wrap LCM Max in c++
+
+#038 [ code ] Integrate LCM Max module in grasp-mining
+
+#039 [ tool ] Add the LCM Max to the build system
+
+#040
