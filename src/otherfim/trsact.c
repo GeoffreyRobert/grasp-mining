@@ -39,7 +39,7 @@ ARY TRSACT_file_count ( char *fname, int *Tnum ){
 
   ARY E;
   int i, j, pp, item;
-  int fc=TRSACT_BUFSIZ, p= TRSACT_BUFSIZ;
+  int read_size=TRSACT_BUFSIZ, read_offset = TRSACT_BUFSIZ;
   char ch, *buf;
   FILE *fp;
 
@@ -50,17 +50,17 @@ ARY TRSACT_file_count ( char *fname, int *Tnum ){
 
   while (1){
     do {
-      for ( pp=p,item=0 ; 1 ; item=item*10 +(int)(ch-'0') ){
-        if ( p == fc ){
-          if ( fc < TRSACT_BUFSIZ ) goto END;
-          fc = fread(buf, 1, TRSACT_BUFSIZ, fp);
-          if ( fc <= 0 ) goto END;
-          p = 0;
+      for ( pp=read_offset,item=0 ; 1 ; item=item*10 +(int)(ch-'0') ){
+        if ( read_offset == read_size ){
+          if ( read_size < TRSACT_BUFSIZ ) goto END;
+          read_size = fread(buf, 1, TRSACT_BUFSIZ, fp);
+          if ( read_size <= 0 ) goto END;
+          read_offset = 0;
         }
-        ch = buf[p++];
+        ch = buf[read_offset++];
         if ( (ch < '0') || (ch > '9')) break;
       }
-      if ( p != pp+1 ){
+      if ( read_offset != pp+1 ){
         ARY_exp_const ( &E, item, 0 );
         ((int *)E.h)[item]++;
       }
@@ -665,9 +665,6 @@ int LCM_init ( int argc, char *argv[] ){
     exit (0);
   }
   
-  if ( LCM_print_flag &2 )
-     printf ("#transactions=%d, #item=%d #elements=%d\n", LCM_Trsact.num, LCM_Eend, n );
-  
   LCM_shrink_p = TRSACT_shurink_init( &LCM_Trsact, LCM_Eend, &LCM_shrink_jump);
   TRSACT_shrink ( &LCM_Trsact, &LCM_shrink_jump, LCM_shrink_p );
   TRSACT_sort_size ( &LCM_Trsact, &LCM_shrink_jump, LCM_shrink_p );
@@ -699,6 +696,10 @@ int LCM_init ( int argc, char *argv[] ){
     }
   }
   for ( i=0,n=0 ; i<LCM_Eend ; i++ ) n += LCM_occ[i].t;
+  
+  if ( LCM_print_flag &2 )
+     printf ("#transactions=%d, #item=%d #elements=%d\n", LCM_Trsact.num, LCM_Eend, n );
+
   for ( i=0 ; i<LCM_Eend ; i++ ){
     LCM_occ[i].q = (QUEUE_INT *)malloc( sizeof(long) * (LCM_occ[i].t+2) );
     if ( LCM_occ[i].q == NULL ){
