@@ -34,7 +34,7 @@ enable_testing()
 ## FIM Library ##
 #################
 
-add_subdirectory(src/otherfim)
+add_subdirectory(src/lcmfim)
 
 #############
 ## Library ##
