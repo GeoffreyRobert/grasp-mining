@@ -82,6 +82,7 @@ add_executable(full_test
   tests/binato_test.cpp
   tests/laarhoven_test.cpp
   tests/main_test.cpp
+  tests/lcm_test.cpp
 )
 
 # Copy test files to output directory
@@ -93,7 +94,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/instances/laar_test.txt ${CMAKE_BINARY_DIR}/instances/laar_test.txt)
 
 target_link_libraries(full_test
-  PRIVATE grasp-lib GTest::gtest GTest::gtest_main compiler_settings)
+  PRIVATE grasp-lib lcm-fim GTest::gtest GTest::gtest_main compiler_settings)
 
 add_test(NAME full_test COMMAND laarhoven_test)
 

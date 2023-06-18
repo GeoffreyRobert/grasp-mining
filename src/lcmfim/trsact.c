@@ -74,6 +74,35 @@ ARY TRSACT_file_count ( char *fname, int *Tnum ){
 }
 
 /***********************************/
+/* count items and transactions in the array buffer */
+/* input: array of transactions */
+/* output: counters for items, #transactions */
+/* set *Tnum to the number of transactions (!= # of newlines) */
+/***********************************/
+#define DELIMITER -1
+ARY TRSACT_array_count ( int *buf, int *Tnum ){
+
+  ARY E;
+  int i, item;
+
+  i = 0;
+  item = buf[i++];
+  *Tnum=0; /* # transactions */
+  ARY_init ( &E, sizeof(int) );
+
+  while (item != DELIMITER){
+    while (item != DELIMITER) {
+      ARY_exp_const ( &E, item, 0 );
+      ((int *)E.h)[item]++;
+      item = buf[i++];
+    }
+    (*Tnum)++;  /* increase #transaction */
+    item = buf[i++];
+  }
+  return ( E );
+}
+
+/***********************************/
 /* sort indices of frequent items by their frequency */
 /* input: E:counter of items, th:minimum support */
 /* output: permutation, #freq items */
@@ -170,6 +199,62 @@ int *TRSACT_load ( char *fname, ARY *T, int th ){
   free ( buf );
   ARY_end ( &E );
   fclose ( fp );
+  return ( perm );
+}
+
+/***********************************/
+/* load transaction database array buffer */
+/* input: buf:array buffer, th:minimum support */
+/* output: the size of database ( size of T ) */
+/* set *T to the transactions loaded from file */
+/***********************************/
+int *TRSACT_array_load ( int *buf, ARY *T, int th ){
+  QUEUE *Q;
+  ARY E;
+  int Tnum, Enum, bnum; /* #transactions, max item, #all freq items */
+  int i, j, p, item;
+  QUEUE_INT *ibuf;  /* buffer for storing all items */
+  int *perm;
+  
+  E = TRSACT_array_count ( buf, &Tnum );
+  int *Eq = E.h;
+  LCM_Trsact_num = Tnum;
+  perm = TRSACT_perm_freq_item ( &E, th, &bnum, &Enum );
+
+  ARY_init ( T, sizeof(QUEUE) );
+  ARY_exp ( T, Tnum+2 );
+  Q = T->h;
+  malloc2 ( ibuf, QUEUE_INT, bnum+Tnum+4, "TRSACT_load", "ibuf");
+    /* read file and store active elements in memory */
+  p = 0;
+  item = buf[p++];
+  i= Tnum = 0;
+  Q[Tnum].q = &(ibuf[i]);
+  j = i;
+
+  while (item != DELIMITER) {
+    while (item != DELIMITER) {
+      if ( Eq[item] >= 0 ){
+        ibuf[i] = Eq[item];
+        i++;
+      }
+      item = buf[p++];
+    }
+    item = buf[p++];
+    if ( j == i ) continue; /* no item is inserted */
+    Q[Tnum].t = i-j;
+    Q[Tnum].s = 0;      /* used for flag */
+    QUEUE_sort_ ( &Q[Tnum] );
+    Q[Tnum].end = 1;    /* multiplicity */
+    Tnum++;
+    ibuf[i] = Enum;   /* loop stopper */
+    i++;
+    Q[Tnum].q = &(ibuf[i]);
+    j = i;
+  }
+  T->num = Tnum;
+  T->dellist = Enum;   /* store max_item: illigal use */
+  ARY_end ( &E );
   return ( perm );
 }
 
@@ -711,6 +796,75 @@ int LCM_init ( int argc, char *argv[] ){
 
   TRSACT_occ_deliver_all( &LCM_Trsact, &LCM_Occ, LCM_Eend-1 );
   if ( LCM_print_flag&1 ) fprint_int_init ( argv[3] );
+  return ( n );
+}
+
+/*************************************************************************/
+/* Common initialization from array buffer for LCM, LCMfreq, LCMmax */
+/*************************************************************************/
+int LCM_array_init ( int* buf, int th, char out_file[] ){
+  int i, n=0, m;
+  QUEUE *Q;
+
+  LCM_start_time = time(NULL);
+  LCM_th = th;
+  LCM_print_flag |= (out_file != NULL ? 1: 0);
+  LCM_perm = TRSACT_array_load ( buf, &LCM_Trsact, LCM_th );
+  LCM_Eend = LCM_Trsact.dellist;
+  LCM_buf = ((QUEUE *)(LCM_Trsact.h))->q;
+  if ( LCM_Trsact.num == 0 ){
+    if ( LCM_print_flag &2 ) printf ("there is no frequent itemset\n");
+    ARY_end ( &LCM_Trsact );
+    free ( LCM_perm );
+    exit (0);
+  }
+  
+  LCM_shrink_p = TRSACT_shurink_init( &LCM_Trsact, LCM_Eend, &LCM_shrink_jump);
+  TRSACT_shrink ( &LCM_Trsact, &LCM_shrink_jump, LCM_shrink_p );
+  TRSACT_sort_size ( &LCM_Trsact, &LCM_shrink_jump, LCM_shrink_p );
+  Q = LCM_Trsact.h;
+  QUEUE_INT *x = Q->q;
+
+  malloc2 ( LCM_ary, int, LCM_Eend*2, "LCM_init", "LCM_ary" );
+  malloc2 ( LCM_sc, int, LCM_Eend+1, "LCM_init", "LCM_sc" );
+  LCM_sc_num = 0;
+  QUEUE_init ( &LCM_jump, LCM_Eend*2+2 );
+  LCM_jump.end = LCM_Eend;
+  QUEUE_init ( &LCM_itemset, LCM_Eend );
+  QUEUE_init ( &LCM_add, LCM_Eend );
+  QUEUE_init ( &LCM_Qtmp, LCM_Eend*2+2 );
+  ARY_init ( &LCM_Occ, sizeof(QUEUE) );
+  ARY_exp ( &LCM_Occ, LCM_Eend-1 );
+  LCM_occ = LCM_Occ.h;
+  for ( i=0 ; i<LCM_Eend ; i++ ){
+    LCM_sc[i] = LCM_occ[i].end = LCM_occ[i].s = LCM_occ[i].t = LCM_ary[i] = 0;
+    LCM_Qtmp.q[i+LCM_Eend] = -1;
+  }
+  LCM_sc[LCM_Eend] = 0;
+  for ( Q=LCM_Trsact.h,i=0 ; i<LCM_Trsact.num ; i++ ){
+    Q[i].s = i;     /* shrinked queue */
+    m = Q[i].end;
+    for ( x=Q[i].q ; *x<LCM_Eend ; x++ ){
+      LCM_occ[*x].t++;
+      LCM_occ[*x].end += m;
+    }
+  }
+  for ( i=0,n=0 ; i<LCM_Eend ; i++ ) n += LCM_occ[i].t;
+  
+  if ( LCM_print_flag &2 )
+     printf ("#transactions=%d, #item=%d #elements=%d\n", LCM_Trsact.num, LCM_Eend, n );
+
+  for ( i=0 ; i<LCM_Eend ; i++ ){
+    LCM_occ[i].q = (QUEUE_INT *)malloc( sizeof(long) * (LCM_occ[i].t+2) );
+    if ( LCM_occ[i].q == NULL ){
+      printf ("LCM_init: memory short for LCM_occ[i].q");
+      exit(1);
+    }
+    LCM_occ[i].t = 0;
+  }
+
+  TRSACT_occ_deliver_all( &LCM_Trsact, &LCM_Occ, LCM_Eend-1 );
+  if ( LCM_print_flag&1 ) fprint_int_init ( out_file );
   return ( n );
 }
 

@@ -2,4 +2,6 @@ add_library(lcm-fim
   lcm_max.c
 )
 
-set_target_properties(lcm-fim PROPERTIES LINKER_LANGUAGE C)
+target_include_directories(lcm-fim
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+)

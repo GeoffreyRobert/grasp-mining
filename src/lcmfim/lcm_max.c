@@ -7,6 +7,7 @@
 #define _lcm_max_c_
 
 #include<time.h>
+#include"lcm_max.h"
 #include"trsact.c"
 
 QUEUE LCM_itemset2;
@@ -747,7 +748,7 @@ int LCMmax_first_iter( int item ){
 /*************************************************************************/
 /* anytime database reduction + occurrence deliver closure               */
 /*************************************************************************/
-void LCMmax ( int n ){
+void LCMmax_compute ( int n ){
   int i;
   QUEUE_init ( &LCM_itemset2, LCM_Eend );
 
@@ -765,17 +766,16 @@ void LCMmax ( int n ){
 }
 
 /*************************************************************************/
+/* reusable mining method               */
 /*************************************************************************/
-int main ( int argc, char *argv[] ){
-  int i, n;
-  n = LCM_init ( argc, argv );
-  LCMmax ( n );
+int LCMmax ( int* buf, int th, char* out_file ){
+  int n = LCM_array_init ( buf, th, out_file );
+  LCMmax_compute ( n );
   LCM_output ( 0 );
   LCM_end ();
   ARY_end ( &LCM_Trsact );
-  exit (0);
+  return 0;
 }
-
 
 #endif
 
