@@ -1,3 +1,9 @@
+#037 [ code ] Output array from LCM Max
+
+#036 [ code ] Turn the lcm_maximal into library
+
+#039 [ tool ] Add the LCM Max to the build system
+
 #031 [ algo ] Design the pattern-based construction phase
 Res: Classic binato with pattern completion from mined edges
 

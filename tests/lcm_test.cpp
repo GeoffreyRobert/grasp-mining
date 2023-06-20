@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "gtest/gtest.h"
 
 extern "C" {
@@ -67,9 +69,21 @@ TEST(LcmMaxTest, SmokeTest)
     D,
   };
 
-  test(0);
   const int th = 10;
-  LCMmax ( buf, th, nullptr );
+  int* store = LCMmax ( buf, th );
+  std::vector<std::vector<int>> itemsetList;
+  while (*store != D)
+  {
+    auto& itemset = itemsetList.emplace_back();
+    while (*store != D)
+    {
+      itemset.push_back(*store);
+      ++store;
+    }
+    ++store;
+  }
+
+  EXPECT_EQ(itemsetList.size(), 2);
 }
 
 }

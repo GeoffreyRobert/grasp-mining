@@ -583,6 +583,27 @@ void LCM_fprint_solution_ (){
   fprint_int_flush ();
 }
 
+ARY Sol_Store;
+void store_init()
+{
+  ARY_init(&Sol_Store, sizeof(int));
+}
+
+/*   store a solution(itemset) to an array */
+void LCM_store_solution_ (){
+  int i, e, sol_idx;
+  QUEUE_FE_LOOP_ ( LCM_itemset, i, e ){
+    sol_idx = ARY_new(&Sol_Store);
+    *ARY_CELL(int, Sol_Store, sol_idx) = e;
+  }
+  QUEUE_FE_LOOP_ ( LCM_add, i, e ){
+    sol_idx = ARY_new(&Sol_Store);
+    *ARY_CELL(int, Sol_Store, sol_idx) = e;
+  }
+  sol_idx = ARY_new(&Sol_Store);
+  *ARY_CELL(int, Sol_Store, sol_idx) = DELIMITER;
+}
+
 void LCM_print_solution (){
 #ifdef LCM_OVERTIME_END
   if ( time(NULL)-LCM_start_time > LCM_maximum_time ){
@@ -606,7 +627,7 @@ void LCM_print_solution_ (){
   if ( s>LCM_sc_num ) LCM_sc_num = s;
   LCM_sc[s]++;
   LCM_counter++;
-  if ( LCM_print_flag&1 ) LCM_fprint_solution_ ();
+  if ( LCM_print_flag&1 ) LCM_store_solution_ ();
 }
 
 void LCM_print_solution2_iter1 ( int i ){
@@ -802,13 +823,13 @@ int LCM_init ( int argc, char *argv[] ){
 /*************************************************************************/
 /* Common initialization from array buffer for LCM, LCMfreq, LCMmax */
 /*************************************************************************/
-int LCM_array_init ( int* buf, int th, char out_file[] ){
+int LCM_array_init ( int* buf, int th ){
   int i, n=0, m;
   QUEUE *Q;
 
   LCM_start_time = time(NULL);
   LCM_th = th;
-  LCM_print_flag |= (out_file != NULL ? 1: 0);
+  LCM_print_flag |= 1;
   LCM_perm = TRSACT_array_load ( buf, &LCM_Trsact, LCM_th );
   LCM_Eend = LCM_Trsact.dellist;
   LCM_buf = ((QUEUE *)(LCM_Trsact.h))->q;
@@ -864,7 +885,7 @@ int LCM_array_init ( int* buf, int th, char out_file[] ){
   }
 
   TRSACT_occ_deliver_all( &LCM_Trsact, &LCM_Occ, LCM_Eend-1 );
-  if ( LCM_print_flag&1 ) fprint_int_init ( out_file );
+  if ( LCM_print_flag&1 ) store_init();
   return ( n );
 }
 
@@ -875,7 +896,6 @@ void LCM_end (){
   int j, i, *x, n=0, m;
   QUEUE *Q;
 
-  if ( LCM_print_flag&1 ) fprint_int_end ();
   QUEUE_end ( &LCM_jump );
   QUEUE_end ( &LCM_itemset );
   QUEUE_end ( &LCM_add );

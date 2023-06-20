@@ -768,13 +768,16 @@ void LCMmax_compute ( int n ){
 /*************************************************************************/
 /* reusable mining method               */
 /*************************************************************************/
-int LCMmax ( int* buf, int th, char* out_file ){
-  int n = LCM_array_init ( buf, th, out_file );
+int* LCMmax ( int* buf, int th ){
+  int n = LCM_array_init ( buf, th );
   LCMmax_compute ( n );
   LCM_output ( 0 );
   LCM_end ();
   ARY_end ( &LCM_Trsact );
-  return 0;
+
+  int sol_idx = ARY_new(&Sol_Store);
+  *ARY_CELL(int, Sol_Store, sol_idx) = DELIMITER;
+  return (int*)Sol_Store.h;
 }
 
 #endif
