@@ -1,3 +1,5 @@
+#025 [ code ] Use FinalOp as storage for makespan
+
 #037 [ code ] Output array from LCM Max
 
 #036 [ code ] Turn the lcm_maximal into library

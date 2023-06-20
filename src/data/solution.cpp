@@ -30,14 +30,14 @@ Solution::Solution(const Problem& problem_)
   , macChild(problem_.size, problem.FinalOp)
   , isCritMachine(problem_.size)
 {
-  startDate[problem.OriginOp] = 0;
+  startDate[problem.OriginOp] = std::numeric_limits<int>::min();
   endDate[problem.OriginOp] = 0;
+  startDate[problem.FinalOp] = 0;
+  endDate[problem.FinalOp] = std::numeric_limits<int>::max();
 }
 
 Solution::Solution(const Solution& other)
   : problem(other.problem)
-  , makespan(other.makespan)
-  , criticalOp(other.criticalOp)
   , startDate(other.startDate)
   , endDate(other.endDate)
   , macParent(other.macParent)
@@ -48,8 +48,6 @@ Solution::Solution(const Solution& other)
 
 Solution::Solution(Solution&& other) noexcept
   : problem(other.problem)
-  , makespan(std::exchange(other.makespan, 0))
-  , criticalOp(std::exchange(other.criticalOp, 0))
   , startDate(std::move(other.startDate))
   , endDate(std::move(other.endDate))
   , macParent(std::move(other.macParent))
@@ -62,9 +60,6 @@ Solution::Solution(Solution&& other) noexcept
 Solution& Solution::operator=(const Solution& other)
 {
   if (this != &other && &problem == &other.problem) {
-    makespan = other.makespan;
-    criticalOp = other.criticalOp;
-
     startDate = other.startDate;
     endDate = other.endDate;
     macParent = other.macParent;
@@ -78,9 +73,6 @@ Solution& Solution::operator=(const Solution& other)
 Solution& Solution::operator=(Solution&& other) noexcept
 {
   if (this != &other && &problem == &other.problem) {
-    makespan = std::exchange(other.makespan, 0);
-    criticalOp = std::exchange(other.criticalOp, 0);
-
     startDate = std::move(other.startDate);
     endDate = std::move(other.endDate);
     macParent = std::move(other.macParent);
@@ -102,6 +94,16 @@ void Solution::Initialize(
   macParent = std::move(macParent_);
   macChild = std::move(macChild_);
   isCritMachine = std::move(isCritMachine_);
+}
+
+int Solution::Makespan()
+{
+  return startDate[problem.FinalOp];
+}
+
+OperationId Solution::CriticalOp()
+{
+  return macParent[problem.FinalOp];
 }
 
 OperationId Solution::ParentOnMachine(OperationId oid) const
@@ -154,10 +156,9 @@ void Solution::AddOperation(OperationId oid)
 
   macChild[macParent[oid]] = oid;
 
-  if (endDate[oid] > makespan) {
-    criticalOp = oid;
-    makespan = endDate[oid];
-    macParent[problem.FinalOp] = criticalOp;
+  if (endDate[oid] > Makespan()) {
+    startDate[problem.FinalOp] = endDate[oid];
+    macParent[problem.FinalOp] = oid;
   }
 
   // update all operations on the same machine that were not yet added to the solution
@@ -183,7 +184,11 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
 
   OperationId swap_successor = macChild[child];
   macChild[parent] = swap_successor;
-  macParent[swap_successor] = parent;
+  // only reassign FinalOp if the child was the previous critical op
+  if (swap_successor != problem.FinalOp || child == CriticalOp())
+  {
+    macParent[swap_successor] = parent;
+  }
 
   macParent[parent] = child;
   macChild[child] = parent;
@@ -202,12 +207,11 @@ int Solution::RescheduleOperation(OperationId oid)
 {
   int end_date = GetOperationScheduling(oid);
 
-  if (end_date > makespan) {
-    criticalOp = oid;
-    makespan = end_date;
-    macParent[problem.FinalOp] = criticalOp;
+  if (end_date > Makespan()) {
+    startDate[problem.FinalOp] = endDate[oid];
+    macParent[problem.FinalOp] = oid;
   }
-  else if (oid == criticalOp && end_date < makespan) {
+  else if (oid == CriticalOp() && end_date < Makespan()) {
     UpdateMakespan();
   }
 
@@ -231,14 +235,13 @@ bool Solution::TryResetOperation(OperationId oid)
 
 void Solution::UpdateMakespan()
 {
-  OperationRank last_rank = problem.nMac - 1;
-  makespan = 0;
+  startDate[problem.FinalOp] = 0;
   for (JobId jid = 0; jid < problem.nJob; ++jid) {
-    OperationId oid = problem.operationNumber[jid][last_rank];
+    OperationId oid = problem.operationNumber[jid].back();
     int end_date = endDate[oid];
-    if (end_date > makespan && end_date != std::numeric_limits<int>::max()) {
-      makespan = end_date;
-      criticalOp = oid;
+    if (end_date > Makespan() && end_date != std::numeric_limits<int>::max()) {
+      startDate[problem.FinalOp] = end_date;
+      macParent[problem.FinalOp] = oid;
     }
   }
 }

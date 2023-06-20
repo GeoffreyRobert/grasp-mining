@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
   std::cout
     << "problem: " << problem.lowerBound << " -- "
-    << "solution: " << solution.makespan << " -- ";
+    << "solution: " << solution.Makespan() << " -- ";
   auto seconds = solver.runtime.count() / 1000;
   auto milliseconds = solver.runtime.count() % 1000;
   std::cout

@@ -26,11 +26,10 @@ Solver::Solver(Solver&& other) :
 Solution Solver::Solve(const Problem& problem)
 {
 	// solutions manipulées dans l'algo
-	Solution best_solution(problem);
-	vector<Solution> solution_set(populationSize, best_solution);
+	vector<Solution> solution_set(populationSize, problem);
 
-	// on met le cout de la meilleure solution tres haut
-	best_solution.makespan = std::numeric_limits<int>::max();
+	// The first uninitialized solution from the set is the reference
+	Solution* best_solution = &solution_set.front();
 
 	// démarre le timer
 	auto init = high_resolution_clock::now();
@@ -43,8 +42,8 @@ Solution Solver::Solve(const Problem& problem)
 		localSearch(sol);
 
 		// Mise à jour de la meilleure solution rencontrée
-		if (sol.makespan < best_solution.makespan) {
-			best_solution = sol;
+		if (sol.Makespan() < best_solution->Makespan()) {
+			best_solution = &sol;
 		}
 	}
 
@@ -52,6 +51,5 @@ Solution Solver::Solve(const Problem& problem)
 	auto end = high_resolution_clock::now();
 	runtime = duration_cast<milliseconds>(end - init);
 
-	return best_solution;
-
+	return std::move(*best_solution);
 }

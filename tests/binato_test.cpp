@@ -18,8 +18,8 @@ TEST(BinatoHeuristic, Operator_Should_Schedule_Single_Operation_Deterministicall
 
   binato(solution);
 
-  EXPECT_EQ(makespan, solution.makespan);
-  EXPECT_EQ(critical_op, solution.criticalOp);
+  EXPECT_EQ(makespan, solution.Makespan());
+  EXPECT_EQ(critical_op, solution.CriticalOp());
 }
 
 TEST(BinatoHeuristic, Operator_Should_Be_Reusable)
@@ -36,8 +36,8 @@ TEST(BinatoHeuristic, Operator_Should_Be_Reusable)
   binato(first_solution);
   binato(second_solution);
 
-  EXPECT_EQ(makespan, second_solution.makespan);
-  EXPECT_EQ(critical_op, second_solution.criticalOp);
+  EXPECT_EQ(makespan, second_solution.Makespan());
+  EXPECT_EQ(critical_op, second_solution.CriticalOp());
 }
 
 } // namespace

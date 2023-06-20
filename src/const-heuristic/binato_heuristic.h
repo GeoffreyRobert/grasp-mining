@@ -7,7 +7,7 @@
 #include "const-heuristic/const_heuristic.h"
 
 struct BinCandidateJob : public CandidateJob {
-  int makespan;
+  int makespan = 0;
 };
 
 class BinatoHeuristic : public CandidateHeuristic<BinCandidateJob> {

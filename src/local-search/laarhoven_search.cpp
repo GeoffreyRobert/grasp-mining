@@ -14,7 +14,7 @@ LaarhovenSearch::LaarhovenSearch(const Problem& problem)
 
 Solution& LaarhovenSearch::operator()(Solution& solution)
 {
-  OperationId operation = solution.criticalOp; // op. considérée pour relocation
+  OperationId operation = solution.CriticalOp(); // op. considérée pour relocation
   OperationId parent = solution.ParentOnMachine(operation); // parent de l'operation
 
   // remonter le chemin critique
@@ -27,7 +27,7 @@ Solution& LaarhovenSearch::operator()(Solution& solution)
       if (SwapAndEvaluate(solution, parent, operation)) {
         // no-copy replacement of the solution by the draft
         solution = std::move(draft_solution);
-        operation = solution.criticalOp;
+        operation = solution.CriticalOp();
         hit_count++; // TODO: sous preproc. pour debug
       } else {
         // on continue sur le chemin critique
@@ -55,7 +55,7 @@ bool LaarhovenSearch::SwapAndEvaluate(
 
   // inversion des 2 opérations sur le chemin critique
   int new_end_date = SwapAndUpdateOps(parent, child);
-  if (new_end_date >= solution.makespan) {
+  if (new_end_date >= solution.Makespan()) {
     ops_to_move.clear();
     return false;
   }
@@ -70,7 +70,7 @@ bool LaarhovenSearch::SwapAndEvaluate(
     new_end_date = UpdateOperation(oid);
 
     // vérification que la nouvelle solution reste sub-critique
-    if (new_end_date >= solution.makespan
+    if (new_end_date >= solution.Makespan()
         && ref_pb.nextOperation[oid] == ref_pb.FinalOp
         && draft_solution.ChildOnMachine(oid) == ref_pb.FinalOp) {
       ops_to_move.clear();

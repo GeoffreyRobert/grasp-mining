@@ -44,6 +44,9 @@ public:
     , vector<bool>&& isCritMachine);
 
   // Getters
+  int Makespan();
+  OperationId CriticalOp();
+
   OperationId ParentOnMachine(OperationId oid) const;
   OperationId ChildOnMachine(OperationId oid) const;
   bool IsCriticalOnMachine(OperationId oid) const;
@@ -57,10 +60,6 @@ public:
   bool TryResetOperation(OperationId oid);
 
   const Problem& problem;
-
-  // Plannification de la solution
-  int makespan = 0;
-  OperationId criticalOp = 0;
 
   vector<int> startDate; // date de début de chaque opération
   vector<int> endDate; // date de fin de chaque operation

@@ -1,3 +1,4 @@
+#include <limits>
 #include "gtest/gtest.h"
 
 #include "data/problem.h"
@@ -44,8 +45,8 @@ TEST(SolutionTest, AddOperation_Should_Update_Child_On_Machine_Of_Parent_And_Mak
 
   EXPECT_EQ(parent_child_on_mac, solution.ChildOnMachine(parent_oid));
   EXPECT_EQ(child_parent_on_mac, solution.ParentOnMachine(child_oid));
-  EXPECT_EQ(makespan, solution.makespan);
-  EXPECT_EQ(critical_op, solution.criticalOp);
+  EXPECT_EQ(makespan, solution.Makespan());
+  EXPECT_EQ(critical_op, solution.CriticalOp());
 }
 
 TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Job_Operations)
@@ -98,8 +99,8 @@ TEST(SolutionTest, AddOperation_Should_Update_Children_On_Same_Machine)
   EXPECT_EQ(parent_oid, solution.ParentOnMachine(tested_oid));
   EXPECT_EQ(child2_parent_on_mac, solution.ParentOnMachine(child2_oid));
   EXPECT_EQ(child3_parent_on_mac, solution.ParentOnMachine(child3_oid));
-  EXPECT_EQ(makespan, solution.makespan);
-  EXPECT_EQ(critical_op, solution.criticalOp);
+  EXPECT_EQ(makespan, solution.Makespan());
+  EXPECT_EQ(critical_op, solution.CriticalOp());
 }
 
 TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Machine_Operations)
@@ -130,8 +131,8 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Machine_Operati
   EXPECT_EQ(parent_on_mac, solution.ParentOnMachine(tested_oid));
   EXPECT_EQ(child_on_mac, solution.ChildOnMachine(tested_oid));
   EXPECT_EQ(parent_child_on_mac, solution.ChildOnMachine(parent_oid));
-  EXPECT_EQ(makespan, solution.makespan);
-  EXPECT_EQ(critical_op, solution.criticalOp);
+  EXPECT_EQ(makespan, solution.Makespan());
+  EXPECT_EQ(critical_op, solution.CriticalOp());
 }
 
 TEST(SolutionTest, AddOperation_Should_Throw_If_Same_Operation_Added_Twice)
@@ -166,6 +167,92 @@ TEST(SolutionTest, AddOperation_Should_Throw_If_Same_Operation_Added_Twice)
   solution.AddOperation(third_oid);
 
   EXPECT_THROW(solution.AddOperation(tested_oid), InvalidScheduling);
+}
+
+TEST(SolutionTest, SwapOperations_Should_Reassign_CriticalOp_On_Swap_Only_If_Child_Is_CriticalOp)
+{
+  Problem problem(2, 2, 3,
+    vector<std::pair<MachineId, int>> {
+      { 0, 1 }, { 1, 1 },
+      { 0, 1 }, { 1, 1 },
+    });
+  Solution solution(problem);
+
+  solution.GetOperationScheduling(1);
+  solution.AddOperation(1);
+  solution.GetOperationScheduling(3);
+  solution.AddOperation(3);
+  solution.GetOperationScheduling(4);
+  solution.AddOperation(4);
+  solution.GetOperationScheduling(2);
+  solution.AddOperation(2);
+
+  EXPECT_EQ(2, solution.CriticalOp());
+  EXPECT_EQ(4, solution.Makespan());
+
+  solution.SwapOperations(1, 3);
+
+  EXPECT_EQ(2, solution.CriticalOp());
+  EXPECT_EQ(4, solution.Makespan());
+
+  solution.SwapOperations(4, 2);
+
+  EXPECT_EQ(4, solution.CriticalOp());
+  EXPECT_EQ(4, solution.Makespan());
+}
+
+TEST(SolutionTest, RescheduleOperation_Should_Update_Makespan)
+{
+  Problem problem(1, 1, 1,
+    vector<std::pair<MachineId, int>> { { 0, 1 } });
+  Solution solution(problem);
+
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
+
+  vector<int> startDate = {
+   Mn,
+    1,
+    2,
+  };
+  vector<int> endDate = {
+    0,
+    2,
+   Mx,
+  };
+  vector<OperationId> macParent = {
+    Or,
+    Or,
+     1,
+  };
+  vector<OperationId> macChild = {
+     1,
+    Fn,
+    Fn,
+  };
+  vector<bool> isCritMachine = {
+    0,
+    0,
+    1,
+  };
+  solution.Initialize(
+      std::move(startDate)
+    , std::move(endDate)
+    , std::move(macParent)
+    , std::move(macChild)
+    , std::move(isCritMachine)
+  );
+
+  EXPECT_EQ(1, solution.CriticalOp());
+  EXPECT_EQ(2, solution.Makespan());
+
+  int end_date = solution.RescheduleOperation(1);
+
+  EXPECT_EQ(1, solution.CriticalOp());
+  EXPECT_EQ(1, solution.Makespan());
+  EXPECT_EQ(end_date, solution.Makespan());
 }
 
 } // namespace

@@ -5,8 +5,6 @@ Req:
 
 #010 [ algo ] Document the algorithms
 
-#025 [ code ] Use FinalOp as storage for makespan
-
 #029 [ code ] Create a pretty printer for solution
 
 #032 [ expr ] Design experiment

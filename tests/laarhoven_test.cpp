@@ -1,3 +1,4 @@
+#include <limits>
 #include "gtest/gtest.h"
 
 #include "data/problem.h"
@@ -20,9 +21,11 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   vector<int> startDate = {
-    0,
+   Mn,
     0, 1,
     2, 3,
     4,
@@ -31,7 +34,7 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
     0,
     1, 2,
     3, 4,
-    4,
+   Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -59,8 +62,6 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.makespan = 4;
-  solution.criticalOp = 4;
 
   const int final_makespan = 2;
   const int final_criticalOp = 2;
@@ -68,8 +69,8 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
   LaarhovenSearch local_search(problem);
   local_search(solution);
 
-  EXPECT_EQ(solution.makespan, final_makespan);
-  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
 }
 
 TEST(LaarhovenTest, NoImprovement)
@@ -86,10 +87,12 @@ TEST(LaarhovenTest, NoImprovement)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   Solution solution(problem);
   vector<int> startDate = {
-    0,
+   Mn,
     0, 1,
     1, 2,
     3,
@@ -98,7 +101,7 @@ TEST(LaarhovenTest, NoImprovement)
     0,
     1, 2,
     2, 3,
-    3,
+   Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -125,8 +128,6 @@ TEST(LaarhovenTest, NoImprovement)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.makespan = 3;
-  solution.criticalOp = 4;
 
   const int final_makespan = 3;
   const int final_criticalOp = 4;
@@ -134,8 +135,8 @@ TEST(LaarhovenTest, NoImprovement)
   LaarhovenSearch local_search(problem);
   local_search(solution);
 
-  EXPECT_EQ(solution.makespan, final_makespan);
-  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
 }
 
 TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
@@ -153,10 +154,12 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   Solution solution(problem);
   vector<int> startDate = {
-    0,
+   Mn,
     0, 1, 2,
     0, 2, 3,
     4,
@@ -165,7 +168,7 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
     0,
     1, 2, 3,
     1, 3, 4,
-    4,
+   Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -192,8 +195,6 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.criticalOp = 6;
-  solution.makespan = 4;
 
   const int final_criticalOp = 6;
   const int final_makespan = 4;
@@ -201,8 +202,8 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
   LaarhovenSearch local_search(problem);
   local_search(solution);
 
-  EXPECT_EQ(solution.makespan, final_makespan);
-  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
 }
 
 TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
@@ -220,10 +221,12 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   Solution solution(problem);
   vector<int> startDate = {
-    0,
+   Mn,
     0, 1,
     0, 2,
     0, 3,
@@ -234,7 +237,7 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
     1, 2,
     0, 3,
     0, 4,
-    4,
+   Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -264,8 +267,6 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.criticalOp = 6;
-  solution.makespan = 4;
 
   const int final_criticalOp = 6;
   const int final_makespan = 3;
@@ -273,8 +274,8 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
   LaarhovenSearch local_search(problem);
   local_search(solution);
 
-  EXPECT_EQ(solution.makespan, final_makespan);
-  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
 }
 
 TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
@@ -293,10 +294,12 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   Solution solution(problem);
   vector startDate = {
-    0,
+   Mn,
     0, 1, 3,
     0, 4, 5,
     1, 2, 3,
@@ -307,7 +310,7 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
     1, 2, 5,
     1, 5, 6,
     2, 3, 4,
-    6,
+   Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -337,8 +340,6 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.criticalOp = 6;
-  solution.makespan = 6;
 
   const int final_criticalOp = 3;
   const int final_makespan = 5;
@@ -346,8 +347,8 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
   LaarhovenSearch local_search(problem);
   local_search(solution);
 
-  EXPECT_EQ(solution.makespan, final_makespan);
-  EXPECT_EQ(solution.criticalOp, final_criticalOp);
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
 }
 
 TEST(LaarhovenTest, LargeProblem)
@@ -364,10 +365,12 @@ TEST(LaarhovenTest, LargeProblem)
 
   const OperationId Or = problem.OriginOp;
   const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
 
   Solution solution(problem);
   vector<int> startDate = {
-     0,
+    Mn,
      0,  1,  4, 10, 17, 20,
     10, 18, 26, 36, 46, 56,
      1,  6, 20, 28, 37, 38,
@@ -384,7 +387,7 @@ TEST(LaarhovenTest, LargeProblem)
     23, 28, 33, 36, 53, 62,
     15, 26, 58, 66, 69, 70,
      3,  6, 15, 22, 62, 63,
-    70,
+    Mx,
   };
   vector<OperationId> macParent = {
     Or,
@@ -423,8 +426,6 @@ TEST(LaarhovenTest, LargeProblem)
     , std::move(macChild)
     , std::move(isCritMachine)
   );
-  solution.criticalOp = 30;
-  solution.makespan = 70;
 
   LaarhovenSearch local_search(problem);
   local_search(solution);
