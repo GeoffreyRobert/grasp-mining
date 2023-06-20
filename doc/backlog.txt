@@ -15,4 +15,6 @@ Req:
 
 #038 [ code ] Integrate LCM Max module in grasp-mining
 
-#040
+#040 [ code ] Adapt construction heuristic to use patterns
+
+#041
