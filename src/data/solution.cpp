@@ -121,7 +121,7 @@ bool Solution::IsCriticalOnMachine(OperationId oid) const
   return isCritMachine[oid];
 }
 
-int Solution::GetOperationScheduling(OperationId oid)
+int Solution::ScheduleOperation(OperationId oid)
 {
   // initialisations durées+parent
   OperationId parent_in_job = problem.prevOperation[oid];
@@ -146,6 +146,16 @@ int Solution::GetOperationScheduling(OperationId oid)
   isCritMachine[oid] = is_on_mac;
 
   return end_date;
+}
+
+int Solution::StartDate(OperationId oid)
+{
+  return startDate[oid];
+}
+
+int Solution::EndDate(OperationId oid)
+{
+  return endDate[oid];
 }
 
 void Solution::AddOperation(OperationId oid)
@@ -194,8 +204,8 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
   macChild[child] = parent;
 
   // update schedule
-  GetOperationScheduling(child);
-  int end_date = GetOperationScheduling(parent);
+  ScheduleOperation(child);
+  int end_date = ScheduleOperation(parent);
 
   CheckCycle(parent);
   CheckCycle(child);
@@ -205,7 +215,7 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
 
 int Solution::RescheduleOperation(OperationId oid)
 {
-  int end_date = GetOperationScheduling(oid);
+  int end_date = ScheduleOperation(oid);
 
   if (end_date > Makespan()) {
     startDate[problem.FinalOp] = endDate[oid];

@@ -27,7 +27,7 @@ Solution& RandomPlacement::operator()(Solution& solution)
     OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
 
     // construction de la solution
-    solution.GetOperationScheduling(oid);
+    solution.ScheduleOperation(oid);
     solution.AddOperation(oid);
 
     // increment operation rank and remove job from list if all ops scheduled

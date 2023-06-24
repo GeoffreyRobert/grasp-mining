@@ -52,7 +52,9 @@ public:
   bool IsCriticalOnMachine(OperationId oid) const;
 
   // Get a scheduled end date for the operation and cache it
-  int GetOperationScheduling(OperationId oid);
+  int ScheduleOperation(OperationId oid);
+  int StartDate(OperationId oid);
+  int EndDate(OperationId oid);
 
   void AddOperation(OperationId oid);
   int SwapOperations(OperationId parent, OperationId child);
@@ -61,14 +63,14 @@ public:
 
   const Problem& problem;
 
-  vector<int> startDate; // date de début de chaque opération
-  vector<int> endDate; // date de fin de chaque operation
-
 private:
   void UpdateMakespan();
   void CheckScheduling(OperationId oid) const;
   void CheckCycle(OperationId oid) const;
   void CheckNoChild(OperationId oid) const;
+
+  vector<int> startDate; // date de début de chaque opération
+  vector<int> endDate; // date de fin de chaque operation
 
   vector<OperationId> macParent; // parent sur la machine
   vector<OperationId> macChild; // successeur(s) sur la machine

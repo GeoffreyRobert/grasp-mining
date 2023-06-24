@@ -46,7 +46,7 @@ bool LaarhovenSearch::SwapAndEvaluate(
     Solution& solution, OperationId parent, OperationId child)
 {
   // cas qui allonge forcément le chemin critique
-  if (solution.startDate[parent] < solution.endDate[ref_pb.prevOperation[child]]) {
+  if (solution.StartDate(parent) < solution.EndDate(ref_pb.prevOperation[child])) {
     return false;
   }
 

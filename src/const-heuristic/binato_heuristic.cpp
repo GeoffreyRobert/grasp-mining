@@ -30,7 +30,7 @@ Solution& BinatoHeuristic::operator()(Solution& solution)
 
     for (auto& c_job : candidate_jobs) {
       OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
-      int end_date = solution.GetOperationScheduling(oid);
+      int end_date = solution.ScheduleOperation(oid);
 
       // parent et date de fin de l'operation
       c_job.makespan = end_date;
