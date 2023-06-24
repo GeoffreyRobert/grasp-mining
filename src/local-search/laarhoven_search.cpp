@@ -47,9 +47,7 @@ bool LaarhovenSearch::SwapAndEvaluate(
   draft_solution = solution;
 
   // inversion des 2 opérations sur le chemin critique
-  int new_end_date = SwapAndUpdateOps(parent, child);
-  if (new_end_date >= solution.Makespan()) {
-    ops_to_move.clear();
+  if (!SwapAndUpdateOps(parent, child, solution.Makespan())) {
     return false;
   }
 
@@ -60,12 +58,8 @@ bool LaarhovenSearch::SwapAndEvaluate(
     ops_to_move.pop_front();
 
     // mise-à-jour des valeurs de l'opération
-    new_end_date = UpdateOperation(oid);
-
     // vérification que la nouvelle solution reste sub-critique
-    if (new_end_date >= solution.Makespan()
-        && ref_pb.nextOperation[oid] == ref_pb.FinalOp
-        && draft_solution.ChildOnMachine(oid) == ref_pb.FinalOp) {
+    if (!UpdateOperation(oid, solution.Makespan())) {
       ops_to_move.clear();
       return false;
     }
@@ -76,10 +70,13 @@ bool LaarhovenSearch::SwapAndEvaluate(
   return true;
 }
 
-int LaarhovenSearch::SwapAndUpdateOps(unsigned parent, unsigned child)
+bool LaarhovenSearch::SwapAndUpdateOps(OperationId parent, OperationId child, int makespan)
 {
   // inversion parent / successeur dans l'ordre sur les machines
   int end_date = draft_solution.SwapOperations(parent, child);
+
+  if (end_date >= makespan)
+    return false;
 
   // add successors of the swapped ops to be updated
   OperationId child_in_parent_job = ref_pb.nextOperation[parent];
@@ -95,12 +92,17 @@ int LaarhovenSearch::SwapAndUpdateOps(unsigned parent, unsigned child)
     ops_to_move.push_back(child_on_mac);
   }
 
-  return end_date;
+  return true;
 }
 
-int LaarhovenSearch::UpdateOperation(unsigned oid)
+bool LaarhovenSearch::UpdateOperation(OperationId oid, int makespan)
 {
   int end_date = draft_solution.RescheduleOperation(oid);
+
+  if (end_date >= makespan
+      && ref_pb.nextOperation[oid] == ref_pb.FinalOp
+      && draft_solution.ChildOnMachine(oid) == ref_pb.FinalOp)
+    return false;
 
   // add successors
   OperationId child_in_job = ref_pb.nextOperation[oid];
@@ -111,5 +113,5 @@ int LaarhovenSearch::UpdateOperation(unsigned oid)
   if (draft_solution.TryResetOperation(child_on_mac))
     ops_to_move.push_back(child_on_mac);
 
-  return end_date;
+  return true;
 }

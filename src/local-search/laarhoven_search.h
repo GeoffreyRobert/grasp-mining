@@ -23,8 +23,8 @@ public:
 
 private:
   bool SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
-  int SwapAndUpdateOps(unsigned parent, unsigned child);
-  int UpdateOperation(unsigned oid);
+  bool SwapAndUpdateOps(OperationId parent, OperationId child, int makespan);
+  bool UpdateOperation(OperationId oid, int makespan);
 
   // temporary solution to try out swaps
   Solution draft_solution;
