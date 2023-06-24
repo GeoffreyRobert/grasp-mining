@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <limits>
 #include <numeric>
+#include <stdexcept>
 
 #include "problem.h"
 
@@ -70,6 +71,8 @@ Problem::Problem(JobId nJob_, MachineId nMac_, int lowerBound_, std::vector<std:
 Problem LoadProblemFromPath(const string& file_path)
 {
   std::ifstream file(file_path, std::ios::in);
+  if (!file.is_open())
+    throw std::runtime_error("failure to open problem file");
   auto problem = LoadProblemFromStream(file);
 
   file.close(); // pas besoin de lire la suite
