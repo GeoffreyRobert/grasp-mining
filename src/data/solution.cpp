@@ -205,7 +205,7 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
 
   // update schedule
   ScheduleOperation(child);
-  int end_date = ScheduleOperation(parent);
+  int end_date = RescheduleOperation(parent);
 
   CheckCycle(parent);
   CheckCycle(child);
