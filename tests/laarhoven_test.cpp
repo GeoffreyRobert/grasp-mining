@@ -431,4 +431,78 @@ TEST(LaarhovenTest, LargeProblem)
   local_search(solution);
 }
 
+TEST(LaarhovenTest, MacParent_Start_Date_Less_Than_JobParent_Start_Date_Can_Still_Improve)
+{
+  // Initial
+  /*
+   * 0 0
+   * 1 1100
+   * 2     00
+   */
+  // Final
+  /*
+   * 0 0
+   * 1  0011
+   * 2    00
+   */
+  Problem problem(2, 3, 5,
+    std::vector<std::pair<MachineId, int>> {
+      { 0, 1 }, { 1, 2 }, { 2, 2 },
+      { 0, 0 }, { 2, 0 }, { 1, 2 },
+    });
+
+  const OperationId Or = problem.OriginOp;
+  const OperationId Fn = problem.FinalOp;
+  const int Mn = std::numeric_limits<int>::min();
+  const int Mx = std::numeric_limits<int>::max();
+
+  Solution solution(problem);
+  vector startDate = {
+   Mn,
+    0, 2, 4,
+    0, 0, 0,
+    6,
+  };
+  vector<int> endDate = {
+    0,
+    1, 4, 6,
+    0, 0, 2,
+   Mx,
+  };
+  vector<OperationId> macParent = {
+    Or,
+     4,  6,  5,
+    Or, Or, Or,
+     3,
+  };
+  vector<OperationId> macChild = {
+     3,
+    Fn, Fn, Fn,
+     1,  3,  2,
+    Fn,
+  };
+  vector<bool> isCritMachine = {
+    0,
+    1, 1, 0,
+    0, 0, 1,
+    1,
+  };
+  solution.Initialize(
+      std::move(startDate)
+    , std::move(endDate)
+    , std::move(macParent)
+    , std::move(macChild)
+    , std::move(isCritMachine)
+  );
+
+  const int final_criticalOp = 3;
+  const int final_makespan = 5;
+
+  LaarhovenSearch local_search(problem);
+  local_search(solution);
+
+  EXPECT_EQ(solution.Makespan(), final_makespan);
+  EXPECT_EQ(solution.CriticalOp(), final_criticalOp);
+}
+
 } // namespace

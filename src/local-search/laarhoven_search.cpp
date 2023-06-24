@@ -43,11 +43,6 @@ Solution& LaarhovenSearch::operator()(Solution& solution)
 bool LaarhovenSearch::SwapAndEvaluate(
     Solution& solution, OperationId parent, OperationId child)
 {
-  // cas qui allonge forcément le chemin critique
-  if (solution.StartDate(parent) < solution.EndDate(ref_pb.prevOperation[child])) {
-    return false;
-  }
-
   // copy the solution to a draft
   draft_solution = solution;
 
