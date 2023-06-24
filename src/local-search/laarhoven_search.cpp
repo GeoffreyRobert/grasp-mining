@@ -25,8 +25,6 @@ Solution& LaarhovenSearch::operator()(Solution& solution)
     } else {
       // on inverse deux ops. sur le chemin critique si réduction du makespan
       if (SwapAndEvaluate(solution, parent, operation)) {
-        // no-copy replacement of the solution by the draft
-        solution = std::move(draft_solution);
         operation = solution.CriticalOp();
         hit_count++; // TODO: sous preproc. pour debug
       } else {
@@ -77,6 +75,9 @@ bool LaarhovenSearch::SwapAndEvaluate(
       return false;
     }
   }
+
+  // no-copy replacement of the solution by the draft
+  std::swap(solution, draft_solution);
   return true;
 }
 
