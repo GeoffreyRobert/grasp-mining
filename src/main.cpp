@@ -13,7 +13,7 @@
 #include "const-heuristic/binato_heuristic.h"
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
-#include "miner/empty_miner.h"
+#include "miner/pattern_miner.h"
 
 namespace fs = std::filesystem;
 using std::string;
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
   BinatoHeuristic init_heuristic(problem, alpha, seed);
   BinatoHeuristic const_heuristic(problem, alpha, seed);
   LaarhovenSearch local_search(problem);
-  EmptyMiner data_miner(problem);
+  PatternMiner data_miner(problem, 0.5);
   Solver solver(init_heuristic, const_heuristic, local_search, data_miner, population_size);
 
   Solution solution = solver.Solve(problem);

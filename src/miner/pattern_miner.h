@@ -10,7 +10,7 @@ using std::list; using std::pair;
 
 class PatternMiner : public DataMiner {
 public:
-	PatternMiner();
+	PatternMiner(const Problem&, double support);
 
 	virtual void operator()(const vector<Solution>& solutions);
 
@@ -25,9 +25,7 @@ private:
 	};
 
 private:
-	unsigned int solCount;
-	unsigned int maxDepth;
-	PatternNode orderedPatterns;
+  const double _support;
 };
 
 #endif // PATTERNS_MINER_

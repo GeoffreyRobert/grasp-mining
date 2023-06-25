@@ -47,6 +47,8 @@ Solution Solver::Solve(const Problem& problem)
 		}
 	}
 
+  dataMiner(solution_set);
+
 	// Timer
 	auto end = high_resolution_clock::now();
 	runtime = duration_cast<milliseconds>(end - init);

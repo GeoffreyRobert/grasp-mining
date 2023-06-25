@@ -6,14 +6,7 @@ extern "C" {
 }
 
 void EmptyMiner::operator()(const vector<Solution>& solutions) {
-  std::vector<int> transactions;
-  for (const Solution& solution : solutions)
-  {
-    for (JobId i = 0; i < 1; ++i)
-    {
-    }
-    (void)solution;
-  }
+  (void)solutions;
 }
 
 vector<int> EmptyMiner::ProposePattern(OperationId operation, double support) {

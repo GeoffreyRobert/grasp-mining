@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "data/problem.h"
+#include "data/typedefs.h"
 #include "solver/solver_module.h"
 
 using std::vector;
