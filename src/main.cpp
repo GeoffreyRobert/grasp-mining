@@ -55,8 +55,11 @@ int main(int argc, char** argv)
 
   Solution solution = solver.Solve(problem);
 
+  std::string instance = file_path.filename().string();
+  instance = instance.substr(0, instance.length() - 4);
   std::cout
-    << "problem: " << problem.lowerBound << " -- "
+    << "instance: " << instance << " -- "
+    << "low bound: " << problem.lowerBound << " -- "
     << "solution: " << solution.Makespan() << " -- ";
   auto seconds = solver.runtime.count() / 1000;
   auto milliseconds = solver.runtime.count() % 1000;
