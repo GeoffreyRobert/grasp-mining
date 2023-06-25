@@ -236,9 +236,6 @@ int Solution::RescheduleOperation(OperationId oid)
 
 bool Solution::TryResetOperation(OperationId oid)
 {
-  if (oid == problem.FinalOp)
-    return false;
-
   // the "is set" invariant as per AddOperation
   if (endDate[oid] == std::numeric_limits<int>::max())
     return false;
