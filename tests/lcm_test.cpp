@@ -71,17 +71,19 @@ TEST(LcmMaxTest, SmokeTest)
 
   const int th = 10;
   int* store = LCMmax ( buf, th );
+  int* iter = store;
   std::vector<std::vector<int>> itemsetList;
-  while (*store != D)
+  while (*iter != D)
   {
     auto& itemset = itemsetList.emplace_back();
-    while (*store != D)
+    while (*iter != D)
     {
-      itemset.push_back(*store);
-      ++store;
+      itemset.push_back(*iter);
+      ++iter;
     }
-    ++store;
+    ++iter;
   }
+  LCMfree(store);
 
   EXPECT_EQ(itemsetList.size(), 2);
 }

@@ -780,6 +780,10 @@ int* LCMmax ( int* buf, int th ){
   return (int*)Sol_Store.h;
 }
 
+void LCMfree ( int* buf ) {
+  free2 ( buf );
+}
+
 #endif
 
 

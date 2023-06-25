@@ -3,4 +3,6 @@
 
 int* LCMmax ( int* buf, int th );
 
+void LCMfree ( int* buf );
+
 #endif
