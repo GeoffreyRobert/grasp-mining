@@ -123,6 +123,8 @@ bool Solution::IsCriticalOnMachine(OperationId oid) const
 
 int Solution::ScheduleOperation(OperationId oid)
 {
+  assert(oid != problem.FinalOp && "schedule attempt on final operation");
+
   // initialisations durées+parent
   OperationId parent_in_job = problem.prevOperation[oid];
   int date_job = endDate[parent_in_job];
@@ -182,7 +184,7 @@ void Solution::AddOperation(OperationId oid)
     }
   }
 
-  CheckCycle(oid);
+  assert(!HasCycle(oid) && "add operation created a cycle");
 }
 
 int Solution::SwapOperations(OperationId parent, OperationId child)
@@ -207,14 +209,16 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
   ScheduleOperation(child);
   int end_date = RescheduleOperation(parent);
 
-  CheckCycle(parent);
-  CheckCycle(child);
+  assert(!HasCycle(parent) && "swap created a cycle with parent operation");
+  assert(!HasCycle(child) && "swap created a cycle with child operation");
 
   return end_date;
 }
 
 int Solution::RescheduleOperation(OperationId oid)
 {
+  assert(oid != problem.FinalOp && "reschedule attempt on final operation");
+
   int end_date = ScheduleOperation(oid);
 
   if (end_date > Makespan()) {
@@ -225,7 +229,7 @@ int Solution::RescheduleOperation(OperationId oid)
     UpdateMakespan();
   }
 
-  CheckCycle(oid);
+  assert(!HasCycle(oid) && "reschedule operation created a cycle");
 
   return end_date;
 }
@@ -267,13 +271,13 @@ void Solution::CheckScheduling(OperationId oid) const
   }
 }
 
-void Solution::CheckCycle(OperationId oid) const
+bool Solution::HasCycle(OperationId oid) const
 {
   OperationId parent = macParent[oid];
   while (parent != problem.OriginOp)
   {
     if (parent == oid)
-      throw InvalidScheduling("Cycle detected");
+      return true;
     parent = macParent[parent];
   }
 
@@ -281,13 +285,14 @@ void Solution::CheckCycle(OperationId oid) const
   while (child != problem.FinalOp)
   {
     if (child == oid)
-      throw InvalidScheduling("Cycle detected");
+      return true;
     child = macChild[child];
   }
+
+  return false;
 }
 
-void Solution::CheckNoChild(OperationId oid) const
+bool Solution::HasChild(OperationId oid) const
 {
-  if (oid != problem.OriginOp && macChild[oid] != problem.FinalOp)
-    throw InvalidScheduling("Operation should not have a child assigned here");
+  return oid != problem.OriginOp && macChild[oid] != problem.FinalOp;
 }

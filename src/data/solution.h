@@ -66,8 +66,8 @@ public:
 private:
   void UpdateMakespan();
   void CheckScheduling(OperationId oid) const;
-  void CheckCycle(OperationId oid) const;
-  void CheckNoChild(OperationId oid) const;
+  bool HasCycle(OperationId oid) const;
+  bool HasChild(OperationId oid) const;
 
   vector<int> startDate; // date de début de chaque opération
   vector<int> endDate; // date de fin de chaque operation
