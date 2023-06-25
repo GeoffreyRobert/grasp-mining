@@ -247,7 +247,7 @@ void Solution::UpdateMakespan()
   for (JobId jid = 0; jid < problem.nJob; ++jid) {
     OperationId oid = problem.operationNumber[jid].back();
     int end_date = endDate[oid];
-    if (end_date > Makespan() && end_date != std::numeric_limits<int>::max()) {
+    if (end_date > Makespan()) {
       startDate[problem.FinalOp] = end_date;
       macParent[problem.FinalOp] = oid;
     }

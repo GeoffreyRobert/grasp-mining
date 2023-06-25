@@ -1,9 +1,7 @@
 #ifndef LAARHOVEN_H_
 #define LAARHOVEN_H_
 
-#include <queue>
-
-#include "boost/circular_buffer.hpp"
+#include <stack>
 
 #include "data/problem.h"
 #include "data/solution.h"
@@ -29,7 +27,7 @@ private:
   Solution draft_solution;
 
   // stockage des operations à déplacer
-  boost::circular_buffer<OperationId> ops_to_move;
+  std::vector<OperationId> ops_to_move;
 };
 
 #endif // LAARHOVEN_H_

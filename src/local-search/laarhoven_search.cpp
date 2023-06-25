@@ -1,4 +1,3 @@
-#include <deque>
 #include <utility>
 
 #include "laarhoven_search.h"
@@ -9,7 +8,7 @@ LaarhovenSearch::LaarhovenSearch(const Problem& problem)
   : LocalSearch(problem)
   , draft_solution(problem)
 {
-  ops_to_move.set_capacity(ref_pb.size);
+  ops_to_move.reserve(ref_pb.size);
 }
 
 Solution& LaarhovenSearch::operator()(Solution& solution)
@@ -53,8 +52,8 @@ bool LaarhovenSearch::SwapAndEvaluate(
   // stack vs queue en termes de perfs ? stack: localité, queue: moins de doubles accès
   while (!ops_to_move.empty()) {
     // get an operation to process
-    unsigned oid = ops_to_move.front();
-    ops_to_move.pop_front();
+    unsigned oid = ops_to_move.back();
+    ops_to_move.pop_back();
 
     // schedule & check that the draft is improving on the base solution
     int end_date = draft_solution.RescheduleOperation(oid);
@@ -64,6 +63,7 @@ bool LaarhovenSearch::SwapAndEvaluate(
     }
 
     // add successors
+    // successors on machine is added first to be processed last
     OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
     if (draft_solution.TryResetOperation(child_on_mac))
       ops_to_move.push_back(child_on_mac);
