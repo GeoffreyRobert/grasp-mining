@@ -57,7 +57,7 @@ public:
   int EndDate(OperationId oid);
 
   void AddOperation(OperationId oid);
-  int SwapOperations(OperationId parent, OperationId child);
+  OperationId SwapOperations(OperationId parent, OperationId child);
   int RescheduleOperation(OperationId oid);
   bool TryResetOperation(OperationId oid);
 

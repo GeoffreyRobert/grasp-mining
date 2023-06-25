@@ -46,70 +46,34 @@ bool LaarhovenSearch::SwapAndEvaluate(
   // copy the solution to a draft
   draft_solution = solution;
 
-  // inversion des 2 opérations sur le chemin critique
-  if (!SwapAndUpdateOps(parent, child, solution.Makespan())) {
-    return false;
-  }
+  // invert parent / child on the critical path and get the new parent of the pair
+  OperationId new_parent = draft_solution.SwapOperations(parent, child);
+  ops_to_move.push_back(new_parent);
 
   // stack vs queue en termes de perfs ? stack: localité, queue: moins de doubles accès
   while (!ops_to_move.empty()) {
-    // récupération des identifiants
+    // get an operation to process
     unsigned oid = ops_to_move.front();
     ops_to_move.pop_front();
 
-    // mise-à-jour des valeurs de l'opération
-    // vérification que la nouvelle solution reste sub-critique
-    if (!UpdateOperation(oid, solution.Makespan())) {
+    // schedule & check that the draft is improving on the base solution
+    int end_date = draft_solution.RescheduleOperation(oid);
+    if (end_date >= solution.Makespan()) {
       ops_to_move.clear();
       return false;
     }
+
+    // add successors
+    OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
+    if (draft_solution.TryResetOperation(child_on_mac))
+      ops_to_move.push_back(child_on_mac);
+
+    OperationId child_in_job = ref_pb.nextOperation[oid];
+    if (draft_solution.TryResetOperation(child_in_job))
+      ops_to_move.push_back(child_in_job);
   }
 
   // no-copy replacement of the solution by the draft
   std::swap(solution, draft_solution);
-  return true;
-}
-
-bool LaarhovenSearch::SwapAndUpdateOps(OperationId parent, OperationId child, int makespan)
-{
-  // inversion parent / successeur dans l'ordre sur les machines
-  int end_date = draft_solution.SwapOperations(parent, child);
-
-  if (end_date >= makespan)
-    return false;
-
-  // add successors of the swapped ops to be updated
-  OperationId child_in_parent_job = ref_pb.nextOperation[parent];
-  if (draft_solution.TryResetOperation(child_in_parent_job))
-    ops_to_move.push_back(child_in_parent_job);
-
-  OperationId child_in_child_job = ref_pb.nextOperation[child];
-  if (draft_solution.TryResetOperation(child_in_child_job))
-    ops_to_move.push_back(child_in_child_job);
-
-  OperationId child_on_mac = draft_solution.ChildOnMachine(parent);
-  if (draft_solution.TryResetOperation(child_on_mac)) {
-    ops_to_move.push_back(child_on_mac);
-  }
-
-  return true;
-}
-
-bool LaarhovenSearch::UpdateOperation(OperationId oid, int makespan)
-{
-  int end_date = draft_solution.RescheduleOperation(oid);
-
-  if (end_date >= makespan)
-    return false;
-
-  // add successors
-  OperationId child_in_job = ref_pb.nextOperation[oid];
-  if (draft_solution.TryResetOperation(child_in_job))
-    ops_to_move.push_back(child_in_job);
-
-  OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
-  if (draft_solution.TryResetOperation(child_on_mac))
-    ops_to_move.push_back(child_on_mac);
-
   return true;
 }

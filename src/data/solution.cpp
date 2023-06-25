@@ -187,7 +187,7 @@ void Solution::AddOperation(OperationId oid)
   assert(!HasCycle(oid) && "add operation created a cycle");
 }
 
-int Solution::SwapOperations(OperationId parent, OperationId child)
+OperationId Solution::SwapOperations(OperationId parent, OperationId child)
 {
   // inversion des deux operations
   OperationId swap_predecessor = macParent[parent]; // predecessor of both swapped ops on machine
@@ -205,14 +205,11 @@ int Solution::SwapOperations(OperationId parent, OperationId child)
   macParent[parent] = child;
   macChild[child] = parent;
 
-  // update schedule
-  ScheduleOperation(child);
-  int end_date = RescheduleOperation(parent);
-
   assert(!HasCycle(parent) && "swap created a cycle with parent operation");
   assert(!HasCycle(child) && "swap created a cycle with child operation");
 
-  return end_date;
+  // new parent
+  return child;
 }
 
 int Solution::RescheduleOperation(OperationId oid)
