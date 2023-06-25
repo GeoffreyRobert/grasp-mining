@@ -99,9 +99,7 @@ bool LaarhovenSearch::UpdateOperation(OperationId oid, int makespan)
 {
   int end_date = draft_solution.RescheduleOperation(oid);
 
-  if (end_date >= makespan
-      && ref_pb.nextOperation[oid] == ref_pb.FinalOp
-      && draft_solution.ChildOnMachine(oid) == ref_pb.FinalOp)
+  if (end_date >= makespan)
     return false;
 
   // add successors
