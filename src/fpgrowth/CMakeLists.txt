@@ -1,4 +1,5 @@
 add_executable(fim_maximal
+  main.cpp
   fpmax.cpp
   data.cpp
   fp_tree.cpp

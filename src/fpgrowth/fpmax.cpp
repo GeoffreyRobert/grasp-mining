@@ -48,6 +48,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #include <ctime>
 #include "common.h"
 #include "buffer.h"
+#include "fpmax.h"
 
 using namespace std;
 
@@ -85,22 +86,17 @@ void printLen()
 }
 
 
-int main(int argc, char **argv)
+int fpmax(char* infile, int threshold, char* outfile)
 {
-	if (argc < 3)
-	{
-	  cout << "usage: fmi <infile> <MINSUP> [<outfile>]\n";
-	  exit(1);
-	}
-	THRESHOLD = atoi(argv[2]);
+	THRESHOLD = threshold;
 
 	int i;
 	FI_tree* fptree;
 
-	Data* fdat=new Data(argv[1]);
+	Data* fdat=new Data(infile);
 
 	if(!fdat->isOpen()) {
-		cerr << argv[1] << " could not be opened!" << endl;
+		cerr << infile << " could not be opened!" << endl;
 		exit(2);
 	}
 
@@ -134,9 +130,9 @@ int main(int argc, char **argv)
 	if(fptree->itemno==0)return 0;
 
 	FSout* fout;
-	if(argc==4)
+	if(outfile != NULL)
 	{
-		fout = new FSout(argv[3]);
+		fout = new FSout(outfile);
 
 		//print the count of emptyset
 #ifdef FI
