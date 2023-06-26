@@ -95,7 +95,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/instances/laar_test.txt ${CMAKE_BINARY_DIR}/instances/laar_test.txt)
 
 target_link_libraries(full_test
-  PRIVATE grasp-lib lcm-fim GTest::gtest GTest::gtest_main compiler_settings)
+  PRIVATE grasp-lib lcm-fim fp-max GTest::gtest GTest::gtest_main compiler_settings)
 
 add_test(NAME full_test COMMAND laarhoven_test)
 

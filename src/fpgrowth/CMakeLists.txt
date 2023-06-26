@@ -1,5 +1,4 @@
-add_executable(fim_maximal
-  main.cpp
+add_library(fp-max
   fpmax.cpp
   data.cpp
   fp_tree.cpp
@@ -8,9 +7,17 @@ add_executable(fim_maximal
   fp_node.cpp
 )
 
-target_include_directories(fim_maximal
+target_include_directories(fp-max
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
 )
 
-target_compile_definitions(fim_maximal
+target_compile_definitions(fp-max
   PRIVATE MFI)
+
+add_executable(fim_maximal
+  main.cpp
+)
+
+target_link_libraries(fim_maximal
+  PRIVATE fp-max
+)

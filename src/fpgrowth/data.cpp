@@ -8,15 +8,11 @@ Contents : data set management
 #include "data.h"
 #include "common.h"
 
-void Transaction::DoubleTrans(int item)
-{
-	int* temp = new int[2*item];
-	maxlength = 2*item;
-	for(int i=0; i<length; i++)
-		temp[i] = t[i];
-	delete []t;
-	t = temp;
-}
+Transaction::Transaction(std::vector<int>&& t_vec)
+  : item_vec(std::move(t_vec))
+  , t(item_vec.data())
+  , length(item_vec.size())
+{}
 
 FileData::FileData(char *filename)
 {
@@ -40,62 +36,61 @@ int FileData::isOpen()
 
 const Transaction *FileData::getNextTransaction()
 {
-	Trans.length = 0;
+  Trans.item_vec.clear();
 
   // read list of items
-#ifndef BINARY	  
-	char c;
-	int item, pos;
-	do {
-		item=0;
-		pos=0;
-		c = getc(in);
-		while((c >= '0') && (c <= '9')) {
-			item *=10;
-			item += int(c)-int('0');
-			c = getc(in);
-			pos++;
-		}
-		if(pos)
-		{
-			if(Trans.length >= Trans.maxlength)
-				Trans.DoubleTrans(Trans.length);
-
-			Trans.t[Trans.length] = item;
-			Trans.length++;
-		}
-	}while(c != '\n' && !feof(in));
-	// if end of file is reached, rewind to beginning for next pass
-	if(feof(in)){
-		rewind(in);
-		return 0;
-	}
-	// Note, also last transaction must end with newline, 
-	// else, it will be ignored
+#ifndef BINARY
+  char c;
+  int item, pos;
+  do {
+    item=0;
+    pos=0;
+    c = getc(in);
+    while((c >= '0') && (c <= '9')) {
+      item *=10;
+      item += int(c)-int('0');
+      c = getc(in);
+      pos++;
+    }
+    if(pos)
+    {
+      Trans.item_vec.push_back(item);
+    }
+  }while(c != '\n' && !feof(in));
+  // if end of file is reached, rewind to beginning for next pass
+  if(feof(in)){
+    rewind(in);
+    return 0;
+  }
+  // Note, also last transaction must end with newline,
+  // else, it will be ignored
 #else
-	int i, nitem, *buffer=new int;
-	fread((char*)buffer, sizeof(int), 1, in);
-	if(feof(in))
-	{
-	    rewind(in);
-		return 0;
-	}
-	fread((char*)buffer, sizeof(int), 1, in);
-	fread((char*)buffer, sizeof(int), 1, in);
-	nitem=*buffer;
-	for(i=0; i<nitem; i++)
-	{
-		fread((char*)buffer, sizeof(int), 1, in);
+  int i, nitem, *buffer=new int;
+  fread((char*)buffer, sizeof(int), 1, in);
+  if(feof(in))
+  {
+    rewind(in);
+    return 0;
+  }
+  fread((char*)buffer, sizeof(int), 1, in);
+  fread((char*)buffer, sizeof(int), 1, in);
+  nitem=*buffer;
+  for(i=0; i<nitem; i++)
+  {
+    fread((char*)buffer, sizeof(int), 1, in);
 
-		if(Trans->length >= Trans->maxlength)
-			Trans->DoubleTrans(Trans->length);
+    if(Trans->length >= Trans->maxlength)
+      Trans->DoubleTrans(Trans->length);
 
-		Trans->t[Trans->length] = *buffer;
-		Trans->length++;
-	}
+    Trans->t[Trans->length] = *buffer;
+    Trans->length++;
+  }
 #endif
-  
-	return &Trans;
+
+  Trans.t = Trans.item_vec.data();
+  Trans.length = Trans.item_vec.size();
+
+  return &Trans;
 }
 
 

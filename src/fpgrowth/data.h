@@ -14,14 +14,12 @@
 class Transaction
 {
 public:
-	
-	Transaction():maxlength(TransLen), length(0){ t = new int[maxlength];}
-	void DoubleTrans(int);				// if current item is greater than current longest transaction, we change the length of t as 2*item
-	~Transaction(){delete []t;}
+	Transaction() {};
+	Transaction(std::vector<int>&&);
   
-	int maxlength;
-	int length;
+  std::vector<int> item_vec;
 	int *t;
+	int length;
 };
 
 class Data
