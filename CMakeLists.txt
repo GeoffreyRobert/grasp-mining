@@ -30,11 +30,12 @@ find_package(Boost COMPONENTS program_options)
 find_package(GTest REQUIRED)
 enable_testing()
 
-#################
-## FIM Library ##
-#################
+###################
+## FIM Libraries ##
+###################
 
 add_subdirectory(src/lcmfim)
+add_subdirectory(src/fpgrowth)
 
 #############
 ## Library ##
