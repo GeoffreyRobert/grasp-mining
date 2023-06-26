@@ -83,7 +83,7 @@ add_executable(full_test
   tests/binato_test.cpp
   tests/laarhoven_test.cpp
   tests/main_test.cpp
-  tests/lcm_test.cpp
+  tests/fim_test.cpp
 )
 
 # Copy test files to output directory

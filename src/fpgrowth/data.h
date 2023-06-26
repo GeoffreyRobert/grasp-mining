@@ -5,8 +5,9 @@
 #ifndef _DATA_CLASS
 #define _DATA_CLASS
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
 #define TransLen 50
 
@@ -25,18 +26,36 @@ public:
 
 class Data
 {
+public:
+  virtual ~Data() {};
+	virtual Transaction *getNextTransaction(Transaction* Trans) = 0;
+};
+
+class FileData : public Data
+{
  public:
 	
-	Data(char *filename);
-	~Data();
+	FileData(char *filename);
+	~FileData() override;
 	int isOpen();
 	void close(){if(in)fclose(in);}
 
-	Transaction *getNextTransaction(Transaction* Trans);
+	Transaction *getNextTransaction(Transaction* Trans) override;
   
  private:
   
 	FILE *in;
+};
+
+class VectorData : public Data
+{
+public:
+  VectorData(std::vector<Transaction>&&);
+	Transaction *getNextTransaction(Transaction* Trans) override;
+
+private:
+  std::vector<Transaction> _transactions;
+  std::vector<Transaction>::iterator _iter;
 };
 
 #endif

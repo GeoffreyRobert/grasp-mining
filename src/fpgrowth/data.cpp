@@ -3,6 +3,8 @@ File     : data.cpp
 Contents : data set management
 ----------------------------------*/
 
+#include <utility>
+
 #include "data.h"
 #include "common.h"
 
@@ -16,7 +18,7 @@ void Transaction::DoubleTrans(int item)
 	t = temp;
 }
 
-Data::Data(char *filename)
+FileData::FileData(char *filename)
 {
 #ifndef BINARY
   in = fopen(filename,"rt");
@@ -25,18 +27,18 @@ Data::Data(char *filename)
 #endif
 }
 
-Data::~Data()
+FileData::~FileData()
 {
   if(in) fclose(in);
 }
 
-int Data::isOpen()
+int FileData::isOpen()
 {
   if(in) return 1;
   else return 0;
 }
 
-Transaction *Data::getNextTransaction(Transaction* Trans)
+Transaction *FileData::getNextTransaction(Transaction* Trans)
 {
 	Trans->length = 0;
 
@@ -94,4 +96,23 @@ Transaction *Data::getNextTransaction(Transaction* Trans)
 #endif
   
 	return Trans;
+}
+
+
+VectorData::VectorData(std::vector<Transaction>&& transactions)
+  : _transactions(std::move(transactions))
+  , _iter(_transactions.begin())
+{ }
+
+
+Transaction* VectorData::getNextTransaction(Transaction* Trans)
+{
+  if (_iter == _transactions.end())
+  {
+    _iter = _transactions.begin();
+    return nullptr;
+  }
+  Transaction* ret = &(*_iter);
+  ++_iter;
+  return ret;
 }

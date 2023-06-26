@@ -93,7 +93,7 @@ int fpmax(char* infile, int threshold, char* outfile)
 	int i;
 	FI_tree* fptree;
 
-	Data* fdat=new Data(infile);
+	FileData* fdat = new FileData(infile);
 
 	if(!fdat->isOpen()) {
 		cerr << infile << " could not be opened!" << endl;
