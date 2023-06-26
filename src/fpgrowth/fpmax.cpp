@@ -50,6 +50,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #include "common.h"
 #include "buffer.h"
 #include "data.h"
+#include "fsout.h"
 
 using namespace std;
 
@@ -87,7 +88,7 @@ void printLen()
 }
 
 
-int fpmax(Data& fdat, int threshold, char* outfile)
+int fpmax(Data& data, int threshold, OutData* outdata)
 {
 	THRESHOLD = threshold;
 
@@ -99,7 +100,7 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 //	fp_buf=new memory(2000, 262144L, 524288L, 2);
 	fptree = (FI_tree*)fp_buf->newbuf(1, sizeof(FI_tree));
 	fptree->init(-1, 0);
-	fptree->scan1_DB(fdat);
+	fptree->scan1_DB(data);
 	ITlen = new int[fptree->itemno];
 	bran = new int[fptree->itemno];
 	compact = new int[fptree->itemno];
@@ -119,26 +120,21 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 		bran[i] = 0;
 	}
 
-	fptree->scan2_DB(fdat);
+	fptree->scan2_DB(data);
 	if(fptree->itemno==0)return 0;
 
-	FSout* fout;
-	if(outfile != NULL)
+	if(outdata != NULL)
 	{
-		fout = new FSout(outfile);
-
 		//print the count of emptyset
 #ifdef FI
-		fout->printSet(0, NULL, TRANSACTION_NO);
+		outdata->printSet(0, NULL, TRANSACTION_NO);
 #endif
 
 #ifdef CFI
 		if(TRANSACTION_NO != fptree->count[0])
-			fout->printSet(0, NULL, TRANSACTION_NO);
+			outdata->printSet(0, NULL, TRANSACTION_NO);
 #endif			
-	}else
-		fout = NULL;
-
+	}
 
 	if(fptree->Single_path())
 	{
@@ -153,7 +149,7 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 		}
 
 #ifdef FI
-			fptree->generate_all(fptree->itemno, fout);
+			fptree->generate_all(fptree->itemno, outdata);
 #endif
 
 #ifdef CFI
@@ -164,12 +160,12 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 				Count = list->counts[i];
 				for(; i<fptree->itemno && list->counts[i]==Count; i++);
 				ITlen[i-1]++;
-				fout->printSet(i, list->FS, Count);
+				outdata->printSet(i, list->FS, Count);
 			}
 #endif
 		
 #ifdef MFI
-			fout->printSet(fptree->itemno, list->FS, fptree->head[fptree->itemno-1]->count);
+			outdata->printSet(fptree->itemno, list->FS, fptree->head[fptree->itemno-1]->count);
 			ITlen[i-1]=1;
 #endif
 		printLen();
@@ -195,7 +191,7 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 		LMFI->init(Max_buf, fptree, NULL, NULL, -1);
 		fptree->set_max_tree(LMFI);
 		mfitrees[0] = LMFI;
-		fptree->FPmax(fout);
+		fptree->FPmax(outdata);
 		delete Max_buf;
 		delete []mfitrees;
 #endif
@@ -219,8 +215,6 @@ int fpmax(Data& fdat, int threshold, char* outfile)
 #endif
 
 	printLen();
-	if(fout)
-		fout->close();
 
 	delete fp_buf;
 	delete list;

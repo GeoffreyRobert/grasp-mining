@@ -19,10 +19,10 @@ int FSout::isOpen()
 
 void FSout::printSet(int length, int *iset, int support)
 {
-//#ifdef shown 
-  for(int i=0; i<length; i++) 
+//#ifdef shown
+  for(int i=0; i<length; i++)
   {
-	fprintf(out, "%d ", order_item[iset[i]]);
+    fprintf(out, "%d ", order_item[iset[i]]);
 //	printf("%d ", order_item[iset[i]]);
   }
   fprintf(out, "(%d)\n", support);
@@ -32,14 +32,29 @@ void FSout::printSet(int length, int *iset, int support)
 
 void FSout::printset(int length, int *iset)
 {
-//#ifdef shown 
-  for(int i=0; i<length; i++) 
+//#ifdef shown
+  for(int i=0; i<length; i++)
     fprintf(out, "%d ", order_item[iset[i]]);
 //#endif
 }
 
-void FSout::close()
+void VectorOut::printSet(int length, int *iset, int support)
 {
-	fclose(out);
+  std::vector<int> iset_vec(length);
+  for(size_t i = 0; i < length; ++i)
+  {
+    iset_vec[i] = order_item[iset[i]];
+  }
+  iset_list.push_back(std::move(iset_vec));
+  supp_list.push_back(support);
 }
 
+void VectorOut::printset(int length, int *iset)
+{
+  std::vector<int> iset_vec(length);
+  for(size_t i = 0; i < length; ++i)
+  {
+    iset_vec[i] = order_item[iset[i]];
+  }
+  iset_list.push_back(std::move(iset_vec));
+}

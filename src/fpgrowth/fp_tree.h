@@ -73,7 +73,7 @@ private:
 	memory* allocate_buf(int sequence, int iteration, int ms);
 	void fill_count(int*, int);
 	void cal_level_25();
-	void powerset(int*, int, int*, int, int, FSout*)const;
+	void powerset(int*, int, int*, int, int, OutData*)const;
 
 public:
 	void init(int Itemno, int new_item_no);
@@ -84,11 +84,11 @@ public:
 	void scan1_DB(Data&);		//find the count of all nodes from origional DB
 	void scan2_DB(Data&);		//construct the first fp-tree from  origional DB
 	bool Single_path(bool=false)const;   //Is it a single path?
-	void generate_all(int, FSout*)const;
+	void generate_all(int, OutData*)const;
 
-	int FP_growth(FSout* fout);
-	int FPmax(FSout*);
-	int FPclose(FSout*);
+	int FP_growth(OutData* fout);
+	int FPmax(OutData*);
+	int FPclose(OutData*);
 };
 
 class MFI_tree : public FP_tree{
@@ -123,7 +123,7 @@ public:
 	bool is_subset(int Count)const;
 	void insert(bool*, int, int);
 	void insert(int*, int, int, int);  //compact info
-	bool generate_close(int, int, FSout*);
+	bool generate_close(int, int, OutData*);
 	void order_FS(int*, int, int);
 };
 

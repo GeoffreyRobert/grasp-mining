@@ -309,7 +309,7 @@ void CFI_tree::order_FS(int* FS, int start, int end)
 			swap(FS+m, FS+m-1);
 }
 
-bool CFI_tree::generate_close(int new_item_no, int Count, FSout* fout)
+bool CFI_tree::generate_close(int new_item_no, int Count, OutData* fout)
 {
 	int i, whole, temp = Count;
 	
@@ -813,7 +813,7 @@ void FI_tree::scan2_DB(FI_tree* old_tree, Fnode* node)
 	delete []origin;
 }
 
-void FI_tree::powerset(int*prefix, int prefixlen, int* items, int current, int itlen, FSout* fout )const
+void FI_tree::powerset(int*prefix, int prefixlen, int* items, int current, int itlen, OutData* fout )const
 {
 	if(current==itlen)
 	{
@@ -835,7 +835,7 @@ void FI_tree::powerset(int*prefix, int prefixlen, int* items, int current, int i
 	}
 }	
 
-void FI_tree::generate_all(int new_item_no, FSout* fout)const
+void FI_tree::generate_all(int new_item_no, OutData* fout)const
 {
 	powerset(prefix, 0, list->FS, list->top, list->top+new_item_no, fout);
 }
@@ -945,7 +945,7 @@ int FI_tree::conditional_pattern_base(int itemname, bool close)const
 	return k;
 }
 
-int FI_tree::FP_growth(FSout* fout)
+int FI_tree::FP_growth(OutData* fout)
 {
 	int sequence, new_item_no, listlen;
 	int MC=0;			//markcount for memory
@@ -1013,7 +1013,7 @@ int FI_tree::FP_growth(FSout* fout)
 	return 0;
 }
 
-int FI_tree::FPmax(FSout* fout)
+int FI_tree::FPmax(OutData* fout)
 {
 	static int ms=9;		//power2[i] is the smallest block size for memory  2**9 = 512
 
@@ -1116,7 +1116,7 @@ int FI_tree::FPmax(FSout* fout)
 	return 0;   
 }
 
-int FI_tree::FPclose(FSout* fout)
+int FI_tree::FPclose(OutData* fout)
 {
 	static int ms=9;		//power2[i] is the smallest block size for memory  2**9 = 512
 
