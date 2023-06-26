@@ -39,6 +39,7 @@ int main(int argc, char** argv)
   const unsigned population_size = varmap["population"].as<unsigned>();
   const double alpha = varmap["alpha"].as<double>();
   const unsigned seed = varmap["seed"].as<unsigned>();
+  const double support = varmap["support"].as<double>();
 
   if (population_size < 1)
     return 0;
@@ -50,7 +51,7 @@ int main(int argc, char** argv)
   BinatoHeuristic init_heuristic(problem, alpha, seed);
   BinatoHeuristic const_heuristic(problem, alpha, seed);
   LaarhovenSearch local_search(problem);
-  PatternMiner data_miner(problem, 0.5);
+  PatternMiner data_miner(problem, support);
   Solver solver(init_heuristic, const_heuristic, local_search, data_miner, population_size);
 
   Solution solution = solver.Solve(problem);
@@ -76,7 +77,8 @@ boost::program_options::variables_map ParseArgs(int argc, char* argv[])
     ("help", "produce help message")
     ("population,p", po::value<unsigned>()->default_value(10), "number of population of the same solver run")
     ("alpha,a", po::value<double>()->default_value(0.5), "alpha parameter of the binato heuristic")
-    ("seed,s", po::value<unsigned>()->default_value(0), "seed to be used by all random generators");
+    ("seed,s", po::value<unsigned>()->default_value(0), "seed to be used by all random generators")
+    ("support,u", po::value<double>()->default_value(0.2), "support parameter of FIM algorithm");
 
   po::options_description hidden_opts("Hidden options");
   hidden_opts.add_options()
