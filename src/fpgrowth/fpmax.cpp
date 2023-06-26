@@ -46,9 +46,10 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #include <fstream>
 #include <iomanip>
 #include <ctime>
+#include "fpmax.h"
 #include "common.h"
 #include "buffer.h"
-#include "fpmax.h"
+#include "data.h"
 
 using namespace std;
 
@@ -86,26 +87,19 @@ void printLen()
 }
 
 
-int fpmax(char* infile, int threshold, char* outfile)
+int fpmax(Data& fdat, int threshold, char* outfile)
 {
 	THRESHOLD = threshold;
 
 	int i;
 	FI_tree* fptree;
 
-	FileData* fdat = new FileData(infile);
-
-	if(!fdat->isOpen()) {
-		cerr << infile << " could not be opened!" << endl;
-		exit(2);
-	}
-
 	fp_buf=new memory(1000, 524288L, 1048576L, 2);
 //	fp_buf=new memory(60, 4194304L, 8388608L, 2);
 //	fp_buf=new memory(2000, 262144L, 524288L, 2);
 	fptree = (FI_tree*)fp_buf->newbuf(1, sizeof(FI_tree));
 	fptree->init(-1, 0);
-	fptree -> scan1_DB(fdat);
+	fptree->scan1_DB(fdat);
 	ITlen = new int[fptree->itemno];
 	bran = new int[fptree->itemno];
 	compact = new int[fptree->itemno];
@@ -126,7 +120,6 @@ int fpmax(char* infile, int threshold, char* outfile)
 	}
 
 	fptree->scan2_DB(fdat);
-    fdat->close();
 	if(fptree->itemno==0)return 0;
 
 	FSout* fout;

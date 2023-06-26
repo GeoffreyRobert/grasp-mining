@@ -531,7 +531,7 @@ void FI_tree::init(int old_itemno, int new_itemno)
 		head = (Fnode**)fp_buf->newbuf(itemno, sizeof(Fnode*));
 }
 
-void FI_tree::scan1_DB(Data* fdat)
+void FI_tree::scan1_DB(Data& fdat)
 {
 	int i,j;
 	int net_itemno=0;
@@ -543,10 +543,9 @@ void FI_tree::scan1_DB(Data* fdat)
 	for(i=0; i<ITEM_NO; i++)
 		counts[i] = 0;
 
-	Transaction *Tran = new Transaction;
-	assert(Tran!=NULL);
+	const Transaction *Tran = nullptr;
 
-	while((Tran = fdat->getNextTransaction(Tran)))
+	while((Tran = fdat.getNextTransaction()))
 	{	
 		for(int i=0; i<Tran->length; i++) 
 		{
@@ -636,7 +635,6 @@ void FI_tree::scan1_DB(Data* fdat)
 	ITEM_NO = itemno;
 
 	delete []counts;
-	delete Tran;
 }
 	
 void FI_tree::insert(int* compact, int counts, int current)
@@ -709,19 +707,19 @@ void FI_tree::fill_count(int* origin, int support)
 	}
 }
 
-void FI_tree::scan2_DB(Data *fdat)
+void FI_tree::scan2_DB(Data& fdat)
 {
 	int i, j, has;
 	int* origin, *buffer=new int;
-	Transaction *Tran = new Transaction;
+	const Transaction *Tran = nullptr;
 	origin = new int[ITEM_NO];
-	assert(Tran!=NULL&&origin!=NULL && buffer!=NULL);
+	assert(origin!=NULL && buffer!=NULL);
 
 	for(j=0; j<ITEM_NO; j++) origin[j]=-1;
 
 	for(i=0; i<TRANSACTION_NO; i++)
 	{
-		Tran = fdat->getNextTransaction(Tran);
+		Tran = fdat.getNextTransaction();
 		has=0;
 		for(int j=0; j<Tran->length; j++) 
 		{
@@ -743,7 +741,6 @@ void FI_tree::scan2_DB(Data *fdat)
 
 	delete []origin;
 	delete buffer;
-	delete Tran;
 }
 
 void FI_tree::scan1_DB(FI_tree* old_tree)

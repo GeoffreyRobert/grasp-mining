@@ -1,6 +1,8 @@
 #ifndef _FPMAX
 #define _FPMAX
 
-int fpmax(char* infile, int threshold, char* outfile);
+class Data;
+
+int fpmax(Data& data, int threshold, char* outfile);
 
 #endif // _FPMAX

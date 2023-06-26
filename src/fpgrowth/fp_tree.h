@@ -81,8 +81,8 @@ public:
 	void set_close_tree(CFI_tree* lclose){LClose = lclose;};
 	~FI_tree(){/*delete root;	delete []order;	delete []table;*/};
 
-	void scan1_DB(Data*);		//find the count of all nodes from origional DB
-	void scan2_DB(Data*);		//construct the first fp-tree from  origional DB
+	void scan1_DB(Data&);		//find the count of all nodes from origional DB
+	void scan2_DB(Data&);		//construct the first fp-tree from  origional DB
 	bool Single_path(bool=false)const;   //Is it a single path?
 	void generate_all(int, FSout*)const;
 

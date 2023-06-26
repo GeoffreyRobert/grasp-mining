@@ -28,7 +28,7 @@ class Data
 {
 public:
   virtual ~Data() {};
-	virtual Transaction *getNextTransaction(Transaction* Trans) = 0;
+	virtual const Transaction* getNextTransaction() = 0;
 };
 
 class FileData : public Data
@@ -38,12 +38,11 @@ class FileData : public Data
 	FileData(char *filename);
 	~FileData() override;
 	int isOpen();
-	void close(){if(in)fclose(in);}
 
-	Transaction *getNextTransaction(Transaction* Trans) override;
+	const Transaction* getNextTransaction() override;
   
  private:
-  
+	Transaction Trans;
 	FILE *in;
 };
 
@@ -51,7 +50,7 @@ class VectorData : public Data
 {
 public:
   VectorData(std::vector<Transaction>&&);
-	Transaction *getNextTransaction(Transaction* Trans) override;
+	const Transaction* getNextTransaction() override;
 
 private:
   std::vector<Transaction> _transactions;

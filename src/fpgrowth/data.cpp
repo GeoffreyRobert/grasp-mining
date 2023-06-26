@@ -38,9 +38,9 @@ int FileData::isOpen()
   else return 0;
 }
 
-Transaction *FileData::getNextTransaction(Transaction* Trans)
+const Transaction *FileData::getNextTransaction()
 {
-	Trans->length = 0;
+	Trans.length = 0;
 
   // read list of items
 #ifndef BINARY	  
@@ -58,11 +58,11 @@ Transaction *FileData::getNextTransaction(Transaction* Trans)
 		}
 		if(pos)
 		{
-			if(Trans->length >= Trans->maxlength)
-				Trans->DoubleTrans(Trans->length);
+			if(Trans.length >= Trans.maxlength)
+				Trans.DoubleTrans(Trans.length);
 
-			Trans->t[Trans->length] = item;
-			Trans->length++;
+			Trans.t[Trans.length] = item;
+			Trans.length++;
 		}
 	}while(c != '\n' && !feof(in));
 	// if end of file is reached, rewind to beginning for next pass
@@ -95,7 +95,7 @@ Transaction *FileData::getNextTransaction(Transaction* Trans)
 	}
 #endif
   
-	return Trans;
+	return &Trans;
 }
 
 
@@ -105,7 +105,7 @@ VectorData::VectorData(std::vector<Transaction>&& transactions)
 { }
 
 
-Transaction* VectorData::getNextTransaction(Transaction* Trans)
+const Transaction* VectorData::getNextTransaction()
 {
   if (_iter == _transactions.end())
   {
