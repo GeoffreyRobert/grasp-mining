@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <cassert>
 
@@ -12,6 +13,12 @@ PatternMiner::PatternMiner(const Problem& problem, double support)
   : DataMiner(problem)
   , _support(support)
 {
+}
+
+bool HasDuplicates(std::vector<int>& t_vec)
+{
+  std::sort(t_vec.begin(), t_vec.end());
+  return std::adjacent_find(t_vec.begin(), t_vec.end()) != t_vec.end();
 }
 
 void PatternMiner::operator()(const vector<Solution>& solutions)
@@ -33,11 +40,14 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
       JobId prev_jid = (prev_oid + ref_pb.nMac - 1) / ref_pb.nMac;
 
       // create a unique item number for a pair of successive operations
-      unsigned itid = oid * ref_pb.nJob + prev_jid;
+      // each operation can have a predecessor from the nJob or the origin job
+      int itid = static_cast<int>(oid * (ref_pb.nJob + 1) + prev_jid);
 
       // add the item to the transaction
-      t_vec.push_back(static_cast<int>(itid));
+      assert(itid != t_vec.back() && "same item inserted twice");
+      t_vec.push_back(itid);
     }
+    assert(!HasDuplicates(t_vec) && "transaction contains duplicates");
     t_list.emplace_back(std::move(t_vec));
   }
 
