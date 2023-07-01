@@ -34,7 +34,7 @@ public:
   void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
 
-  const std::vector<std::vector<int>>& GetItemsets() { return iset_list; };
+  std::vector<std::vector<int>>&& GetItemsets() { return std::move(iset_list); };
 
 private:
   std::vector<std::vector<int>> iset_list;

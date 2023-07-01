@@ -59,7 +59,7 @@ target_include_directories(grasp-lib
 )
 
 target_link_libraries(grasp-lib
-  PRIVATE lcm-fim Boost::headers compiler_settings)
+  PRIVATE fp-max Boost::headers compiler_settings)
 
 ################
 ## Exexutable ##

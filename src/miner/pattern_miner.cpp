@@ -1,11 +1,12 @@
 #include <cmath>
+#include <cassert>
 
 #include "pattern_miner.h"
 #include "data/problem.h"
 #include "data/solution.h"
-extern "C" {
-  #include "lcm_max.h"
-}
+#include "data.h"
+#include "fsout.h"
+#include "fpmax.h"
 
 PatternMiner::PatternMiner(const Problem& problem, double support)
   : DataMiner(problem)
@@ -15,12 +16,16 @@ PatternMiner::PatternMiner(const Problem& problem, double support)
 
 void PatternMiner::operator()(const vector<Solution>& solutions)
 {
+  // number of solutions to mine
+  size_t t_num = solutions.size();
+
   // encode solutions as transactions to mine
-  auto max_num_t = solutions.size() * ref_pb.size;
-  std::vector<int> transactions(max_num_t);
-  transactions.clear();
+  std::vector<Transaction> t_list(t_num);
+  t_list.clear();
   for (auto& solution : solutions)
   {
+    std::vector<int> t_vec(ref_pb.size);
+    t_vec.clear();
     for (OperationId oid = ref_pb.OriginOp + 1; oid < ref_pb.FinalOp; ++oid)
     {
       OperationId prev_oid = solution.ParentOnMachine(oid);
@@ -31,18 +36,21 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
       unsigned itid = oid * ref_pb.nJob + prev_jid;
 
       // add the item to the transaction
-      transactions.push_back(static_cast<int>(itid));
+      t_vec.push_back(static_cast<int>(itid));
     }
-    transactions.push_back(-1);
+    t_list.emplace_back(std::move(t_vec));
   }
-  transactions.push_back(-1);
 
   int support = static_cast<int>(
-      std::lround(_support * static_cast<double>(solutions.size())));
+      std::lround(_support * static_cast<double>(t_num)));
 
+  VectorData transactions(std::move(t_list));
+  VectorOut out_data;
   // maximal itemset mining
-  int* store = LCMmax ( transactions.data(), support );
-  LCMfree(store);
+  int res = fpmax(transactions, support, &out_data);
+  assert(res == 0 && "fpmax algorithm didn't complete properly");
+
+  std::vector<std::vector<int>> itemsets = out_data.GetItemsets();
 }
 
 void PatternMiner::PatternNode::GetSuccessor(vector<int>& full_pattern, double support, int depth) {

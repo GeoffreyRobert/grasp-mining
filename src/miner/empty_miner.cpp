@@ -1,10 +1,6 @@
 #include "data/solution.h"
 #include "empty_miner.h"
 
-extern "C" {
-  #include "lcm_max.h"
-}
-
 void EmptyMiner::operator()(const vector<Solution>& solutions) {
   (void)solutions;
 }
