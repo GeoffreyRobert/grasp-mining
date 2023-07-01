@@ -17,6 +17,10 @@ public:
 	virtual vector<int> ProposePattern(OperationId oid, double support);
 
 private:
+  int OperationPairToItem(OperationId prev_oid, OperationId oid) const;
+  std::pair<OperationId, OperationId> ItemToOperationPair(int itemId) const;
+  std::vector<int> SolutionToVec(const Solution&) const;
+
 	class PatternNode {
 	public:
 		void GetSuccessor(vector<int>& full_pattern, double support, int depth);
