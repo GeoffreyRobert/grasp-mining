@@ -7,6 +7,15 @@
 
 using std::vector;
 
+Critical operator|(Critical a, Critical b)
+{
+    return static_cast<Critical>(static_cast<char>(a) | static_cast<char>(b));
+}
+Critical operator&(Critical a, Critical b)
+{
+    return static_cast<Critical>(static_cast<char>(a) & static_cast<char>(b));
+}
+
 OpUpdate& operator++(OpUpdate& up)
 {
   return up = static_cast<OpUpdate>(static_cast<int>(up) + 1);
@@ -28,7 +37,7 @@ Solution::Solution(const Problem& problem_)
   , endDate(problem_.size, std::numeric_limits<int>::max())
   , macParent(problem_.size, problem.OriginOp)
   , macChild(problem_.size, problem.FinalOp)
-  , isCritMachine(problem_.size)
+  , isCritical(problem_.size)
 {
   startDate[problem.OriginOp] = std::numeric_limits<int>::min();
   endDate[problem.OriginOp] = 0;
@@ -42,7 +51,7 @@ Solution::Solution(const Solution& other)
   , endDate(other.endDate)
   , macParent(other.macParent)
   , macChild(other.macChild)
-  , isCritMachine(other.isCritMachine)
+  , isCritical(other.isCritical)
 {
 }
 
@@ -52,7 +61,7 @@ Solution::Solution(Solution&& other) noexcept
   , endDate(std::move(other.endDate))
   , macParent(std::move(other.macParent))
   , macChild(std::move(other.macChild))
-  , isCritMachine(std::move(other.isCritMachine))
+  , isCritical(std::move(other.isCritical))
 {
 }
 
@@ -64,7 +73,7 @@ Solution& Solution::operator=(const Solution& other)
     endDate = other.endDate;
     macParent = other.macParent;
     macChild = other.macChild;
-    isCritMachine = other.isCritMachine;
+    isCritical = other.isCritical;
   }
   return *this;
 }
@@ -77,7 +86,7 @@ Solution& Solution::operator=(Solution&& other) noexcept
     endDate = std::move(other.endDate);
     macParent = std::move(other.macParent);
     macChild = std::move(other.macChild);
-    isCritMachine = std::move(other.isCritMachine);
+    isCritical = std::move(other.isCritical);
   }
   return *this;
 }
@@ -86,14 +95,29 @@ void Solution::Initialize(
     vector<int>&& startDate_
   , vector<int>&& endDate_
   , vector<OperationId>&& macParent_
-  , vector<OperationId>&& macChild_
-  , vector<bool>&& isCritMachine_)
+  , vector<OperationId>&& macChild_)
 {
   startDate = std::move(startDate_);
   endDate = std::move(endDate_);
   macParent = std::move(macParent_);
   macChild = std::move(macChild_);
-  isCritMachine = std::move(isCritMachine_);
+  isCritical.resize(problem.size);
+  isCritical[problem.OriginOp] = Critical::None;
+  isCritical[problem.FinalOp] = Critical::Machine;
+  for (OperationId oid = problem.OriginOp + 1; oid < problem.FinalOp; ++oid)
+  {
+    OperationId parent_in_job = problem.prevOperation[oid];
+    int date_job = endDate[parent_in_job];
+    OperationId parent_on_mac = macParent[oid];
+    int date_mac = endDate[parent_on_mac];
+
+    Critical& is_critical = isCritical[oid] = Critical::None;
+    // go through both if to set critical parent data
+    if (date_job <= date_mac)
+      is_critical = is_critical | Critical::Machine;
+    if (date_mac <= date_job)
+      is_critical = is_critical | Critical::Job;
+  }
 }
 
 int Solution::Makespan()
@@ -118,7 +142,12 @@ OperationId Solution::ChildOnMachine(OperationId oid) const
 
 bool Solution::IsCriticalOnMachine(OperationId oid) const
 {
-  return isCritMachine[oid];
+  return (isCritical[oid] & Critical::Machine) != Critical::None;
+}
+
+bool Solution::IsCriticalOnJob(OperationId oid) const
+{
+  return (isCritical[oid] & Critical::Job) != Critical::None;
 }
 
 int Solution::ScheduleOperation(OperationId oid)
@@ -133,19 +162,23 @@ int Solution::ScheduleOperation(OperationId oid)
   int date_mac = endDate[parent_on_mac];
 
   int start_date;
-  bool is_on_mac;
-  if (date_job < date_mac) { // si la date disj est superieure
+  Critical is_critical(Critical::None);
+  // go through both if to set critical parent data
+  if (date_job <= date_mac)
+  {
     start_date = date_mac;
-    is_on_mac = true;
-  } else {
+    is_critical = is_critical | Critical::Machine;
+  }
+  if (date_mac <= date_job)
+  {
     start_date = date_job;
-    is_on_mac = false;
+    is_critical = is_critical | Critical::Job;
   }
   int end_date = start_date + problem.timeOnMachine[oid];
 
   startDate[oid] = start_date;
   endDate[oid] = end_date;
-  isCritMachine[oid] = is_on_mac;
+  isCritical[oid] = is_critical;
 
   return end_date;
 }

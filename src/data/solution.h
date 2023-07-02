@@ -12,6 +12,15 @@ using std::string;
 using std::tuple;
 using std::vector;
 
+enum class Critical : char
+{
+  None = 0,
+  Job = 1 << 0,
+  Machine = 1 << 1,
+};
+inline Critical operator|(Critical a, Critical b);
+inline Critical operator&(Critical a, Critical b);
+
 enum OpUpdate {
   Unchanged = 0,
   ToChange = 1,
@@ -40,8 +49,7 @@ public:
       vector<int>&& startDate
     , vector<int>&& endDate
     , vector<OperationId>&& macParent
-    , vector<OperationId>&& macChild
-    , vector<bool>&& isCritMachine);
+    , vector<OperationId>&& macChild);
 
   // Getters
   int Makespan();
@@ -50,6 +58,7 @@ public:
   OperationId ParentOnMachine(OperationId oid) const;
   OperationId ChildOnMachine(OperationId oid) const;
   bool IsCriticalOnMachine(OperationId oid) const;
+  bool IsCriticalOnJob(OperationId oid) const;
 
   // Get a scheduled end date for the operation and cache it
   int ScheduleOperation(OperationId oid);
@@ -74,6 +83,6 @@ private:
 
   vector<OperationId> macParent; // parent sur la machine
   vector<OperationId> macChild; // successeur(s) sur la machine
-  vector<bool> isCritMachine; // parent critique sur la machine
+  vector<Critical> isCritical; // parent critique sur la machine
 };
 #endif

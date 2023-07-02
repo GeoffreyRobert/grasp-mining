@@ -232,17 +232,11 @@ TEST(SolutionTest, RescheduleOperation_Should_Update_Makespan)
     Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   EXPECT_EQ(1, solution.CriticalOp());

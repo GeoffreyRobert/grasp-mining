@@ -51,7 +51,7 @@ public:
   vector<vector<OperationId>> operationNumber; // numero du sommet traité (job, op)
   vector<vector<OperationId>> operationsOnMachine; // for each machine, for each job, operation on the machine
 
-  vector<OperationId> prevOperation; // numéro de l'op. suivante dans le job
+  vector<OperationId> prevOperation; // id of the next operation in the job
   vector<OperationId> nextOperation; // numéro de l'op. préc. dans le job
   vector<MachineId> machineNumber; // numéro de machine qui exec. l'op
   vector<int> timeOnMachine; // durée à passer sur la machine

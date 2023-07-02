@@ -48,19 +48,12 @@ TEST(LaarhovenTest, SimpleImprovementWithOneSwap)
     Fn, Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0, 0,
-    1, 0,
-    1,
-  };
   Solution solution(problem);
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_makespan = 2;
@@ -115,18 +108,11 @@ TEST(LaarhovenTest, NoImprovement)
     Fn, Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0, 0,
-    1, 1,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_makespan = 3;
@@ -182,18 +168,11 @@ TEST(LaarhovenTest, NoImprovementShouldNotChangeSolution)
      3, Fn, Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0, 0, 0,
-    0, 1, 0,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_criticalOp = 6;
@@ -253,19 +232,11 @@ TEST(LaarhovenTest, OperationNotInvolvedInSwapsShouldStillBeCompacted)
      3, Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    1, 0,
-    1, 1,
-    0, 1,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_criticalOp = 6;
@@ -326,19 +297,11 @@ TEST(LaarhovenTest, UnmodifiedOpsShouldBeTakenIntoAccountOnCriticalPath)
      6,  3,  5,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0, 0, 1,
-    0, 1, 0,
-    1, 0, 0,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_criticalOp = 3;
@@ -409,22 +372,11 @@ TEST(LaarhovenTest, LargeProblem)
      3, 14,  5, 20, Fn, Fn,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    0, 0, 0, 0, 0, 0,
-    1, 0, 1, 0, 0, 0,
-    1, 0, 1, 0, 0, 0,
-    1, 0, 0, 0, 1, 0,
-    1, 1, 1, 1, 0, 0,
-    0, 0, 0, 0, 1, 0,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   LaarhovenSearch local_search(problem);
@@ -481,18 +433,11 @@ TEST(LaarhovenTest, MacParent_Start_Date_Less_Than_JobParent_Start_Date_Can_Stil
      1,  3,  2,
     Fn,
   };
-  vector<bool> isCritMachine = {
-    0,
-    1, 1, 0,
-    0, 0, 1,
-    1,
-  };
   solution.Initialize(
       std::move(startDate)
     , std::move(endDate)
     , std::move(macParent)
     , std::move(macChild)
-    , std::move(isCritMachine)
   );
 
   const int final_criticalOp = 3;
