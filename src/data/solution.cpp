@@ -33,7 +33,7 @@ InvalidScheduling::InvalidScheduling(const string& what)
 
 Solution::Solution(const Problem& problem_)
   : problem(problem_)
-  , startDate(problem_.size, std::numeric_limits<int>::max())
+  , startDate(problem_.size, std::numeric_limits<int>::min())
   , endDate(problem_.size, std::numeric_limits<int>::max())
   , macParent(problem_.size, problem.OriginOp)
   , macChild(problem_.size, problem.FinalOp)
@@ -199,10 +199,15 @@ void Solution::AddOperation(OperationId oid)
   if (macChild[oid] != problem.FinalOp)
     throw InvalidScheduling("Cannot add operation that was already added");
 
+  // if the scheduling was not cached, compute it
+  int end_date = endDate[oid];
+  if (end_date == std::numeric_limits<int>::max())
+    end_date = ScheduleOperation(oid);
+
   macChild[macParent[oid]] = oid;
 
-  if (endDate[oid] > Makespan()) {
-    startDate[problem.FinalOp] = endDate[oid];
+  if (end_date > Makespan()) {
+    startDate[problem.FinalOp] = end_date;
     macParent[problem.FinalOp] = oid;
   }
 

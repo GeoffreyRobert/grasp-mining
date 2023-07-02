@@ -18,11 +18,12 @@ public:
   Solution& operator()(Solution&) override;
 
 private:
-  void virtual Init() override;
+  BinCandidateJob& CandidateSelection(vector<BinCandidateJob>&, Solution&) override;
+  std::pair<int, int> CandidatesGeneration(vector<BinCandidateJob>&, Solution&);
   double _alpha = 0.5;
 
   // Restricted Candidate List
-  vector<BinCandidateJob*> rc_list;
+  vector<size_t> rc_list;
 };
 
 #endif // !BINATO_HEURISTIC_H_

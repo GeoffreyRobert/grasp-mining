@@ -1,5 +1,5 @@
-#ifndef CONST_HEURITIC_H_
-#define CONST_HEURITIC_H_
+#ifndef CONST_HEURISTIC_H_
+#define CONST_HEURISTIC_H_
 
 #include <random>
 
@@ -31,10 +31,13 @@ public:
 	virtual Solution& operator()(Solution&) = 0;
 
 protected:
-  virtual void Init();
+  virtual std::vector<ConstData>& CandidatesInitialization();
+  virtual ConstData& CandidateSelection(vector<ConstData>&, Solution&) = 0;
 
 	std::mt19937 generator;
-  vector<ConstData> candidate_jobs;  // jobs left to be added to the solution
+
+private:
+  vector<ConstData> _candidate_jobs;  // jobs left to be added to the solution
 };
 
-#endif // CONST_HEURITIC_H_
+#endif // CONST_HEURISTIC_H_

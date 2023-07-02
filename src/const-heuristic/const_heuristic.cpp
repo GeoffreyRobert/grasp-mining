@@ -7,17 +7,18 @@ template<class ConstData>
 CandidateHeuristic<ConstData>::CandidateHeuristic(const Problem& problem, unsigned seed)
   : ConstHeuristic(problem)
   , generator(seed)
-  , candidate_jobs(ref_pb.nJob)
+  , _candidate_jobs(ref_pb.nJob)
 {}
 
 template<class ConstData>
-void CandidateHeuristic<ConstData>::Init()
+std::vector<ConstData>& CandidateHeuristic<ConstData>::CandidatesInitialization()
 {
   // Gestion des contraintes de dépendance
-  candidate_jobs.clear();
+  _candidate_jobs.clear();
   for (JobId jid = 0; jid < ref_pb.nJob; ++jid) {
-    candidate_jobs.push_back({jid, 0});
+    _candidate_jobs.push_back({jid, 0});
   }
+  return _candidate_jobs;
 }
 
 template class CandidateHeuristic<CandidateJob>;

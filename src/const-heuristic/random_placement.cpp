@@ -13,21 +13,13 @@ RandomPlacement::RandomPlacement(const Problem& problem, unsigned seed)
 
 Solution& RandomPlacement::operator()(Solution& solution)
 {
-  Init();
+  auto& candidate_jobs = CandidatesInitialization();
 
   for (OperationId counter = 0; counter < ref_pb.opNum; ++counter) {
-    // random choice of a job
-    unsigned long job_idx = candidate_jobs.size() - 1;
-    if (job_idx != 0) {
-      job_idx = std::uniform_int_distribution<unsigned long>(0, job_idx)(generator);
-    }
-    auto& c_job = candidate_jobs[job_idx];
-
-    // récupération des identifiants operation, machine et parent
-    OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
+    auto& c_job = CandidateSelection(candidate_jobs, solution);
 
     // construction de la solution
-    solution.ScheduleOperation(oid);
+    OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     solution.AddOperation(oid);
 
     // increment operation rank and remove job from list if all ops scheduled
@@ -38,4 +30,14 @@ Solution& RandomPlacement::operator()(Solution& solution)
   }
 
   return solution;
+}
+
+CandidateJob& RandomPlacement::CandidateSelection(vector<CandidateJob>& candidate_jobs, Solution&)
+{
+  // random choice of a job
+  size_t job_idx = candidate_jobs.size() - 1;
+  if (job_idx != 0) {
+    job_idx = std::uniform_int_distribution<unsigned long>(0, job_idx)(generator);
+  }
+  return candidate_jobs[job_idx];
 }
