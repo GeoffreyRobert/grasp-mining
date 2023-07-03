@@ -37,7 +37,6 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #include <cmath>
 #include "buffer.h"
 #include "common.h"
-#include "sort.h"
 
 template <class T> void swap(T* k, T* j)
 {
@@ -47,7 +46,7 @@ template <class T> void swap(T* k, T* j)
   *k = temp;
 }
 
-int findpivot(int i, int j) {return (i+j)/2;}
+int findpivot(const int& i, const int& j) {return (i+j)/2;}
 
 int partition(int* array, int* temp, int l, int r)
 {
@@ -59,7 +58,7 @@ int partition(int* array, int* temp, int l, int r)
     swap(array+l, array+r);
     swap(temp+l, temp+r);
     while (array[l] > pivot) ++l;
-    while (pivot > array[r]) --r;
+    while (pivot >= array[r]) --r;
   }
   return l;
 }

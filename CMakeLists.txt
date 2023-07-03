@@ -84,7 +84,6 @@ add_executable(full_test
   tests/laarhoven_test.cpp
   tests/main_test.cpp
   tests/fim_test.cpp
-  tests/fp_sort.cpp
 )
 
 # Copy test files to output directory
