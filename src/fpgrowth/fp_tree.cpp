@@ -58,7 +58,7 @@ int partition(int* array, int* temp, int l, int r)
     swap(array+l, array+r);
     swap(temp+l, temp+r);
     while (array[l] > pivot) ++l;
-    while (pivot >= array[r]) --r;
+    while (pivot > array[r]) --r;
   }
   return l;
 }
