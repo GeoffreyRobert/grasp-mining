@@ -200,7 +200,7 @@ void Solution::AddOperation(OperationId oid)
     throw InvalidScheduling("Cannot add operation that was already added");
 
   // if the scheduling was not cached, compute it
-  int end_date = endDate[oid];
+  int& end_date = endDate[oid];
   if (end_date == std::numeric_limits<int>::max())
     end_date = ScheduleOperation(oid);
 

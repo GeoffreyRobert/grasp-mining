@@ -31,3 +31,8 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
 ```
 gdb ./full_test
 ```
+
+# Multi Config
+```
+cmake . -G"Ninja Multi-Config" -DCMAKE_CONFIGURATION_TYPES="Release;Debug" -DCMAKE_DEFAULT_BUILD_TYPE=Debug -B build/
+```

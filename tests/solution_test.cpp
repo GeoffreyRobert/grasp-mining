@@ -26,6 +26,26 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Operation)
   EXPECT_EQ(child_on_mac, solution.ChildOnMachine(oid));
 }
 
+TEST(SolutionTest, AddOperation_Should_Schedule_Operation)
+{
+  Problem problem(1, 1, 1,
+    vector<std::pair<MachineId, int>> { { 0, 1 } });
+  Solution solution(problem);
+
+  const OperationId oid = 1;
+  const int start_date = 0;
+  const int end_date = 1;
+  const MachineId parent_on_mac = problem.OriginOp;
+  const MachineId child_on_mac = problem.FinalOp;
+
+  solution.AddOperation(oid);
+
+  EXPECT_EQ(start_date, solution.StartDate(oid));
+  EXPECT_EQ(end_date, solution.EndDate(oid));
+  EXPECT_EQ(parent_on_mac, solution.ParentOnMachine(oid));
+  EXPECT_EQ(child_on_mac, solution.ChildOnMachine(oid));
+}
+
 TEST(SolutionTest, AddOperation_Should_Update_Child_On_Machine_Of_Parent_And_Makespan)
 {
   Problem problem(1, 1, 1,
@@ -40,7 +60,6 @@ TEST(SolutionTest, AddOperation_Should_Update_Child_On_Machine_Of_Parent_And_Mak
   const int makespan = 1;
   const OperationId critical_op = tested_oid;
 
-  solution.ScheduleOperation(tested_oid);
   solution.AddOperation(tested_oid);
 
   EXPECT_EQ(parent_child_on_mac, solution.ChildOnMachine(parent_oid));
@@ -64,7 +83,6 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Job_Operations)
   const MachineId parent_on_mac = problem.OriginOp;
   const MachineId child_on_mac = problem.FinalOp;
 
-  solution.ScheduleOperation(parent_oid);
   solution.AddOperation(parent_oid);
   solution.ScheduleOperation(tested_oid);
 
@@ -93,7 +111,6 @@ TEST(SolutionTest, AddOperation_Should_Update_Children_On_Same_Machine)
   const int makespan = 1;
   const OperationId critical_op = tested_oid;
 
-  solution.ScheduleOperation(tested_oid);
   solution.AddOperation(tested_oid);
 
   EXPECT_EQ(parent_oid, solution.ParentOnMachine(tested_oid));
@@ -122,7 +139,6 @@ TEST(SolutionTest, GetOperationScheduling_Should_Initialize_Same_Machine_Operati
   const int makespan = 1;
   const OperationId critical_op = parent_oid; // for the same reasons, makespan is not updated
 
-  solution.ScheduleOperation(parent_oid);
   solution.AddOperation(parent_oid);
   solution.ScheduleOperation(tested_oid);
 
@@ -149,11 +165,8 @@ TEST(SolutionTest, AddOperation_Should_Throw_If_Same_Operation_Added_Twice)
   const OperationId second_oid = 2;
   const OperationId third_oid = 3;
 
-  solution.ScheduleOperation(tested_oid);
   solution.AddOperation(tested_oid);
-  solution.ScheduleOperation(second_oid);
   solution.AddOperation(second_oid);
-  solution.ScheduleOperation(third_oid);
   solution.AddOperation(third_oid);
 
   EXPECT_EQ(problem.OriginOp, solution.ParentOnMachine(tested_oid));
@@ -178,13 +191,9 @@ TEST(SolutionTest, SwapOperations_Should_Reassign_CriticalOp_On_Swap_Only_If_Chi
     });
   Solution solution(problem);
 
-  solution.ScheduleOperation(1);
   solution.AddOperation(1);
-  solution.ScheduleOperation(3);
   solution.AddOperation(3);
-  solution.ScheduleOperation(4);
   solution.AddOperation(4);
-  solution.ScheduleOperation(2);
   solution.AddOperation(2);
 
   EXPECT_EQ(2, solution.CriticalOp());
