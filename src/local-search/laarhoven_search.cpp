@@ -49,6 +49,23 @@ bool LaarhovenSearch::SwapAndEvaluate(
   OperationId new_parent = draft_solution.SwapOperations(parent, child);
   ops_to_move.push_back(new_parent);
 
+  // first pass to invalidate operations affected by swap
+  while (!ops_to_move.empty()) {
+    // get an operation to process
+    unsigned oid = ops_to_move.back();
+    ops_to_move.pop_back();
+
+    // try invalidate successors
+    OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
+    if (draft_solution.TryResetOperation(child_on_mac))
+      ops_to_move.push_back(child_on_mac);
+
+    OperationId child_in_job = ref_pb.nextOperation[oid];
+    if (draft_solution.TryResetOperation(child_in_job))
+      ops_to_move.push_back(child_in_job);
+  }
+
+  ops_to_move.push_back(new_parent);
   // stack vs queue en termes de perfs ? stack: localité, queue: moins de doubles accès
   while (!ops_to_move.empty()) {
     // get an operation to process
@@ -62,15 +79,17 @@ bool LaarhovenSearch::SwapAndEvaluate(
       return false;
     }
 
-    // add successors
+    // add successors if their other parents were already scheduled
     // successors on machine is added first to be processed last
     // this works very well (10x better) when there are many jobs and few machines
     OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
-    if (draft_solution.TryResetOperation(child_on_mac, ParentType::Job))
+    OperationId child_on_mac_other_parent = ref_pb.prevOperation[child_on_mac];
+    if (child_on_mac != ref_pb.FinalOp && draft_solution.IsScheduled(child_on_mac_other_parent))
       ops_to_move.push_back(child_on_mac);
 
     OperationId child_in_job = ref_pb.nextOperation[oid];
-    if (draft_solution.TryResetOperation(child_in_job, ParentType::Machine))
+    OperationId child_in_job_other_parent = draft_solution.ParentOnMachine(child_in_job);
+    if (child_in_job != ref_pb.FinalOp && draft_solution.IsScheduled(child_in_job_other_parent))
       ops_to_move.push_back(child_in_job);
 
     // the ordering of the above should depend on whether there more jobs

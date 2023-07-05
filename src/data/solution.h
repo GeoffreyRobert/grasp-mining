@@ -68,7 +68,8 @@ public:
   void AddOperation(OperationId oid);
   OperationId SwapOperations(OperationId parent, OperationId child);
   int RescheduleOperation(OperationId oid);
-  bool TryResetOperation(OperationId oid, ParentType);
+  bool IsScheduled(OperationId oid);
+  bool TryResetOperation(OperationId oid);
 
   const Problem& problem;
 

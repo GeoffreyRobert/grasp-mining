@@ -161,8 +161,8 @@ int Solution::ScheduleOperation(OperationId oid)
   OperationId parent_on_mac = macParent[oid];
   int date_mac = endDate[parent_on_mac];
 
-  assert(date_job != std::numeric_limits<int>::max() && "parent in job is not scheduled yet");
-  assert(date_mac != std::numeric_limits<int>::max() && "parent on machine is not scheduled yet");
+  assert(IsScheduled(parent_in_job) && "parent in job is not scheduled yet");
+  assert(IsScheduled(parent_on_mac) && "parent on machine is not scheduled yet");
 
   int start_date;
   ParentType is_critical{ParentType::None};
@@ -203,14 +203,13 @@ void Solution::AddOperation(OperationId oid)
     throw InvalidScheduling("Cannot add operation that was already added");
 
   // if the scheduling was not cached, compute it
-  int& end_date = endDate[oid];
-  if (end_date == std::numeric_limits<int>::max())
-    end_date = ScheduleOperation(oid);
+  if (!IsScheduled(oid))
+    ScheduleOperation(oid);
 
   macChild[macParent[oid]] = oid;
 
-  if (end_date > Makespan()) {
-    startDate[problem.FinalOp] = end_date;
+  if (endDate[oid] > Makespan()) {
+    startDate[problem.FinalOp] = endDate[oid];
     macParent[problem.FinalOp] = oid;
   }
 
@@ -272,27 +271,18 @@ int Solution::RescheduleOperation(OperationId oid)
   return end_date;
 }
 
+bool Solution::IsScheduled(OperationId oid)
+{
+  return endDate[oid] != std::numeric_limits<int>::max();
+}
+
 // test if an operation can be rescheduled and tag it if so
-bool Solution::TryResetOperation(OperationId oid, ParentType checkParent)
+bool Solution::TryResetOperation(OperationId oid)
 {
   // check whether it's already reset to be rescheduled
   // the "is scheduled" invariant as per AddOperation
-  if (endDate[oid] == std::numeric_limits<int>::max())
+  if (!IsScheduled(oid))
     return false;
-
-  // then check that the successor has both parents scheduled
-  if ((checkParent & ParentType::Machine) != ParentType::None)
-  {
-    OperationId parent_on_mac = macParent[oid];
-    if (endDate[parent_on_mac] == std::numeric_limits<int>::max())
-      return false;
-  }
-  if ((checkParent & ParentType::Job) != ParentType::None)
-  {
-    OperationId parent_in_job = problem.prevOperation[oid];
-    if (endDate[parent_in_job] == std::numeric_limits<int>::max())
-      return false;
-  }
 
   endDate[oid] = std::numeric_limits<int>::max();
   return true;
