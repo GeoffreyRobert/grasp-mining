@@ -12,14 +12,14 @@ using std::string;
 using std::tuple;
 using std::vector;
 
-enum class Critical : char
+enum class ParentType : char
 {
   None = 0,
   Job = 1 << 0,
   Machine = 1 << 1,
 };
-inline Critical operator|(Critical a, Critical b);
-inline Critical operator&(Critical a, Critical b);
+inline ParentType operator|(ParentType a, ParentType b);
+inline ParentType operator&(ParentType a, ParentType b);
 
 enum OpUpdate {
   Unchanged = 0,
@@ -68,7 +68,7 @@ public:
   void AddOperation(OperationId oid);
   OperationId SwapOperations(OperationId parent, OperationId child);
   int RescheduleOperation(OperationId oid);
-  bool TryResetOperation(OperationId oid);
+  bool TryResetOperation(OperationId oid, ParentType);
 
   const Problem& problem;
 
@@ -83,6 +83,6 @@ private:
 
   vector<OperationId> macParent; // parent sur la machine
   vector<OperationId> macChild; // successeur(s) sur la machine
-  vector<Critical> isCritical; // parent critique sur la machine
+  vector<ParentType> isCritical; // parent critique sur la machine
 };
 #endif

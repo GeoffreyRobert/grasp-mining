@@ -64,13 +64,17 @@ bool LaarhovenSearch::SwapAndEvaluate(
 
     // add successors
     // successors on machine is added first to be processed last
+    // this works very well (10x better) when there are many jobs and few machines
     OperationId child_on_mac = draft_solution.ChildOnMachine(oid);
-    if (draft_solution.TryResetOperation(child_on_mac))
+    if (draft_solution.TryResetOperation(child_on_mac, ParentType::Job))
       ops_to_move.push_back(child_on_mac);
 
     OperationId child_in_job = ref_pb.nextOperation[oid];
-    if (draft_solution.TryResetOperation(child_in_job))
+    if (draft_solution.TryResetOperation(child_in_job, ParentType::Machine))
       ops_to_move.push_back(child_in_job);
+
+    // the ordering of the above should depend on whether there more jobs
+    // than machines or vice-versa
   }
 
   // no-copy replacement of the solution by the draft

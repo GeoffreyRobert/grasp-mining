@@ -7,13 +7,13 @@
 
 using std::vector;
 
-Critical operator|(Critical a, Critical b)
+ParentType operator|(ParentType a, ParentType b)
 {
-    return static_cast<Critical>(static_cast<char>(a) | static_cast<char>(b));
+    return static_cast<ParentType>(static_cast<char>(a) | static_cast<char>(b));
 }
-Critical operator&(Critical a, Critical b)
+ParentType operator&(ParentType a, ParentType b)
 {
-    return static_cast<Critical>(static_cast<char>(a) & static_cast<char>(b));
+    return static_cast<ParentType>(static_cast<char>(a) & static_cast<char>(b));
 }
 
 OpUpdate& operator++(OpUpdate& up)
@@ -102,8 +102,8 @@ void Solution::Initialize(
   macParent = std::move(macParent_);
   macChild = std::move(macChild_);
   isCritical.resize(problem.size);
-  isCritical[problem.OriginOp] = Critical::None;
-  isCritical[problem.FinalOp] = Critical::Machine;
+  isCritical[problem.OriginOp] = ParentType::None;
+  isCritical[problem.FinalOp] = ParentType::Machine;
   for (OperationId oid = problem.OriginOp + 1; oid < problem.FinalOp; ++oid)
   {
     OperationId parent_in_job = problem.prevOperation[oid];
@@ -111,12 +111,12 @@ void Solution::Initialize(
     OperationId parent_on_mac = macParent[oid];
     int date_mac = endDate[parent_on_mac];
 
-    Critical& is_critical = isCritical[oid] = Critical::None;
+    ParentType& is_critical = isCritical[oid] = ParentType::None;
     // go through both if to set critical parent data
     if (date_job <= date_mac)
-      is_critical = is_critical | Critical::Machine;
+      is_critical = is_critical | ParentType::Machine;
     if (date_mac <= date_job)
-      is_critical = is_critical | Critical::Job;
+      is_critical = is_critical | ParentType::Job;
   }
 }
 
@@ -142,12 +142,12 @@ OperationId Solution::ChildOnMachine(OperationId oid) const
 
 bool Solution::IsCriticalOnMachine(OperationId oid) const
 {
-  return (isCritical[oid] & Critical::Machine) != Critical::None;
+  return (isCritical[oid] & ParentType::Machine) != ParentType::None;
 }
 
 bool Solution::IsCriticalOnJob(OperationId oid) const
 {
-  return (isCritical[oid] & Critical::Job) != Critical::None;
+  return (isCritical[oid] & ParentType::Job) != ParentType::None;
 }
 
 int Solution::ScheduleOperation(OperationId oid)
@@ -161,18 +161,21 @@ int Solution::ScheduleOperation(OperationId oid)
   OperationId parent_on_mac = macParent[oid];
   int date_mac = endDate[parent_on_mac];
 
+  assert(date_job != std::numeric_limits<int>::max() && "parent in job is not scheduled yet");
+  assert(date_mac != std::numeric_limits<int>::max() && "parent on machine is not scheduled yet");
+
   int start_date;
-  Critical is_critical(Critical::None);
+  ParentType is_critical{ParentType::None};
   // go through both if to set critical parent data
   if (date_job <= date_mac)
   {
     start_date = date_mac;
-    is_critical = is_critical | Critical::Machine;
+    is_critical = is_critical | ParentType::Machine;
   }
   if (date_mac <= date_job)
   {
     start_date = date_job;
-    is_critical = is_critical | Critical::Job;
+    is_critical = is_critical | ParentType::Job;
   }
   int end_date = start_date + problem.timeOnMachine[oid];
 
@@ -269,11 +272,27 @@ int Solution::RescheduleOperation(OperationId oid)
   return end_date;
 }
 
-bool Solution::TryResetOperation(OperationId oid)
+// test if an operation can be rescheduled and tag it if so
+bool Solution::TryResetOperation(OperationId oid, ParentType checkParent)
 {
-  // the "is set" invariant as per AddOperation
+  // check whether it's already reset to be rescheduled
+  // the "is scheduled" invariant as per AddOperation
   if (endDate[oid] == std::numeric_limits<int>::max())
     return false;
+
+  // then check that the successor has both parents scheduled
+  if ((checkParent & ParentType::Machine) != ParentType::None)
+  {
+    OperationId parent_on_mac = macParent[oid];
+    if (endDate[parent_on_mac] == std::numeric_limits<int>::max())
+      return false;
+  }
+  if ((checkParent & ParentType::Job) != ParentType::None)
+  {
+    OperationId parent_in_job = problem.prevOperation[oid];
+    if (endDate[parent_in_job] == std::numeric_limits<int>::max())
+      return false;
+  }
 
   endDate[oid] = std::numeric_limits<int>::max();
   return true;
