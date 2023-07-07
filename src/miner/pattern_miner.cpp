@@ -6,44 +6,16 @@
 #include "pattern_miner.h"
 #include "data/problem.h"
 #include "data/solution.h"
+#include "miner/transaction_encoder.h"
 #include "data.h"
 #include "fsout.h"
 #include "fpmax.h"
 
-PatternMiner::PatternMiner(const Problem& problem, double support)
+PatternMiner::PatternMiner(const Problem& problem, double support, const TransactionEncoder& encoder)
   : DataMiner(problem)
+  , _encoder(encoder)
   , _support(support)
 {
-}
-
-int PatternMiner::OperationPairToItem(OperationId prev_oid, OperationId oid) const
-{
-    // encode OriginOp in JobId 0 and other ops in JobId+1
-    JobId prev_jid = (prev_oid + ref_pb.nMac - 1) / ref_pb.nMac;
-
-    // create a unique item number for a pair of successive operations
-    // each operation can have a predecessor from the nJob or the origin job
-    return static_cast<int>(oid * (ref_pb.nJob + 1) + prev_jid);
-}
-
-std::pair<OperationId, OperationId> PatternMiner::ItemToOperationPair(int itid) const
-{
-  OperationId oid = static_cast<unsigned>(itid) / (ref_pb.nJob + 1);
-  JobId jid = (oid - 1) / ref_pb.nMac;
-  JobId prev_jid = static_cast<unsigned>(itid) % (ref_pb.nJob + 1);
-
-  OperationId prev_oid;
-  if (prev_jid == jid)
-  {
-    prev_oid = ref_pb.prevOperation[oid];
-  }
-  else
-  {
-    MachineId mid = (oid - 1) % ref_pb.nMac;
-    prev_oid = ref_pb.operationsOnMachine[mid][prev_jid];
-  }
-
-  return {prev_oid, oid};
 }
 
 std::vector<int> PatternMiner::SolutionToVec(const Solution& solution) const
@@ -53,7 +25,7 @@ std::vector<int> PatternMiner::SolutionToVec(const Solution& solution) const
   for (OperationId oid = ref_pb.OriginOp + 1; oid < ref_pb.FinalOp; ++oid)
   {
     OperationId prev_oid = solution.ParentOnMachine(oid);
-    int itid = OperationPairToItem(prev_oid, oid);
+    int itid = _encoder.OperationPairToItem(prev_oid, oid);
 
     // add the item to the transaction
     t_vec.push_back(itid);
@@ -92,7 +64,7 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
     itemset.clear();
     for (auto itid : i_vec)
     {
-      itemset.emplace_back(ItemToOperationPair(itid));
+      itemset.emplace_back(_encoder.ItemToOperationPair(itid));
     }
     itemsets.emplace_back(std::move(itemset));
   }

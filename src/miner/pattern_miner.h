@@ -8,17 +8,17 @@
 
 using std::list; using std::pair;
 
+class TransactionEncoder;
+
 class PatternMiner : public DataMiner {
 public:
-	PatternMiner(const Problem&, double support);
+	PatternMiner(const Problem&, double support, const TransactionEncoder& encoder);
 
 	virtual void operator()(const vector<Solution>& solutions);
 
 	virtual vector<int> ProposePattern(OperationId oid, double support);
 
 private:
-  int OperationPairToItem(OperationId prev_oid, OperationId oid) const;
-  std::pair<OperationId, OperationId> ItemToOperationPair(int itemId) const;
   std::vector<int> SolutionToVec(const Solution&) const;
 
 	class PatternNode {
@@ -29,6 +29,7 @@ private:
 	};
 
 private:
+  const TransactionEncoder& _encoder;
   const double _support;
 };
 

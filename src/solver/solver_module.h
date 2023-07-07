@@ -8,7 +8,7 @@ public:
 	SolverModule(const Problem& problem) : ref_pb(problem) {};
 
 protected:
-    const Problem& ref_pb;
+  const Problem& ref_pb;
 };
 
 #endif // SOLVER_MODULE_H_

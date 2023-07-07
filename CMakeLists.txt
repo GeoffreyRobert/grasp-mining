@@ -50,6 +50,7 @@ add_library(grasp-lib
   src/local-search/empty_search.cpp
   src/local-search/laarhoven_search.cpp
   src/miner/empty_miner.cpp
+  src/miner/transaction_encoder.cpp
   src/miner/pattern_miner.cpp
   src/miner/median_filter.cpp
   src/solver/solver.cpp
@@ -85,6 +86,7 @@ add_executable(full_test
   tests/laarhoven_test.cpp
   tests/main_test.cpp
   tests/fim_test.cpp
+  tests/encoder_test.cpp
 )
 
 # Copy test files to output directory

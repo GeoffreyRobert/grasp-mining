@@ -14,6 +14,7 @@
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
 #include "miner/median_filter.h"
+#include "miner/transaction_encoder.h"
 #include "miner/pattern_miner.h"
 
 namespace fs = std::filesystem;
@@ -54,7 +55,8 @@ int main(int argc, char** argv)
   BinatoHeuristic const_heuristic(problem, alpha, seed);
   LaarhovenSearch local_search(problem);
   MedianFilter median_filter(threshold);
-  PatternMiner data_miner(problem, support);
+  TransactionEncoder encoder(problem);
+  PatternMiner data_miner(problem, support, encoder);
   Solver solver(init_heuristic, const_heuristic, local_search, median_filter, data_miner, population_size);
 
   Solution solution = solver.Solve(problem);
