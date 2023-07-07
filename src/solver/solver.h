@@ -9,11 +9,12 @@ class Problem;
 class Solution;
 class ConstHeuristic;
 class LocalSearch;
+class SolutionFilter;
 class DataMiner;
 
 class Solver {
 public:
-	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, DataMiner&, unsigned pop_size);
+	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, SolutionFilter&, DataMiner&, unsigned pop_size);
 
 	Solver(Solver&&);
 
@@ -27,6 +28,7 @@ public:
 	ConstHeuristic& initHeuristic;
 	ConstHeuristic& constHeuristic;
 	LocalSearch& localSearch;
+  SolutionFilter& solutionFilter;
 	DataMiner& dataMiner;
 
 	// Size of the population of one batch

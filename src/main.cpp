@@ -13,6 +13,7 @@
 #include "const-heuristic/binato_heuristic.h"
 #include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
+#include "miner/median_filter.h"
 #include "miner/pattern_miner.h"
 
 namespace fs = std::filesystem;
@@ -40,6 +41,7 @@ int main(int argc, char** argv)
   const double alpha = varmap["alpha"].as<double>();
   const unsigned seed = varmap["seed"].as<unsigned>();
   const double support = varmap["support"].as<double>();
+  const double threshold = 0.5;
 
   if (population_size < 1)
     return 0;
@@ -51,8 +53,9 @@ int main(int argc, char** argv)
   BinatoHeuristic init_heuristic(problem, alpha, seed);
   BinatoHeuristic const_heuristic(problem, alpha, seed);
   LaarhovenSearch local_search(problem);
+  MedianFilter median_filter(threshold);
   PatternMiner data_miner(problem, support);
-  Solver solver(init_heuristic, const_heuristic, local_search, data_miner, population_size);
+  Solver solver(init_heuristic, const_heuristic, local_search, median_filter, data_miner, population_size);
 
   Solution solution = solver.Solve(problem);
 
