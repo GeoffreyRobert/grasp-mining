@@ -1,6 +1,7 @@
 { stdenv, version, src, lib, boost, gtest
 , cmake
 , ninja
+, ccls
 , enableShared ? true
 , enableStatic ? !enableShared
 }:
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
   inherit version;
   inherit src;
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake ninja ccls ];
   buildInputs = [ boost gtest ];
 
   # Remove warnings during debug builds
