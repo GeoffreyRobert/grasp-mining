@@ -51,7 +51,7 @@ add_library(grasp-lib
   src/local-search/laarhoven_search.cpp
   src/miner/empty_miner.cpp
   src/miner/pattern_miner.cpp
-  src/miner/median_selector.cpp
+  src/miner/median_filter.cpp
   src/solver/solver.cpp
 )
 
