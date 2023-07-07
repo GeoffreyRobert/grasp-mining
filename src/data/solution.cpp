@@ -91,6 +91,11 @@ Solution& Solution::operator=(Solution&& other) noexcept
   return *this;
 }
 
+bool Solution::operator>(const Solution& other) const noexcept
+{
+  return Makespan() < other.Makespan();
+}
+
 void Solution::Initialize(
     vector<int>&& startDate_
   , vector<int>&& endDate_
@@ -120,12 +125,12 @@ void Solution::Initialize(
   }
 }
 
-int Solution::Makespan()
+int Solution::Makespan() const
 {
   return startDate[problem.FinalOp];
 }
 
-OperationId Solution::CriticalOp()
+OperationId Solution::CriticalOp() const
 {
   return macParent[problem.FinalOp];
 }
@@ -186,12 +191,12 @@ int Solution::ScheduleOperation(OperationId oid)
   return end_date;
 }
 
-int Solution::StartDate(OperationId oid)
+int Solution::StartDate(OperationId oid) const
 {
   return startDate[oid];
 }
 
-int Solution::EndDate(OperationId oid)
+int Solution::EndDate(OperationId oid) const
 {
   return endDate[oid];
 }
@@ -271,7 +276,7 @@ int Solution::RescheduleOperation(OperationId oid)
   return end_date;
 }
 
-bool Solution::IsScheduled(OperationId oid)
+bool Solution::IsScheduled(OperationId oid) const
 {
   return endDate[oid] != std::numeric_limits<int>::max();
 }

@@ -44,6 +44,7 @@ public:
   Solution(Solution&& other) noexcept;
   Solution& operator=(const Solution& other);
   Solution& operator=(Solution&& other) noexcept;
+  bool operator>(const Solution& other) const noexcept;
 
   void Initialize(
       vector<int>&& startDate
@@ -52,8 +53,8 @@ public:
     , vector<OperationId>&& macChild);
 
   // Getters
-  int Makespan();
-  OperationId CriticalOp();
+  int Makespan() const;
+  OperationId CriticalOp() const;
 
   OperationId ParentOnMachine(OperationId oid) const;
   OperationId ChildOnMachine(OperationId oid) const;
@@ -62,13 +63,13 @@ public:
 
   // Get a scheduled end date for the operation and cache it
   int ScheduleOperation(OperationId oid);
-  int StartDate(OperationId oid);
-  int EndDate(OperationId oid);
+  int StartDate(OperationId oid) const;
+  int EndDate(OperationId oid) const;
 
   void AddOperation(OperationId oid);
   OperationId SwapOperations(OperationId parent, OperationId child);
   int RescheduleOperation(OperationId oid);
-  bool IsScheduled(OperationId oid);
+  bool IsScheduled(OperationId oid) const;
   bool TryResetOperation(OperationId oid);
 
   const Problem& problem;
