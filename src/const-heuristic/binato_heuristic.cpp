@@ -44,15 +44,11 @@ std::pair<int, int> BinatoHeuristic::CandidatesGeneration(vector<BinCandidateJob
     OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     int end_date = solution.ScheduleOperation(oid);
 
-    // parent et date de fin de l'operation
+    // assign a makespan to each candidate job
     c_job.makespan = end_date;
 
-    if (min_makespan > end_date) {
-      min_makespan = end_date;
-    }
-    if (max_makespan < end_date) {
-      max_makespan = end_date;
-    }
+    min_makespan = std::min(min_makespan, end_date);
+    max_makespan = std::max(max_makespan, end_date);
   }
 
   return {min_makespan, max_makespan};
@@ -87,5 +83,4 @@ BinCandidateJob& BinatoHeuristic::CandidateSelection(vector<BinCandidateJob>& ca
     }
     job_idx = rc_list[rcl_idx];
     return candidate_jobs[job_idx];
-;
 }

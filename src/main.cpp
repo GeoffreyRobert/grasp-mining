@@ -11,7 +11,6 @@
 #include "solver/solver.h"
 //#include "util/out_js.h"
 #include "const-heuristic/binato_heuristic.h"
-#include "local-search/empty_search.h"
 #include "local-search/laarhoven_search.h"
 #include "miner/median_filter.h"
 #include "miner/transaction_encoder.h"

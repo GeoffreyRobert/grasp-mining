@@ -1,3 +1,10 @@
+#006 [ code ] Cleanup obvious code smells
+Req:
+  - All files were inspected
+  - Code was simplified for better readability
+
+#038 [ code ] Integrate LCM Max module in grasp-mining
+
 #025 [ code ] Use FinalOp as storage for makespan
 
 #037 [ code ] Output array from LCM Max
