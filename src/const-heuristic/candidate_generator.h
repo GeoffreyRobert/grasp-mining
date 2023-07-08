@@ -13,6 +13,7 @@ class CandidateGenerator : public SolverModule
 public:
   CandidateGenerator(const Problem&);
   vector<ConstData>& Init();
+  void IncrementJob(ConstData& job);
 
 private:
   vector<ConstData> _candidate_jobs;  // jobs left to be added to the solution

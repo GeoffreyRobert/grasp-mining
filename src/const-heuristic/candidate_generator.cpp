@@ -19,5 +19,15 @@ std::vector<ConstData>& CandidateGenerator<ConstData>::Init()
   return _candidate_jobs;
 }
 
+template<class ConstData>
+void CandidateGenerator<ConstData>::IncrementJob(ConstData& job)
+{
+  // increment operation rank and remove job from list if all ops scheduled
+  if (++job.rank == ref_pb.nMac) {
+    job = _candidate_jobs.back();
+    _candidate_jobs.pop_back();
+  }
+}
+
 template class CandidateGenerator<CandidateJob>;
 template class CandidateGenerator<BinCandidateJob>;

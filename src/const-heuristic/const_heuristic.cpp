@@ -27,11 +27,7 @@ Solution& CandidateHeuristic<ConstData>::operator()(Solution& solution)
     OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     solution.AddOperation(oid);
 
-    // increment operation rank and remove job from list if all ops scheduled
-    if (++c_job.rank == ref_pb.nMac) {
-      c_job = candidate_jobs.back();
-      candidate_jobs.pop_back();
-    }
+    _c_generator.IncrementJob(c_job);
   }
 
   return solution;
