@@ -1,11 +1,10 @@
 #include <limits>
 #include <chrono>
 
+#include "data/solution.h"
 #include "solver/solver.h"
-#include "const-heuristic/binato_heuristic.h"
-#include "const-heuristic/random_placement.h"
-#include "local-search/empty_search.h"
-#include "local-search/laarhoven_search.h"
+#include "const-heuristic/const_heuristic.h"
+#include "local-search/local_search.h"
 #include "miner/solution_filter.h"
 #include "miner/data_miner.h"
 
