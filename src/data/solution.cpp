@@ -91,7 +91,7 @@ Solution& Solution::operator=(Solution&& other) noexcept
   return *this;
 }
 
-bool Solution::operator>(const Solution& other) const noexcept
+bool Solution::operator<(const Solution& other) const noexcept
 {
   return Makespan() < other.Makespan();
 }

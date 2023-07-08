@@ -14,7 +14,7 @@ vector<Solution>& MedianFilter::operator()(vector<Solution>& solutions)
   auto middle = begin(solutions)
     + std::lround(_threshold * static_cast<double>(solutions.size()));
 
-  std::partial_sort(begin(solutions), middle, end(solutions), std::greater());
+  std::partial_sort(begin(solutions), middle, end(solutions));
   solutions.erase(middle, end(solutions));
   return solutions;
 }

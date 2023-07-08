@@ -87,6 +87,7 @@ add_executable(full_test
   tests/main_test.cpp
   tests/fim_test.cpp
   tests/encoder_test.cpp
+  tests/solution_filter_test.cpp
 )
 
 # Copy test files to output directory

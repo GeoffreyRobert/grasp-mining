@@ -44,7 +44,7 @@ public:
   Solution(Solution&& other) noexcept;
   Solution& operator=(const Solution& other);
   Solution& operator=(Solution&& other) noexcept;
-  bool operator>(const Solution& other) const noexcept;
+  bool operator<(const Solution& other) const noexcept;
 
   void Initialize(
       vector<int>&& startDate
