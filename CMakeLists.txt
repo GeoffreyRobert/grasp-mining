@@ -43,9 +43,10 @@ add_subdirectory(src/fpgrowth)
 
 add_library(grasp-lib
   src/const-heuristic/candidate_generator.cpp
+  src/const-heuristic/candidate_selector.cpp
+  src/const-heuristic/random_selector.cpp
+  src/const-heuristic/restricted_selector.cpp
   src/const-heuristic/const_heuristic.cpp
-  src/const-heuristic/binato_heuristic.cpp
-  src/const-heuristic/random_placement.cpp
   src/data/problem.cpp
   src/data/solution.cpp
   src/local-search/empty_search.cpp
@@ -83,7 +84,7 @@ target_link_libraries(grasp
 add_executable(full_test
   tests/problem_test.cpp
   tests/solution_test.cpp
-  tests/binato_test.cpp
+  tests/const_heuristic_test.cpp
   tests/laarhoven_test.cpp
   tests/main_test.cpp
   tests/fim_test.cpp

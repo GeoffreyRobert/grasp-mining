@@ -14,7 +14,7 @@ class DataMiner;
 
 class Solver {
 public:
-	Solver(ConstHeuristic&, ConstHeuristic&, LocalSearch&, SolutionFilter&, DataMiner&, unsigned pop_size);
+	Solver(ConstHeuristic&, LocalSearch&, SolutionFilter&, DataMiner&, unsigned pop_size);
 
 	Solver(Solver&&);
 
@@ -26,7 +26,6 @@ public:
 
 	// The hybrid solver.
 	ConstHeuristic& initHeuristic;
-	ConstHeuristic& constHeuristic;
 	LocalSearch& localSearch;
   SolutionFilter& solutionFilter;
 	DataMiner& dataMiner;

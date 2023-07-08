@@ -11,7 +11,8 @@
 #include "solver/solver.h"
 //#include "util/out_js.h"
 #include "const-heuristic/candidate_generator.h"
-#include "const-heuristic/binato_heuristic.h"
+#include "const-heuristic/restricted_selector.h"
+#include "const-heuristic/const_heuristic.h"
 #include "local-search/laarhoven_search.h"
 #include "miner/median_filter.h"
 #include "miner/transaction_encoder.h"
@@ -50,15 +51,15 @@ int main(int argc, char** argv)
   // extraction des données
   auto problem = LoadProblemFromPath(file_path);
 
-  // Construction du solver
-  CandidateGenerator<BinCandidateJob> generator(problem);
-  BinatoHeuristic init_heuristic(problem, generator, alpha, seed);
-  BinatoHeuristic const_heuristic(problem, generator, alpha, seed);
+  // build the solver
+  CandidateGenerator generator(problem);
+  RestrictedSelector selector(problem, alpha, seed);
+  ConstHeuristic init_heuristic(problem, generator, selector);
   LaarhovenSearch local_search(problem);
   MedianFilter median_filter(threshold);
   TransactionEncoder encoder(problem);
   PatternMiner data_miner(problem, support, encoder);
-  Solver solver(init_heuristic, const_heuristic, local_search, median_filter, data_miner, population_size);
+  Solver solver(init_heuristic, local_search, median_filter, data_miner, population_size);
 
   Solution solution = solver.Solve(problem);
 

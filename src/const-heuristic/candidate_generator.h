@@ -7,16 +7,17 @@
 
 using std::vector;
 
-template<class ConstData>
+class CandidateJob;
+
 class CandidateGenerator : public SolverModule
 {
 public:
-  CandidateGenerator(const Problem&);
-  vector<ConstData>& Init();
-  void IncrementJob(ConstData& job);
+  using SolverModule::SolverModule;
+  vector<CandidateJob>& Init();
+  void IncrementJob(CandidateJob& job);
 
 private:
-  vector<ConstData> _candidate_jobs;  // jobs left to be added to the solution
+  vector<CandidateJob> _candidate_jobs;  // jobs left to be added to the solution
 };
 
 #endif // CANDIDATE_GENERATOR_

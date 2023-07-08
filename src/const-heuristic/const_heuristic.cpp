@@ -1,37 +1,32 @@
 #include "data/problem.h"
 #include "data/solution.h"
 #include "const-heuristic/const_heuristic.h"
-#include "const-heuristic/random_placement.h"
-#include "const-heuristic/binato_heuristic.h"
 #include "const-heuristic/candidate_generator.h"
+#include "const-heuristic/candidate_selector.h"
 
-template<class ConstData>
-CandidateHeuristic<ConstData>::CandidateHeuristic(
+ConstHeuristic::ConstHeuristic(
     const Problem& problem
-  , CandidateGenerator<ConstData>& c_generator
-  , unsigned seed)
-  : ConstHeuristic(problem)
-  , generator(seed)
-  , _c_generator(c_generator)
+  , CandidateGenerator& generator
+  , CandidateSelector& selector)
+  : SolverModule(problem)
+  , _generator(generator)
+  , _selector(selector)
 {}
 
-template<class ConstData>
-Solution& CandidateHeuristic<ConstData>::operator()(Solution& solution)
+Solution& ConstHeuristic::operator()(Solution& solution)
 {
-  auto& candidate_jobs = _c_generator.Init();
+  auto& candidate_jobs = _generator.Init();
 
   for (OperationId counter = 0; counter < ref_pb.opNum; ++counter) {
-    auto& c_job = CandidateSelection(candidate_jobs, solution);
+    size_t job_idx = _selector(solution, candidate_jobs);
 
     // construction de la solution
+    auto& c_job = candidate_jobs[job_idx];
     OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     solution.AddOperation(oid);
 
-    _c_generator.IncrementJob(c_job);
+    _generator.IncrementJob(c_job);
   }
 
   return solution;
 }
-
-template class CandidateHeuristic<CandidateJob>;
-template class CandidateHeuristic<BinCandidateJob>;

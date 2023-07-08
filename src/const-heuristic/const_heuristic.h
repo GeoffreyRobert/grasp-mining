@@ -1,7 +1,7 @@
 #ifndef CONST_HEURISTIC_H_
 #define CONST_HEURISTIC_H_
 
-#include <random>
+#include <vector>
 
 #include "data/typedefs.h"
 #include "solver/solver_module.h"
@@ -10,35 +10,26 @@ using std::vector;
 
 class Problem;
 class Solution;
-template<class ConstData> class CandidateGenerator;
-
-class ConstHeuristic : public SolverModule {
-public:
-  using SolverModule::SolverModule;
-  virtual ~ConstHeuristic() {};
-	virtual Solution& operator()(Solution&) = 0;
-};
+class CandidateGenerator;
+class CandidateSelector;
 
 struct CandidateJob {
   JobId jid;
   OperationRank rank;
+  int makespan;
 };
 
-template<class ConstData>
-class CandidateHeuristic : public ConstHeuristic {
+class ConstHeuristic : public SolverModule {
 public:
-  CandidateHeuristic(
-      const Problem& problem, CandidateGenerator<ConstData>& generator, unsigned seed);
-  virtual ~CandidateHeuristic() {};
+  ConstHeuristic(
+      const Problem&
+    , CandidateGenerator&
+    , CandidateSelector&);
 	Solution& operator()(Solution&);
 
-protected:
-  virtual ConstData& CandidateSelection(vector<ConstData>&, Solution&) = 0;
-
-	std::mt19937 generator;
-
 private:
-  CandidateGenerator<ConstData>& _c_generator;
+  CandidateGenerator& _generator;
+  CandidateSelector& _selector;
 };
 
 #endif // CONST_HEURISTIC_H_

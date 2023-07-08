@@ -12,13 +12,11 @@ using namespace std::chrono;
 
 Solver::Solver(
     ConstHeuristic& init_heuristic
-  , ConstHeuristic& const_heuristic
   , LocalSearch& local_search
   , SolutionFilter& solution_filter
   , DataMiner& data_miner
   , unsigned pop_size)
   : initHeuristic(init_heuristic)
-  , constHeuristic(const_heuristic)
   , localSearch(local_search)
   , solutionFilter(solution_filter)
   , dataMiner(data_miner)
@@ -28,7 +26,6 @@ Solver::Solver(
 
 Solver::Solver(Solver&& other)
   : initHeuristic(other.initHeuristic)
-  , constHeuristic(other.constHeuristic)
   , localSearch(other.localSearch)
   , solutionFilter(other.solutionFilter)
   , dataMiner(other.dataMiner)

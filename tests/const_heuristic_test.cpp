@@ -2,21 +2,24 @@
 
 #include "data/problem.h"
 #include "data/solution.h"
-#include "const-heuristic/binato_heuristic.h"
+#include "const-heuristic/const_heuristic.h"
 #include "const-heuristic/candidate_generator.h"
+#include "const-heuristic/restricted_selector.h"
 
 namespace {
 
-TEST(BinatoHeuristic, Operator_Should_Schedule_Single_Operation_Deterministically)
+TEST(ConstHeuristicTest, Operator_Should_Schedule_Single_Operation_Deterministically)
 {
   Problem problem(1, 1, 1,
     vector<std::pair<MachineId, int>> { { 0, 1 } });
   const int makespan = 1;
   const OperationId critical_op = 1;
 
+  const unsigned seed = 0;
   Solution solution(problem);
-  CandidateGenerator<BinCandidateJob> generator(problem);
-  BinatoHeuristic binato(problem, generator);
+  CandidateGenerator generator(problem);
+  RestrictedSelector selector(problem, seed);
+  ConstHeuristic binato(problem, generator, selector);
 
   binato(solution);
 
@@ -24,17 +27,21 @@ TEST(BinatoHeuristic, Operator_Should_Schedule_Single_Operation_Deterministicall
   EXPECT_EQ(critical_op, solution.CriticalOp());
 }
 
-TEST(BinatoHeuristic, Operator_Should_Be_Reusable)
+TEST(ConstHeuristicTest, Operator_Should_Be_Reusable)
 {
   Problem problem(1, 1, 1,
     vector<std::pair<MachineId, int>> { { 0, 1 } });
   const int makespan = 1;
   const OperationId critical_op = 1;
 
+  const unsigned seed = 0;
+  Solution solution(problem);
+  CandidateGenerator generator(problem);
+  RestrictedSelector selector(problem, seed);
+  ConstHeuristic binato(problem, generator, selector);
+
   Solution first_solution(problem);
   Solution second_solution(problem);
-  CandidateGenerator<BinCandidateJob> generator(problem);
-  BinatoHeuristic binato(problem, generator);
 
   binato(first_solution);
   binato(second_solution);
