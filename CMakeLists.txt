@@ -42,6 +42,7 @@ add_subdirectory(src/fpgrowth)
 #############
 
 add_library(grasp-lib
+  src/const-heuristic/candidate_generator.cpp
   src/const-heuristic/const_heuristic.cpp
   src/const-heuristic/binato_heuristic.cpp
   src/const-heuristic/random_placement.cpp

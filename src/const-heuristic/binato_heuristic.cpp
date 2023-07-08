@@ -7,8 +7,11 @@
 using std::pair;
 using std::vector;
 
-BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha, unsigned seed)
-  : CandidateHeuristic<BinCandidateJob>(problem, seed)
+BinatoHeuristic::BinatoHeuristic(
+    const Problem& problem
+  , CandidateGenerator<BinCandidateJob>& generator
+  , double alpha, unsigned seed)
+  : CandidateHeuristic<BinCandidateJob>(problem, generator, seed)
   , _alpha(alpha)
   , rc_list(problem.nJob)
 {

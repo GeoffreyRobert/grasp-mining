@@ -10,6 +10,7 @@ using std::vector;
 
 class Problem;
 class Solution;
+template<class ConstData> class CandidateGenerator;
 
 class ConstHeuristic : public SolverModule {
 public:
@@ -26,18 +27,18 @@ struct CandidateJob {
 template<class ConstData>
 class CandidateHeuristic : public ConstHeuristic {
 public:
-  CandidateHeuristic(const Problem& problem, unsigned seed);
+  CandidateHeuristic(
+      const Problem& problem, CandidateGenerator<ConstData>& generator, unsigned seed);
   virtual ~CandidateHeuristic() {};
 	Solution& operator()(Solution&);
 
 protected:
-  virtual std::vector<ConstData>& CandidatesInitialization();
   virtual ConstData& CandidateSelection(vector<ConstData>&, Solution&) = 0;
 
 	std::mt19937 generator;
 
 private:
-  vector<ConstData> _candidate_jobs;  // jobs left to be added to the solution
+  CandidateGenerator<ConstData>& _c_generator;
 };
 
 #endif // CONST_HEURISTIC_H_

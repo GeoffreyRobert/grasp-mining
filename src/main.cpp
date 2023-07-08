@@ -10,6 +10,7 @@
 //#include "solver/solver_factory.h"
 #include "solver/solver.h"
 //#include "util/out_js.h"
+#include "const-heuristic/candidate_generator.h"
 #include "const-heuristic/binato_heuristic.h"
 #include "local-search/laarhoven_search.h"
 #include "miner/median_filter.h"
@@ -50,8 +51,9 @@ int main(int argc, char** argv)
   auto problem = LoadProblemFromPath(file_path);
 
   // Construction du solver
-  BinatoHeuristic init_heuristic(problem, alpha, seed);
-  BinatoHeuristic const_heuristic(problem, alpha, seed);
+  CandidateGenerator<BinCandidateJob> generator(problem);
+  BinatoHeuristic init_heuristic(problem, generator, alpha, seed);
+  BinatoHeuristic const_heuristic(problem, generator, alpha, seed);
   LaarhovenSearch local_search(problem);
   MedianFilter median_filter(threshold);
   TransactionEncoder encoder(problem);

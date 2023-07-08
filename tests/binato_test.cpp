@@ -3,6 +3,7 @@
 #include "data/problem.h"
 #include "data/solution.h"
 #include "const-heuristic/binato_heuristic.h"
+#include "const-heuristic/candidate_generator.h"
 
 namespace {
 
@@ -14,7 +15,8 @@ TEST(BinatoHeuristic, Operator_Should_Schedule_Single_Operation_Deterministicall
   const OperationId critical_op = 1;
 
   Solution solution(problem);
-  BinatoHeuristic binato(problem);
+  CandidateGenerator<BinCandidateJob> generator(problem);
+  BinatoHeuristic binato(problem, generator);
 
   binato(solution);
 
@@ -31,7 +33,8 @@ TEST(BinatoHeuristic, Operator_Should_Be_Reusable)
 
   Solution first_solution(problem);
   Solution second_solution(problem);
-  BinatoHeuristic binato(problem);
+  CandidateGenerator<BinCandidateJob> generator(problem);
+  BinatoHeuristic binato(problem, generator);
 
   binato(first_solution);
   binato(second_solution);

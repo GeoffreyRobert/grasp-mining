@@ -12,7 +12,10 @@ struct BinCandidateJob : public CandidateJob {
 
 class BinatoHeuristic : public CandidateHeuristic<BinCandidateJob> {
 public:
-  BinatoHeuristic(const Problem&, double alpha = 0.5, unsigned seed = 0);
+  BinatoHeuristic(
+      const Problem&
+    , CandidateGenerator<BinCandidateJob>& generator
+    , double alpha = 0.5, unsigned seed = 0);
 
 private:
   BinCandidateJob& CandidateSelection(vector<BinCandidateJob>&, Solution&) override;
@@ -23,4 +26,4 @@ private:
   vector<size_t> rc_list;
 };
 
-#endif // !BINATO_HEURISTIC_H_
+#endif // BINATO_HEURISTIC_H_

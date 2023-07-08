@@ -5,7 +5,8 @@
 
 class RandomPlacement : public CandidateHeuristic<CandidateJob> {
 public:
-	RandomPlacement(const Problem&, unsigned seed = 0);
+	RandomPlacement(
+      const Problem&, CandidateGenerator<CandidateJob>& generator, unsigned seed = 0);
 
 private:
   CandidateJob& CandidateSelection(vector<CandidateJob>&, Solution&) override;

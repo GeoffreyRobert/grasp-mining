@@ -1,13 +1,14 @@
 #include <numeric>
 
-#include "data/problem.h"
-#include "data/solution.h"
 #include "const-heuristic/random_placement.h"
 
 using std::vector;
 
-RandomPlacement::RandomPlacement(const Problem& problem, unsigned seed)
-  : CandidateHeuristic<CandidateJob>(problem, seed)
+RandomPlacement::RandomPlacement(
+    const Problem& problem
+  , CandidateGenerator<CandidateJob>& c_generator
+  , unsigned seed)
+  : CandidateHeuristic<CandidateJob>(problem, c_generator, seed)
 {
 }
 
