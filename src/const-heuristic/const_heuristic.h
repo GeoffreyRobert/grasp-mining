@@ -28,7 +28,7 @@ class CandidateHeuristic : public ConstHeuristic {
 public:
   CandidateHeuristic(const Problem& problem, unsigned seed);
   virtual ~CandidateHeuristic() {};
-	virtual Solution& operator()(Solution&) = 0;
+	Solution& operator()(Solution&);
 
 protected:
   virtual std::vector<ConstData>& CandidatesInitialization();

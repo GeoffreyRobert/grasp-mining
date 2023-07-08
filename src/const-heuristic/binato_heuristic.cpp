@@ -14,27 +14,6 @@ BinatoHeuristic::BinatoHeuristic(const Problem& problem, double alpha, unsigned 
 {
 }
 
-Solution& BinatoHeuristic::operator()(Solution& solution)
-{
-  auto& candidate_jobs = CandidatesInitialization();
-
-  for (OperationId counter = 0; counter < ref_pb.opNum; ++counter) {
-    auto& c_job = CandidateSelection(candidate_jobs, solution);
-
-    // construction de la solution
-    OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
-    solution.AddOperation(oid);
-
-    // increment operation rank and remove job from list if all ops scheduled
-    if (++c_job.rank == ref_pb.nMac) {
-      c_job = candidate_jobs.back();
-      candidate_jobs.pop_back();
-    }
-  }
-
-  return solution;
-}
-
 std::pair<int, int> BinatoHeuristic::CandidatesGeneration(vector<BinCandidateJob>& candidate_jobs, Solution& solution)
 {
   int min_makespan = std::numeric_limits<int>::max();

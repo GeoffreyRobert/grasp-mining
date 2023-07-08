@@ -6,7 +6,6 @@
 class RandomPlacement : public CandidateHeuristic<CandidateJob> {
 public:
 	RandomPlacement(const Problem&, unsigned seed = 0);
-	Solution& operator()(Solution&) override;
 
 private:
   CandidateJob& CandidateSelection(vector<CandidateJob>&, Solution&) override;

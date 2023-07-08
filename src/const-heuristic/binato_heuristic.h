@@ -14,9 +14,6 @@ class BinatoHeuristic : public CandidateHeuristic<BinCandidateJob> {
 public:
   BinatoHeuristic(const Problem&, double alpha = 0.5, unsigned seed = 0);
 
-  // construction greedy randomisée
-  Solution& operator()(Solution&) override;
-
 private:
   BinCandidateJob& CandidateSelection(vector<BinCandidateJob>&, Solution&) override;
   std::pair<int, int> CandidatesGeneration(vector<BinCandidateJob>&, Solution&);
