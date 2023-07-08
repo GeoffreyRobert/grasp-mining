@@ -42,9 +42,6 @@ Solution Solver::Solve(const Problem& problem)
   // solutions manipulées dans l'algo
   vector<Solution> solution_set(populationSize, problem);
 
-  // The first uninitialized solution from the set is the reference
-  Solution* best_solution = &solution_set.front();
-
   // démarre le timer
   auto init = high_resolution_clock::now();
 
@@ -54,11 +51,6 @@ Solution Solver::Solve(const Problem& problem)
 
     localSearch.hit_count = 0;
     localSearch(sol);
-
-    // Mise à jour de la meilleure solution rencontrée
-    if (sol.Makespan() < best_solution->Makespan()) {
-      best_solution = &sol;
-    }
   }
 
   auto& filtered_solutions = solutionFilter(solution_set);
@@ -68,5 +60,5 @@ Solution Solver::Solve(const Problem& problem)
   auto end = high_resolution_clock::now();
   runtime = duration_cast<milliseconds>(end - init);
 
-  return std::move(*best_solution);
+  return std::move(filtered_solutions.front());
 }
