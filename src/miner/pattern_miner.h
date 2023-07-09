@@ -17,6 +17,8 @@ private:
   const TransactionEncoder& _encoder;
   vector<vector<pair<OperationId, OperationId>>> _itemsets;
   const double _support;
+  const double _itemset_ratio = 0.2;
+  const double _support_incr = 0.05;
 };
 
 #endif // PATTERNS_MINER_

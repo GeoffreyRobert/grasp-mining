@@ -91,6 +91,8 @@ void printLen()
 int fpmax(Data& data, int threshold, OutData* outdata)
 {
 	THRESHOLD = threshold;
+  TRANSACTION_NO=0;
+  ITEM_NO=100;
 
 	int i;
 	FI_tree* fptree;

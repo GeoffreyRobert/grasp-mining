@@ -51,16 +51,29 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
 
   int support = static_cast<int>(
       std::lround(_support * static_cast<double>(t_num)));
+  unsigned num_itemsets = static_cast<unsigned>(
+      std::lround(_itemset_ratio * static_cast<double>(t_num)));
+  int support_incr = static_cast<int>(
+      std::lround(_support_incr * static_cast<double>(t_num)));
 
   // maximal itemset mining
   VectorData transactions(SolutionsToVectors(solutions));
-  VectorOut out_data;
-  int res = fpmax(transactions, support, &out_data);
-  if (res != 0)
-    throw std::runtime_error("fpmax algorithm did not complete nominally");
-  vector<vector<int>> raw_itemsets(out_data.GetItemsets());
+  vector<vector<int>> raw_itemsets;
+  while (raw_itemsets.size() < num_itemsets)
+  {
+    VectorOut out_data;
+    int res = fpmax(transactions, support, &out_data);
+    if (transactions.getNextTransaction() != nullptr)
+      throw std::runtime_error("fpmax did not scan DB properly");
+    if (res != 0)
+      throw std::runtime_error("fpmax algorithm did not complete nominally");
+    raw_itemsets = out_data.GetItemsets();
+    support -= support_incr;
+  }
 
   // decode into itemsets of operation pairs
+  _itemsets.clear();
+  _itemsets.reserve(raw_itemsets.size());
   for (const auto& i_vec : raw_itemsets)
   {
     std::vector<std::pair<OperationId, OperationId>> itemset(i_vec.size());
