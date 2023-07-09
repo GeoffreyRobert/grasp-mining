@@ -42,7 +42,8 @@ Solution Solver::Solve(const Problem& problem)
   auto init = high_resolution_clock::now();
 
   /*while (populationSize++< populationSize && best_solution.makespan > problem.lowerBound && time cond) {*/
-  for (Solution& sol : solution_set)  {
+  for (Solution& sol : solution_set)
+  {
     initHeuristic(sol);
 
     localSearch.hit_count = 0;
