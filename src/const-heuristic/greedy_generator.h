@@ -1,8 +1,6 @@
 #ifndef GREEDY_GENERATOR_
 #define GREEDY_GENERATOR_
 
-#include <vector>
-
 #include "const-heuristic/candidate_generator.h"
 
 class GreedyGenerator : public CandidateGenerator

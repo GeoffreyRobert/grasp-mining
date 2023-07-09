@@ -16,6 +16,7 @@ Solution& LaarhovenSearch::operator()(Solution& solution)
   OperationId operation = solution.CriticalOp(); // op. considérée pour relocation
   OperationId parent = solution.ParentOnMachine(operation); // parent de l'operation
 
+  hit_count = 0;
   // remonter le chemin critique
   do {
     if (!solution.IsCriticalOnMachine(operation)) {

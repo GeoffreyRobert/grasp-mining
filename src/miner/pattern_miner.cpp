@@ -18,19 +18,30 @@ PatternMiner::PatternMiner(const Problem& problem, double support, const Transac
 {
 }
 
-std::vector<int> PatternMiner::SolutionToVec(const Solution& solution) const
+vector<Transaction> PatternMiner::SolutionsToVectors(
+    const vector<Solution>& solutions) const
 {
-  std::vector<int> t_vec(ref_pb.size);
-  t_vec.clear();
-  for (OperationId oid = ref_pb.OriginOp + 1; oid < ref_pb.FinalOp; ++oid)
-  {
-    OperationId prev_oid = solution.ParentOnMachine(oid);
-    int itid = _encoder.OperationPairToItem(prev_oid, oid);
+  size_t t_num = solutions.size();
 
-    // add the item to the transaction
-    t_vec.push_back(itid);
+  // encode solutions as transactions to mine
+  vector<Transaction> t_list;
+  t_list.reserve(t_num);
+  for (auto& solution : solutions)
+  {
+    vector<int> t_vec(ref_pb.size);
+    t_vec.clear();
+    for (OperationId oid = ref_pb.OriginOp + 1; oid < ref_pb.FinalOp; ++oid)
+    {
+      OperationId prev_oid = solution.ParentOnMachine(oid);
+      int itid = _encoder.OperationPairToItem(prev_oid, oid);
+
+      // add the item to the transaction
+      t_vec.push_back(itid);
+    }
+    t_list.emplace_back(std::move(t_vec));
   }
-  return t_vec;
+
+  return t_list;
 }
 
 void PatternMiner::operator()(const vector<Solution>& solutions)
@@ -38,27 +49,19 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
   // number of solutions to mine
   size_t t_num = solutions.size();
 
-  // encode solutions as transactions to mine
-  std::vector<Transaction> t_list(t_num);
-  t_list.clear();
-  for (const auto& solution : solutions)
-  {
-    t_list.emplace_back(SolutionToVec(solution));
-  }
-  VectorData transactions(std::move(t_list));
-
   int support = static_cast<int>(
       std::lround(_support * static_cast<double>(t_num)));
 
-  VectorOut out_data;
   // maximal itemset mining
+  VectorData transactions(SolutionsToVectors(solutions));
+  VectorOut out_data;
   int res = fpmax(transactions, support, &out_data);
   if (res != 0)
     throw std::runtime_error("fpmax algorithm did not complete nominally");
+  vector<vector<int>> raw_itemsets(out_data.GetItemsets());
 
   // decode into itemsets of operation pairs
-  std::vector<std::vector<std::pair<OperationId, OperationId>>> itemsets;
-  for (const auto& i_vec : out_data.GetItemsets())
+  for (const auto& i_vec : raw_itemsets)
   {
     std::vector<std::pair<OperationId, OperationId>> itemset(i_vec.size());
     itemset.clear();
@@ -66,6 +69,11 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
     {
       itemset.emplace_back(_encoder.ItemToOperationPair(itid));
     }
-    itemsets.emplace_back(std::move(itemset));
+    _itemsets.emplace_back(std::move(itemset));
   }
+}
+
+vector<vector<pair<OperationId, OperationId>>> PatternMiner::GetItemsets()
+{
+  return std::move(_itemsets);
 }

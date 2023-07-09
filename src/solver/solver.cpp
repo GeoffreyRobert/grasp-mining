@@ -45,8 +45,6 @@ Solution Solver::Solve(const Problem& problem)
   for (Solution& sol : solution_set)
   {
     initHeuristic(sol);
-
-    localSearch.hit_count = 0;
     localSearch(sol);
   }
 

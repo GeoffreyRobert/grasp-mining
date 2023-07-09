@@ -6,7 +6,7 @@
 class EmptyMiner : public DataMiner {
 public:
   using DataMiner::DataMiner;
-  void operator()(const vector<Solution>&);
-  vector<int> ProposePattern(OperationId operation, double support);
+  void operator()(const vector<Solution>&) override;
+  vector<vector<pair<OperationId, OperationId>>> GetItemsets() override;
 };
 #endif // EMPTY_MINER_H_

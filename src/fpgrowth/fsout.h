@@ -33,8 +33,7 @@ class VectorOut : public OutData
 public:
   void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
-
-  std::vector<std::vector<int>>&& GetItemsets() { return std::move(iset_list); };
+  std::vector<std::vector<int>> GetItemsets();
 
 private:
   std::vector<std::vector<int>> iset_list;

@@ -3,19 +3,19 @@
 
 #include "data_miner.h"
 
-using std::pair;
-
 class TransactionEncoder;
+class Transaction;
 
 class PatternMiner : public DataMiner {
 public:
   PatternMiner(const Problem&, double support, const TransactionEncoder& encoder);
-  virtual void operator()(const vector<Solution>& solutions);
+  void operator()(const vector<Solution>& solutions) override;
+  vector<vector<pair<OperationId, OperationId>>> GetItemsets() override;
 
 private:
-  std::vector<int> SolutionToVec(const Solution&) const;
-
+  vector<Transaction> SolutionsToVectors(const vector<Solution>& solutions) const;
   const TransactionEncoder& _encoder;
+  vector<vector<pair<OperationId, OperationId>>> _itemsets;
   const double _support;
 };
 

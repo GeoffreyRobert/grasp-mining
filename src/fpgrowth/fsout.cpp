@@ -58,3 +58,9 @@ void VectorOut::printset(int length, int *iset)
   }
   iset_list.push_back(std::move(iset_vec));
 }
+
+std::vector<std::vector<int>> VectorOut::GetItemsets()
+{
+  supp_list.clear();
+  return std::move(iset_list);
+}

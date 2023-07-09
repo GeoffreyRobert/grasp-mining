@@ -5,8 +5,7 @@ void EmptyMiner::operator()(const vector<Solution>& solutions) {
   (void)solutions;
 }
 
-vector<int> EmptyMiner::ProposePattern(OperationId operation, double support) {
-  (void)operation;
-  (void)support;
-	return vector<int>();
+vector<vector<pair<OperationId, OperationId>>> EmptyMiner::GetItemsets()
+{
+  return {};
 }
