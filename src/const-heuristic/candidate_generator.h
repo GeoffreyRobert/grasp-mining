@@ -5,18 +5,21 @@
 
 #include "solver/solver_module.h"
 
-using std::vector;
+using std::vector; using std::size_t;
 
+class Solution;
 class CandidateJob;
 
 class CandidateGenerator : public SolverModule
 {
 public:
-  using SolverModule::SolverModule;
-  vector<CandidateJob>& Init();
-  void IncrementJob(CandidateJob& job);
+  CandidateGenerator(const Problem&);
+  virtual ~CandidateGenerator() {};
+  void Init();
+  virtual const vector<CandidateJob>& operator()(Solution&);
+  void IncrementJob(size_t job_idx);
 
-private:
+protected:
   vector<CandidateJob> _candidate_jobs;  // jobs left to be added to the solution
 };
 

@@ -10,7 +10,7 @@
 //#include "solver/solver_factory.h"
 #include "solver/solver.h"
 //#include "util/out_js.h"
-#include "const-heuristic/candidate_generator.h"
+#include "const-heuristic/greedy_generator.h"
 #include "const-heuristic/restricted_selector.h"
 #include "const-heuristic/const_heuristic.h"
 #include "local-search/laarhoven_search.h"
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   auto problem = LoadProblemFromPath(file_path);
 
   // build the solver
-  CandidateGenerator generator(problem);
+  GreedyGenerator generator(problem);
   RestrictedSelector selector(problem, alpha, seed);
   ConstHeuristic init_heuristic(problem, generator, selector);
   LaarhovenSearch local_search(problem);

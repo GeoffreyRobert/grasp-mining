@@ -15,17 +15,18 @@ ConstHeuristic::ConstHeuristic(
 
 Solution& ConstHeuristic::operator()(Solution& solution)
 {
-  auto& candidate_jobs = _generator.Init();
+  _generator.Init();
 
   for (OperationId counter = 0; counter < ref_pb.opNum; ++counter) {
-    size_t job_idx = _selector(solution, candidate_jobs);
+    auto& candidate_jobs = _generator(solution);
+    size_t job_idx = _selector(candidate_jobs);
 
     // construction de la solution
     auto& c_job = candidate_jobs[job_idx];
     OperationId oid = ref_pb.operationNumber[c_job.jid][c_job.rank];
     solution.AddOperation(oid);
 
-    _generator.IncrementJob(c_job);
+    _generator.IncrementJob(job_idx);
   }
 
   return solution;

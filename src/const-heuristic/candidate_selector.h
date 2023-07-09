@@ -16,7 +16,7 @@ class CandidateSelector : public SolverModule
 public:
   CandidateSelector(const Problem&, unsigned seed);
   virtual ~CandidateSelector() {};
-  virtual size_t operator()(Solution&, vector<CandidateJob>& candidates) = 0;
+  virtual size_t operator()(const vector<CandidateJob>& candidates) = 0;
 
 protected:
 	std::mt19937 _r_generator;

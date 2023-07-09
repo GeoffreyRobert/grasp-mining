@@ -10,7 +10,7 @@ class RestrictedSelector : public CandidateSelector
 {
 public:
   RestrictedSelector(const Problem&, double alpha = 0.5, unsigned seed = 0);
-  size_t operator()(Solution&, vector<CandidateJob>& candidates) override;
+  size_t operator()(const vector<CandidateJob>& candidates) override;
 
 private:
   double _alpha = 0.5;
