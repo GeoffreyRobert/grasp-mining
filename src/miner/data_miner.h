@@ -15,6 +15,5 @@ public:
   using SolverModule::SolverModule;
   virtual ~DataMiner() {};
   virtual void operator()(const vector<Solution>&) = 0;
-  virtual vector<int> ProposePattern(OperationId operation, double support) = 0;
 };
 #endif // DATA_MINER_H_
