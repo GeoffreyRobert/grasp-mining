@@ -17,7 +17,9 @@ public:
 
 private:
   DataMiner& _data_miner;
-  vector<vector<std::pair<OperationId, OperationId>>> _itemsets;
+  // lookup table indexed by operation id and containing
+  // following operation in pattern, used to cache itemset
+  vector<OperationId> _itemset;
 };
 
 #endif // HYBRID_GENERATOR_

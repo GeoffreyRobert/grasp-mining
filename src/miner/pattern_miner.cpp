@@ -84,9 +84,13 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
     }
     _itemsets.emplace_back(std::move(itemset));
   }
+  _iter = _itemsets.begin();
 }
 
-vector<vector<pair<OperationId, OperationId>>> PatternMiner::GetItemsets()
+const vector<pair<OperationId, OperationId>>& PatternMiner::GetItemset()
 {
-  return std::move(_itemsets);
+  auto& res = *(_iter++);
+  if (_iter == _itemsets.end())
+    _iter = _itemsets.begin();
+  return res;
 }

@@ -5,7 +5,7 @@ void EmptyMiner::operator()(const vector<Solution>& solutions) {
   (void)solutions;
 }
 
-vector<vector<pair<OperationId, OperationId>>> EmptyMiner::GetItemsets()
+const vector<pair<OperationId, OperationId>>& EmptyMiner::GetItemset()
 {
-  return {};
+  return _dummy_itemset;
 }
