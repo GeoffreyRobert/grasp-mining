@@ -37,7 +37,8 @@ Solver::Solver(Solver&& other)
 Solution Solver::Solve(const Problem& problem)
 {
   // solutions manipulées dans l'algo
-  vector<Solution> solution_set(populationSize, problem);
+  unsigned init_population = populationSize / 2;
+  vector<Solution> solution_set(init_population, problem);
 
   // démarre le timer
   auto init = high_resolution_clock::now();
@@ -51,10 +52,12 @@ Solution Solver::Solve(const Problem& problem)
 
   Solution best_solution =
       *std::min_element(std::begin(solution_set), std::end(solution_set));
+  // data miner is implicitly linked to the hybrid heuristic
   dataMiner(solution_set);
 
   solution_set.clear();
-  solution_set.resize(populationSize, problem);
+  unsigned hybrid_population = populationSize - init_population;
+  solution_set.resize(hybrid_population, problem);
   for (Solution& sol : solution_set)
   {
     hybridHeuristic(sol);
