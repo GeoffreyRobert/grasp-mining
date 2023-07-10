@@ -13,6 +13,7 @@ class HybridGenerator : public CandidateGenerator
 public:
   HybridGenerator(const Problem&, DataMiner&);
   void Init() override;
+  void IncrementJob(size_t job_idx) override;
 
 private:
   DataMiner& _data_miner;

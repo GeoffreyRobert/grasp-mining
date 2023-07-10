@@ -1,5 +1,6 @@
 #include "const-heuristic/hybrid_generator.h"
 #include "data/problem.h"
+#include "data/solution.h"
 #include "const-heuristic/const_heuristic.h"
 
 HybridGenerator::HybridGenerator(const Problem& problem, DataMiner& data_miner)
@@ -30,4 +31,22 @@ void HybridGenerator::Init()
       _itemset[oid] = next_oid;
     }
   }
+}
+
+void HybridGenerator::IncrementJob(size_t job_idx)
+{
+  auto& job = _candidate_jobs[job_idx];
+
+  // remove operation from waiting list if it belonged to it
+  OperationId oid = ref_pb.operationNumber[job.jid][job.rank];
+  MachineId mid = ref_pb.machineNumber[oid];
+  if (oid == _pattern_ops[mid])
+    _pattern_ops[mid] = ref_pb.OriginOp;
+
+  // add successor if scheduled operation is part of pattern
+  if (_itemset[oid] != ref_pb.OriginOp)
+    _pattern_ops[mid] = _itemset[oid];
+
+  // perform the classic job increment
+  CandidateGenerator::IncrementJob(job_idx);
 }

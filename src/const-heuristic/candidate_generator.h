@@ -17,7 +17,7 @@ public:
   virtual ~CandidateGenerator() {};
   virtual void Init();
   virtual const vector<CandidateJob>& operator()(Solution&);
-  void IncrementJob(size_t job_idx);
+  virtual void IncrementJob(size_t job_idx);
 
 protected:
   vector<CandidateJob> _candidate_jobs;  // jobs left to be added to the solution
