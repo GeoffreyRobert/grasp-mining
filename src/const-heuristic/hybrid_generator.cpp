@@ -31,8 +31,3 @@ void HybridGenerator::Init()
     }
   }
 }
-
-const vector<CandidateJob>& HybridGenerator::operator()(Solution&)
-{
-  return _candidate_jobs;
-}

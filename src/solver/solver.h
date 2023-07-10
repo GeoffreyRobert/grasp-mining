@@ -18,6 +18,7 @@ public:
       ConstHeuristic& init_heuristic
     , LocalSearch&
     , DataMiner&
+    , ConstHeuristic& hybrid_heuristic
     , unsigned pop_size);
 
   Solver(Solver&&);
@@ -32,6 +33,7 @@ public:
   ConstHeuristic& initHeuristic;
   LocalSearch& localSearch;
   DataMiner& dataMiner;
+  ConstHeuristic& hybridHeuristic;
 
   // Size of the population of one batch
   unsigned populationSize = 500;

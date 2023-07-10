@@ -11,6 +11,7 @@
 #include "solver/solver.h"
 //#include "util/out_js.h"
 #include "const-heuristic/scheduled_generator.h"
+#include "const-heuristic/hybrid_generator.h"
 #include "const-heuristic/restricted_selector.h"
 #include "const-heuristic/const_heuristic.h"
 #include "local-search/laarhoven_search.h"
@@ -59,10 +60,14 @@ int main(int argc, char** argv)
   MedianFilter median_filter(threshold);
   TransactionEncoder encoder(problem);
   PatternMiner data_miner(problem, encoder, median_filter, support);
+  HybridGenerator hybrid_generator(problem, data_miner);
+  RestrictedSelector hybrid_selector(problem, alpha, seed);
+  ConstHeuristic hybrid_heuristic(problem, hybrid_generator, hybrid_selector);
   Solver solver(
       init_heuristic
     , local_search
     , data_miner
+    , hybrid_heuristic
     , population_size);
 
   Solution solution = solver.Solve(problem);

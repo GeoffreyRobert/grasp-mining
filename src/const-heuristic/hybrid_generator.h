@@ -13,7 +13,6 @@ class HybridGenerator : public CandidateGenerator
 public:
   HybridGenerator(const Problem&, DataMiner&);
   void Init() override;
-  const vector<CandidateJob>& operator()(Solution&) override;
 
 private:
   DataMiner& _data_miner;
