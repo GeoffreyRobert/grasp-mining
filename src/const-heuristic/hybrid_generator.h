@@ -20,6 +20,9 @@ private:
   // lookup table indexed by operation id and containing
   // following operation in pattern, used to cache itemset
   vector<OperationId> _itemset;
+  // lookup table indexed by machine id and containing ops
+  // that were scheduled as they belong to a mined pattern
+  vector<OperationId> _pattern_ops;
 };
 
 #endif // HYBRID_GENERATOR_
