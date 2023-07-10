@@ -9,7 +9,7 @@ MedianFilter::MedianFilter(double threshold)
 {
 }
 
-vector<Solution>& MedianFilter::operator()(vector<Solution>& solutions)
+vector<Solution>& MedianFilter::operator()(vector<Solution>& solutions) const
 {
   auto middle = begin(solutions)
     + std::lround(_threshold * static_cast<double>(solutions.size()));

@@ -15,7 +15,7 @@ class DataMiner : public SolverModule
 public:
   using SolverModule::SolverModule;
   virtual ~DataMiner() {};
-  virtual void operator()(const vector<Solution>&) = 0;
+  virtual void operator()(vector<Solution>&) = 0;
   virtual const vector<pair<OperationId, OperationId>>& GetItemset() = 0;
 };
 #endif // DATA_MINER_H_

@@ -14,7 +14,11 @@ class DataMiner;
 
 class Solver {
 public:
-  Solver(ConstHeuristic&, LocalSearch&, SolutionFilter&, DataMiner&, unsigned pop_size);
+  Solver(
+      ConstHeuristic& init_heuristic
+    , LocalSearch&
+    , DataMiner&
+    , unsigned pop_size);
 
   Solver(Solver&&);
 
@@ -27,7 +31,6 @@ public:
   // The hybrid solver.
   ConstHeuristic& initHeuristic;
   LocalSearch& localSearch;
-  SolutionFilter& solutionFilter;
   DataMiner& dataMiner;
 
   // Size of the population of one batch

@@ -58,8 +58,12 @@ int main(int argc, char** argv)
   LaarhovenSearch local_search(problem);
   MedianFilter median_filter(threshold);
   TransactionEncoder encoder(problem);
-  PatternMiner data_miner(problem, support, encoder);
-  Solver solver(init_heuristic, local_search, median_filter, data_miner, population_size);
+  PatternMiner data_miner(problem, encoder, median_filter, support);
+  Solver solver(
+      init_heuristic
+    , local_search
+    , data_miner
+    , population_size);
 
   Solution solution = solver.Solve(problem);
 

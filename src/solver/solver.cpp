@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits>
 #include <chrono>
 
@@ -13,12 +14,10 @@ using namespace std::chrono;
 Solver::Solver(
     ConstHeuristic& init_heuristic
   , LocalSearch& local_search
-  , SolutionFilter& solution_filter
   , DataMiner& data_miner
   , unsigned pop_size)
   : initHeuristic(init_heuristic)
   , localSearch(local_search)
-  , solutionFilter(solution_filter)
   , dataMiner(data_miner)
   , populationSize(pop_size)
   , runtime(0)
@@ -27,7 +26,6 @@ Solver::Solver(
 Solver::Solver(Solver&& other)
   : initHeuristic(other.initHeuristic)
   , localSearch(other.localSearch)
-  , solutionFilter(other.solutionFilter)
   , dataMiner(other.dataMiner)
   , populationSize(other.populationSize)
   , runtime(other.runtime)
@@ -48,12 +46,13 @@ Solution Solver::Solve(const Problem& problem)
     localSearch(sol);
   }
 
-  auto& filtered_solutions = solutionFilter(solution_set);
-  dataMiner(filtered_solutions);
+  Solution best_solution =
+      *std::min_element(std::begin(solution_set), std::end(solution_set));
+  dataMiner(solution_set);
 
   // Timer
   auto end = high_resolution_clock::now();
   runtime = duration_cast<milliseconds>(end - init);
 
-  return std::move(filtered_solutions.front());
+  return best_solution;
 }

@@ -1,7 +1,7 @@
 #include "data/solution.h"
 #include "empty_miner.h"
 
-void EmptyMiner::operator()(const vector<Solution>& solutions) {
+void EmptyMiner::operator()(vector<Solution>& solutions) {
   (void)solutions;
 }
 

@@ -7,7 +7,7 @@ class MedianFilter : public SolutionFilter
 {
 public:
   MedianFilter(double threshold);
-	vector<Solution>& operator()(vector<Solution>& solutions) override;
+	vector<Solution>& operator()(vector<Solution>& solutions) const override;
 
 private:
   const double _threshold;

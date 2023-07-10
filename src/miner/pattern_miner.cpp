@@ -7,13 +7,19 @@
 #include "data/problem.h"
 #include "data/solution.h"
 #include "miner/transaction_encoder.h"
+#include "miner/solution_filter.h"
 #include "data.h"
 #include "fsout.h"
 #include "fpmax.h"
 
-PatternMiner::PatternMiner(const Problem& problem, double support, const TransactionEncoder& encoder)
+PatternMiner::PatternMiner(
+    const Problem& problem
+  , const TransactionEncoder& encoder
+  , const SolutionFilter& filter
+  , double support)
   : DataMiner(problem)
   , _encoder(encoder)
+  , _filter(filter)
   , _support(support)
 {
 }
@@ -44,10 +50,12 @@ vector<Transaction> PatternMiner::SolutionsToVectors(
   return t_list;
 }
 
-void PatternMiner::operator()(const vector<Solution>& solutions)
+void PatternMiner::operator()(vector<Solution>& solution_set)
 {
+  auto& filtered_solutions = _filter(solution_set);
+
   // number of solutions to mine
-  size_t t_num = solutions.size();
+  size_t t_num = filtered_solutions.size();
 
   int support = static_cast<int>(
       std::lround(_support * static_cast<double>(t_num)));
@@ -58,7 +66,7 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
 
   // maximal itemset mining
   auto init = high_resolution_clock::now();
-  VectorData transactions(SolutionsToVectors(solutions));
+  VectorData transactions(SolutionsToVectors(filtered_solutions));
   vector<vector<int>> raw_itemsets;
   while (raw_itemsets.size() < num_itemsets)
   {

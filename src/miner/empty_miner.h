@@ -7,7 +7,7 @@ class EmptyMiner : public DataMiner
 {
 public:
   using DataMiner::DataMiner;
-  void operator()(const vector<Solution>&) override;
+  void operator()(vector<Solution>&) override;
   const vector<pair<OperationId, OperationId>>& GetItemset() override;
 
 private:

@@ -11,7 +11,7 @@ class SolutionFilter
 {
 public:
   virtual ~SolutionFilter() {};
-  virtual vector<Solution>& operator()(vector<Solution>& solutions) = 0;
+  virtual vector<Solution>& operator()(vector<Solution>& solutions) const = 0;
 };
 
 #endif // SOLUTION_FILTER_
