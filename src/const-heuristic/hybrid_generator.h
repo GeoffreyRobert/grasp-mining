@@ -13,6 +13,7 @@ class HybridGenerator : public CandidateGenerator
 public:
   HybridGenerator(const Problem&, DataMiner&);
   void Init() override;
+  const vector<CandidateJob>& operator()(Solution&) override;
   void IncrementJob(size_t job_idx) override;
 
 private:
@@ -22,7 +23,7 @@ private:
   vector<OperationId> _itemset;
   // lookup table indexed by machine id and containing ops
   // that were scheduled as they belong to a mined pattern
-  vector<OperationId> _pattern_ops;
+  vector<OperationId> _priority_ops;
 };
 
 #endif // HYBRID_GENERATOR_
