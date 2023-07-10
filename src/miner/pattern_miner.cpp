@@ -53,8 +53,6 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
       std::lround(_support * static_cast<double>(t_num)));
   unsigned num_itemsets = static_cast<unsigned>(
       std::lround(_itemset_ratio * static_cast<double>(t_num)));
-  int support_incr = static_cast<int>(
-      std::lround(_support_incr * static_cast<double>(t_num)));
 
   // maximal itemset mining
   VectorData transactions(SolutionsToVectors(solutions));
@@ -70,7 +68,8 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
     if (res != 0)
       throw std::runtime_error("fpmax algorithm did not complete nominally");
     raw_itemsets = out_data.GetItemsets();
-    support -= support_incr;
+    support = static_cast<int>(
+        std::lround(_support_mult * static_cast<double>(support)));
   }
 
   // decode into itemsets of operation pairs
@@ -91,8 +90,9 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
   std::sort(_itemsets.begin(), _itemsets.end()
       , [](const auto& a, const auto& b)
       {
-        return a.size() < b.size();
+        return b.size() < a.size(); // non-increasing ordering
       });
+
   // truncate vector to target size
   if (num_itemsets < raw_itemsets.size())
     raw_itemsets.resize(num_itemsets);

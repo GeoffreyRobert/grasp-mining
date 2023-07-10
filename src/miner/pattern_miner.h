@@ -18,7 +18,7 @@ private:
   const TransactionEncoder& _encoder;
   const double _support;
   const double _itemset_ratio = 0.2;
-  const double _support_incr = 0.05;
+  const double _support_mult = 0.75;
   vector<vector<pair<OperationId, OperationId>>> _itemsets;
   vector<vector<pair<OperationId, OperationId>>>::iterator _iter;
 };
