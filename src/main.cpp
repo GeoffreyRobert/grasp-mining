@@ -60,9 +60,7 @@ int main(int argc, char** argv)
   MedianFilter median_filter(threshold);
   TransactionEncoder encoder(problem);
   PatternMiner data_miner(problem, encoder, median_filter, support);
-  HybridGenerator hybrid_generator(problem, data_miner);
-  RestrictedSelector hybrid_selector(problem, alpha, seed);
-  ConstHeuristic hybrid_heuristic(problem, hybrid_generator, hybrid_selector);
+  ConstHeuristic hybrid_heuristic(problem, generator, selector);
   Solver solver(
       init_heuristic
     , local_search
