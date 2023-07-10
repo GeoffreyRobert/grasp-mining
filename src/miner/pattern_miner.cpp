@@ -55,6 +55,7 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
       std::lround(_itemset_ratio * static_cast<double>(t_num)));
 
   // maximal itemset mining
+  auto init = high_resolution_clock::now();
   VectorData transactions(SolutionsToVectors(solutions));
   vector<vector<int>> raw_itemsets;
   while (raw_itemsets.size() < num_itemsets)
@@ -97,6 +98,8 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
   if (num_itemsets < raw_itemsets.size())
     raw_itemsets.resize(num_itemsets);
   _iter = _itemsets.begin();
+
+  runtime += duration_cast<microseconds>(high_resolution_clock::now() - init);
 }
 
 const vector<pair<OperationId, OperationId>>& PatternMiner::GetItemset()
