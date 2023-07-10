@@ -8,6 +8,6 @@
 
 #040 [ code ] Adapt construction heuristic to use patterns
 
-#041 [ code ] Sort itemsets by size and use largest
+#042 [ code ] Sort by support instead of #items
 
-#042
+#043

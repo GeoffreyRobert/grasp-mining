@@ -1,3 +1,5 @@
+#041 [ code ] Sort itemsets by size and use largest
+
 #006 [ code ] Cleanup obvious code smells
 Req:
   - All files were inspected

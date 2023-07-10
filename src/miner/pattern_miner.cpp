@@ -61,6 +61,8 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
   vector<vector<int>> raw_itemsets;
   while (raw_itemsets.size() < num_itemsets)
   {
+    if (support <= 0)
+      throw std::runtime_error("fpmax couldn't find any recurring pattern");
     VectorOut out_data;
     int res = fpmax(transactions, support, &out_data);
     if (transactions.getNextTransaction() != nullptr)
@@ -84,6 +86,16 @@ void PatternMiner::operator()(const vector<Solution>& solutions)
     }
     _itemsets.emplace_back(std::move(itemset));
   }
+
+  // sort patterns by decreasing size
+  std::sort(_itemsets.begin(), _itemsets.end()
+      , [](const auto& a, const auto& b)
+      {
+        return a.size() < b.size();
+      });
+  // truncate vector to target size
+  if (num_itemsets < raw_itemsets.size())
+    raw_itemsets.resize(num_itemsets);
   _iter = _itemsets.begin();
 }
 
