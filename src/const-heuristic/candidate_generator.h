@@ -15,7 +15,7 @@ class CandidateGenerator : public SolverModule
 public:
   CandidateGenerator(const Problem&);
   virtual ~CandidateGenerator() {};
-  void Init();
+  virtual void Init();
   virtual const vector<CandidateJob>& operator()(Solution&);
   void IncrementJob(size_t job_idx);
 

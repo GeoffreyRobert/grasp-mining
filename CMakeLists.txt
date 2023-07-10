@@ -43,7 +43,8 @@ add_subdirectory(src/fpgrowth)
 
 add_library(grasp-lib
   src/const-heuristic/candidate_generator.cpp
-  src/const-heuristic/greedy_generator.cpp
+  src/const-heuristic/scheduled_generator.cpp
+  src/const-heuristic/hybrid_generator.cpp
   src/const-heuristic/candidate_selector.cpp
   src/const-heuristic/random_selector.cpp
   src/const-heuristic/restricted_selector.cpp

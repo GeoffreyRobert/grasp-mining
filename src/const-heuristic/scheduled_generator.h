@@ -3,7 +3,7 @@
 
 #include "const-heuristic/candidate_generator.h"
 
-class GreedyGenerator : public CandidateGenerator
+class ScheduledGenerator : public CandidateGenerator
 {
 public:
   using CandidateGenerator::CandidateGenerator;

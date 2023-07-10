@@ -1,9 +1,9 @@
 #include "data/problem.h"
 #include "data/solution.h"
 #include "const-heuristic/const_heuristic.h"
-#include "const-heuristic/greedy_generator.h"
+#include "const-heuristic/scheduled_generator.h"
 
-const vector<CandidateJob>& GreedyGenerator::operator()(Solution& solution)
+const vector<CandidateJob>& ScheduledGenerator::operator()(Solution& solution)
 {
   for (auto& c_job : _candidate_jobs)
   {
