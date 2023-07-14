@@ -9,3 +9,8 @@ const vector<pair<OperationId, OperationId>>& EmptyMiner::GetItemset()
 {
   return _dummy_itemset;
 }
+
+void EmptyMiner::SetItemset(vector<pair<OperationId, OperationId>>&& itemset)
+{
+  _dummy_itemset = std::move(itemset);
+}

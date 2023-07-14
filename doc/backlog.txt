@@ -6,8 +6,6 @@
 
 #033 [ code ] Instrument code for experiments
 
-#040 [ code ] Adapt construction heuristic to use patterns
-
 #042 [ code ] Sort by support instead of #items
 
 #043

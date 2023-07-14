@@ -3,10 +3,12 @@
 
 #include <utility>
 
+#include "data/typedefs.h"
 #include "const-heuristic/candidate_generator.h"
-#include "miner/data_miner.h"
 
 using std::pair;
+
+class DataMiner;
 
 class HybridGenerator : public CandidateGenerator
 {

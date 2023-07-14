@@ -86,6 +86,7 @@ target_link_libraries(grasp
 add_executable(full_test
   tests/problem_test.cpp
   tests/solution_test.cpp
+  tests/hybrid_generator_test.cpp
   tests/const_heuristic_test.cpp
   tests/laarhoven_test.cpp
   tests/main_test.cpp

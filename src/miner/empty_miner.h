@@ -9,6 +9,7 @@ public:
   using DataMiner::DataMiner;
   void operator()(vector<Solution>&) override;
   const vector<pair<OperationId, OperationId>>& GetItemset() override;
+  void SetItemset(vector<pair<OperationId, OperationId>>&&);
 
 private:
   vector<pair<OperationId, OperationId>> _dummy_itemset;

@@ -1,6 +1,7 @@
 #include "const-heuristic/hybrid_generator.h"
 #include "data/problem.h"
 #include "data/solution.h"
+#include "miner/data_miner.h"
 #include "const-heuristic/const_heuristic.h"
 
 HybridGenerator::HybridGenerator(const Problem& problem, DataMiner& data_miner)
