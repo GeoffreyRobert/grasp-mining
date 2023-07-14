@@ -72,10 +72,17 @@ target_link_libraries(grasp-lib
 ################
 
 add_executable(grasp
-  src/main.cpp
+  src/grasp.cpp
 )
 
 target_link_libraries(grasp
+  PRIVATE grasp-lib Boost::program_options compiler_settings)
+
+add_executable(grasp-miner
+  src/grasp_miner.cpp
+)
+
+target_link_libraries(grasp-miner
   PRIVATE grasp-lib Boost::program_options compiler_settings)
 
 ################

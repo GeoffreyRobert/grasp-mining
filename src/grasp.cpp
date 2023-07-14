@@ -7,21 +7,16 @@
 #include <boost/program_options.hpp>
 
 #include "data/problem.h"
-//#include "solver/solver_factory.h"
 #include "solver/solver.h"
-//#include "util/out_js.h"
 #include "const-heuristic/scheduled_generator.h"
-#include "const-heuristic/hybrid_generator.h"
 #include "const-heuristic/restricted_selector.h"
 #include "const-heuristic/const_heuristic.h"
 #include "local-search/laarhoven_search.h"
-#include "miner/median_filter.h"
-#include "miner/transaction_encoder.h"
-#include "miner/pattern_miner.h"
+#include "miner/empty_miner.h"
 
 namespace fs = std::filesystem;
-using std::string;
-using std::vector;
+
+using std::string; using std::vector;
 
 /*
         Programme principal permettant l'appel des différentes méthodes
@@ -43,8 +38,6 @@ int main(int argc, char** argv)
   const unsigned population_size = varmap["population"].as<unsigned>();
   const double alpha = varmap["alpha"].as<double>();
   const unsigned seed = varmap["seed"].as<unsigned>();
-  const double support = varmap["support"].as<double>();
-  const double threshold = 0.5;
 
   if (population_size < 1)
     return 0;
@@ -52,20 +45,17 @@ int main(int argc, char** argv)
   // extraction des données
   auto problem = LoadProblemFromPath(file_path);
 
-  // build the solver
+  // build the solver NOT using mining
   ScheduledGenerator generator(problem);
   RestrictedSelector selector(problem, alpha, seed);
   ConstHeuristic init_heuristic(problem, generator, selector);
   LaarhovenSearch local_search(problem);
-  MedianFilter median_filter(threshold);
-  TransactionEncoder encoder(problem);
-  PatternMiner data_miner(problem, encoder, median_filter, support);
-  ConstHeuristic hybrid_heuristic(problem, generator, selector);
+  EmptyMiner data_miner(problem);
   Solver solver(
       init_heuristic
     , local_search
     , data_miner
-    , hybrid_heuristic
+    , init_heuristic
     , population_size);
 
   Solution solution = solver.Solve(problem);
@@ -89,10 +79,9 @@ boost::program_options::variables_map ParseArgs(int argc, char* argv[])
   po::options_description visible_opts("Allowed options");
   visible_opts.add_options()
     ("help", "produce help message")
-    ("population,p", po::value<unsigned>()->default_value(10), "number of population of the same solver run")
+    ("population,p", po::value<unsigned>()->default_value(1000), "number of population of the same solver run")
     ("alpha,a", po::value<double>()->default_value(0.5), "alpha parameter of the binato heuristic")
-    ("seed,s", po::value<unsigned>()->default_value(0), "seed to be used by all random generators")
-    ("support,u", po::value<double>()->default_value(0.2), "support parameter of FIM algorithm");
+    ("seed,s", po::value<unsigned>()->default_value(0), "seed to be used by all random generators");
 
   po::options_description hidden_opts("Hidden options");
   hidden_opts.add_options()

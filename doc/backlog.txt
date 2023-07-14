@@ -8,4 +8,6 @@
 
 #042 [ code ] Sort by support instead of #items
 
-#043
+#043 [ code ] Add dynamic configuration of mining
+
+#044
