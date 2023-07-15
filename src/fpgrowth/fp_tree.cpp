@@ -822,7 +822,7 @@ void FI_tree::powerset(int*prefix, int prefixlen, int* items, int current, int i
 			ITlen[list->top+prefixlen-1]++;
 			if(fout)
 			{
-				fout->printset(list->top, list->FS);
+				//fout->printset(list->top, list->FS);
 				fout->printSet(prefixlen, prefix, this->head[order[prefix[prefixlen-1]]]->count);
 			}
 		}

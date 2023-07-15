@@ -8,7 +8,7 @@ class OutData
 {
 public:
   virtual ~OutData() {};
-  virtual void printset(int length, int *iset) = 0;
+  //virtual void printset(int length, int *iset) = 0;
   virtual void printSet(int length, int *iset, int support) = 0;
 };
 
@@ -21,7 +21,7 @@ class FSout : public OutData
 
   int isOpen();
 
-  void printset(int length, int *iset) override;
+  //void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
 
  private:
@@ -31,7 +31,7 @@ class FSout : public OutData
 class VectorOut : public OutData
 {
 public:
-  void printset(int length, int *iset) override;
+  //void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
   std::vector<std::vector<int>> GetItemsets();
 
