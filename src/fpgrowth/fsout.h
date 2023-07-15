@@ -8,36 +8,31 @@ class OutData
 {
 public:
   virtual ~OutData() {};
-  //virtual void printset(int length, int *iset) = 0;
   virtual void printSet(int length, int *iset, int support) = 0;
 };
 
 class FSout : public OutData
 {
- public:
-
+public:
   FSout(char *filename);
   ~FSout();
-
   int isOpen();
-
-  //void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
 
- private:
+private:
   FILE *out;
 };
+
+using std::vector; using std::pair;
 
 class VectorOut : public OutData
 {
 public:
-  //void printset(int length, int *iset) override;
   void printSet(int length, int *iset, int support) override;
-  std::vector<std::vector<int>> GetItemsets();
+  vector<pair<int, vector<int>>> GetItemsets();
 
 private:
-  std::vector<std::vector<int>> iset_list;
-  std::vector<int> supp_list;
+  vector<pair<int, vector<int>>> iset_list;
 };
 
 #endif

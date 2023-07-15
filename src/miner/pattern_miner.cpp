@@ -67,7 +67,7 @@ void PatternMiner::operator()(vector<Solution>& solution_set)
   // maximal itemset mining
   auto init = high_resolution_clock::now();
   VectorData transactions(SolutionsToVectors(filtered_solutions));
-  vector<vector<int>> raw_itemsets;
+  vector<pair<int, vector<int>>> raw_itemsets;
   while (raw_itemsets.size() < num_itemsets)
   {
     if (support <= 0)
@@ -93,30 +93,28 @@ void PatternMiner::operator()(vector<Solution>& solution_set)
     }
   }
 
+  // get the itemsets with highest support
+  auto middle = begin(raw_itemsets) + num_itemsets;
+  std::partial_sort(begin(raw_itemsets), middle, end(raw_itemsets)
+      , [](const auto& a, const auto& b)
+      {
+        return a.first > b.first; // non-increasing ordering [ ..., a, b, ... ]
+      });
+
   // decode into itemsets of operation pairs
   _itemsets.clear();
-  _itemsets.reserve(raw_itemsets.size());
-  for (const auto& i_vec : raw_itemsets)
+  _itemsets.reserve(num_itemsets);
+  for (const auto& i_pair : raw_itemsets)
   {
-    std::vector<std::pair<OperationId, OperationId>> itemset(i_vec.size());
-    itemset.clear();
+    auto& i_vec = i_pair.second;
+    vector<pair<OperationId, OperationId>> itemset;
+    itemset.reserve(i_vec.size());
     for (auto itid : i_vec)
     {
       itemset.emplace_back(_encoder.ItemToOperationPair(itid));
     }
     _itemsets.emplace_back(std::move(itemset));
   }
-
-  // sort patterns by decreasing size
-  std::sort(_itemsets.begin(), _itemsets.end()
-      , [](const auto& a, const auto& b)
-      {
-        return b.size() < a.size(); // non-increasing ordering
-      });
-
-  // truncate vector to target size
-  if (num_itemsets < raw_itemsets.size())
-    raw_itemsets.resize(num_itemsets);
   _iter = _itemsets.begin();
 
   runtime += duration_cast<microseconds>(high_resolution_clock::now() - init);

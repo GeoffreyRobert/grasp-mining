@@ -1,3 +1,5 @@
+#045 [ code ] Sort the itemsets based on support
+
 #040 [ code ] Adapt construction heuristic to use patterns
 
 #041 [ code ] Sort itemsets by size and use largest

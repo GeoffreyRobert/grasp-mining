@@ -10,4 +10,6 @@
 
 #043 [ code ] Add dynamic configuration of mining
 
-#044
+#044 [ code ] Schedule operations in waiting list
+
+#046
