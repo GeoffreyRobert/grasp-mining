@@ -25,6 +25,10 @@ private:
   const double _support;
   const double _itemset_ratio = 0.2;
   const double _support_mult = 0.8;
+
+  unsigned _min_support;
+  unsigned _max_support;
+  vector<unsigned> _length_distrib;
   vector<vector<pair<OperationId, OperationId>>> _itemsets;
   vector<vector<pair<OperationId, OperationId>>>::iterator _iter;
 };

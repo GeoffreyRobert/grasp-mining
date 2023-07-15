@@ -170,7 +170,6 @@ int fpmax(Data& data, int threshold, OutData* outdata)
 			outdata->printSet(fptree->itemno, list->FS, fptree->head[fptree->itemno-1]->count);
 			ITlen[i-1]=1;
 #endif
-		printLen();
 		return 0;
 	}
 
@@ -215,8 +214,6 @@ int fpmax(Data& data, int threshold, OutData* outdata)
 #ifdef FI
 		fptree->FP_growth(fout);
 #endif
-
-	printLen();
 
 	delete fp_buf;
 	delete list;

@@ -100,6 +100,8 @@ void PatternMiner::operator()(vector<Solution>& solution_set)
       {
         return a.first > b.first; // non-increasing ordering [ ..., a, b, ... ]
       });
+  _min_support = static_cast<unsigned>(begin(raw_itemsets)->first);
+  _min_support = static_cast<unsigned>((middle - 1)->first);
 
   // decode into itemsets of operation pairs
   _itemsets.clear();
@@ -107,13 +109,19 @@ void PatternMiner::operator()(vector<Solution>& solution_set)
   for (const auto& i_pair : raw_itemsets)
   {
     auto& i_vec = i_pair.second;
+    size_t length = i_vec.size();
     vector<pair<OperationId, OperationId>> itemset;
-    itemset.reserve(i_vec.size());
+    itemset.reserve(length);
     for (auto itid : i_vec)
     {
       itemset.emplace_back(_encoder.ItemToOperationPair(itid));
     }
     _itemsets.emplace_back(std::move(itemset));
+
+    // diagnostic information
+    if (_length_distrib.size() < length + 1)
+      _length_distrib.resize(length + 1, 0);
+    ++_length_distrib[length];
   }
   _iter = _itemsets.begin();
 
