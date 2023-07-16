@@ -2,6 +2,7 @@
 #define CANDIDATE_GENERATOR_
 
 #include <vector>
+#include <ostream>
 
 #include "solver/solver_module.h"
 
@@ -19,7 +20,10 @@ public:
   virtual const vector<CandidateJob>& operator()(Solution&);
   virtual void IncrementJob(size_t job_idx);
 
+  friend std::ostream& operator<<(std::ostream&, const CandidateGenerator&);
+
 protected:
+  virtual void Write(std::ostream&) const;
   vector<CandidateJob> _candidate_jobs;  // jobs left to be added to the solution
 };
 

@@ -10,3 +10,8 @@ size_t RandomSelector::operator()(const vector<CandidateJob>& candidate_jobs)
   }
   return job_idx;
 }
+
+void RandomSelector::Write(std::ostream& stream) const
+{
+  stream << "RandomSelector\n";
+}

@@ -29,5 +29,18 @@ Solution& ConstHeuristic::operator()(Solution& solution)
     _generator.IncrementJob(job_idx);
   }
 
+  _makespan_acc += solution.Makespan();
+  ++_count_acc;
   return solution;
+}
+
+std::ostream& operator<<(std::ostream& stream, const ConstHeuristic& heuristic)
+{
+  double mean = static_cast<double>(heuristic._makespan_acc) / heuristic._count_acc;
+  stream
+    << "ConstHeuristic:"<< '\n'
+    << "  mean=" << mean << '\n'
+    << "  generator=" << heuristic._generator << '\n'
+    << "  selector=" << heuristic._selector;
+  return stream;
 }

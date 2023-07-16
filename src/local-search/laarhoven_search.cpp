@@ -101,3 +101,8 @@ bool LaarhovenSearch::SwapAndEvaluate(
   std::swap(solution, draft_solution);
   return true;
 }
+
+void LaarhovenSearch::Write(std::ostream& stream) const
+{
+  stream << "LaarhovenSearch";
+}

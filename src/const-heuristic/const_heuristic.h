@@ -2,6 +2,7 @@
 #define CONST_HEURISTIC_H_
 
 #include <vector>
+#include <ostream>
 
 #include "data/typedefs.h"
 #include "solver/solver_module.h"
@@ -25,11 +26,17 @@ public:
       const Problem&
     , CandidateGenerator&
     , CandidateSelector&);
-	Solution& operator()(Solution&);
+  Solution& operator()(Solution&);
+
+  friend std::ostream& operator<<(std::ostream&, const ConstHeuristic&);
 
 private:
   CandidateGenerator& _generator;
   CandidateSelector& _selector;
+
+  // diagnostics
+  int _makespan_acc = 0;
+  int _count_acc = 0;
 };
 
 #endif // CONST_HEURISTIC_H_

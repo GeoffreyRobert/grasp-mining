@@ -51,3 +51,8 @@ size_t RestrictedSelector::operator()(const vector<CandidateJob>& candidate_jobs
 
   return job_idx;
 }
+
+void RestrictedSelector::Write(std::ostream& stream) const
+{
+  stream << "RestrictedSelector";
+}

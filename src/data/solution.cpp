@@ -1,5 +1,6 @@
 #include <cassert>
 #include <limits>
+#include <numeric>
 #include <stdexcept>
 
 #include "data/solution.h"
@@ -341,4 +342,13 @@ bool Solution::HasCycle(OperationId oid) const
 bool Solution::HasChild(OperationId oid) const
 {
   return oid != problem.OriginOp && macChild[oid] != problem.FinalOp;
+}
+
+double mean(const vector<Solution>& solution_set)
+{
+  double makespan_mean = std::accumulate(
+      begin(solution_set), end(solution_set), 0.0
+      , [](double acc, const auto& sol) { return acc + sol.Makespan(); });
+  makespan_mean /= static_cast<double>(solution_set.size());
+  return makespan_mean;
 }

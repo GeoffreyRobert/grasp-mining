@@ -18,7 +18,10 @@ public:
   virtual ~CandidateSelector() {};
   virtual size_t operator()(const vector<CandidateJob>& candidates) = 0;
 
+  friend std::ostream& operator<<(std::ostream&, const CandidateSelector&);
+
 protected:
+  virtual void Write(std::ostream&) const = 0;
 	std::mt19937 _r_generator;
 };
 

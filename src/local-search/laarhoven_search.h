@@ -19,6 +19,9 @@ public:
   // Recherche locale le long du chemin critique
   Solution& operator()(Solution& solution) override;
 
+protected:
+  void Write(std::ostream&) const override;
+
 private:
   bool SwapAndEvaluate(Solution&, OperationId parent, OperationId child);
   bool SwapAndUpdateOps(OperationId parent, OperationId child, int makespan);

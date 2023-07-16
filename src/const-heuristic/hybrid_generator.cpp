@@ -51,8 +51,12 @@ const vector<CandidateJob>& HybridGenerator::operator()(Solution& solution)
         && oid != prio_oid
         && solution.StartDate(prio_oid) < makespan
         && solution.StartDate(oid) < solution.EndDate(prio_oid))
+    {
       makespan = solution.EndDate(prio_oid) + ref_pb.timeOnMachine[oid];
+      ++_penalty_count;
+    }
     c_job.makespan = makespan;
+    ++_schedule_count;
   }
   return _candidate_jobs;
 }
@@ -73,4 +77,12 @@ void HybridGenerator::IncrementJob(size_t job_idx)
 
   // perform the classic job increment
   CandidateGenerator::IncrementJob(job_idx);
+}
+
+void HybridGenerator::Write(std::ostream& stream) const
+{
+  double penalty_ratio_mean = static_cast<double>(_penalty_count) / _schedule_count;
+  stream
+    << "HybridGenerator:\n"
+    << "    penalty_ratio_mean=" << penalty_ratio_mean;
 }

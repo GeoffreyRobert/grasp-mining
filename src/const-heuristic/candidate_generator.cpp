@@ -34,3 +34,14 @@ void CandidateGenerator::IncrementJob(size_t job_idx)
     _candidate_jobs.pop_back();
   }
 }
+
+void CandidateGenerator::Write(std::ostream& stream) const
+{
+  stream << "CandidateGenerator";
+}
+
+std::ostream& operator<<(std::ostream& stream, const CandidateGenerator& generator)
+{
+  generator.Write(stream);
+  return stream;
+}

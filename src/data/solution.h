@@ -87,4 +87,7 @@ private:
   vector<OperationId> macChild; // successeur(s) sur la machine
   vector<ParentType> isCritical; // parent critique sur la machine
 };
+
+double mean(const vector<Solution>&);
+
 #endif

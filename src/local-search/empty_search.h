@@ -5,6 +5,9 @@
 
 class EmptySearch : public LocalSearch {
 public:
-	Solution& operator()(Solution&);
+	Solution& operator()(Solution&) override;
+
+protected:
+  void Write(std::ostream&) const override;
 };
 #endif // !EMPTY_SEARCH_H_

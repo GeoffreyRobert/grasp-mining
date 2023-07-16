@@ -51,10 +51,9 @@ Solution Solver::Solve(const Problem& problem)
     initHeuristic(sol);
     localSearch(sol);
   }
-  double init_makespan_mean = std::accumulate(
-      begin(solution_set), end(solution_set), 0.0
-      , [](double acc, const auto& sol) { return acc + sol.Makespan(); });
-  init_makespan_mean /= static_cast<double>(solution_set.size());
+  std::cout << "initHeuristic=" << initHeuristic << '\n';
+  std::cout << "localSearch=" << localSearch << '\n';
+  double init_makespan_mean = mean(solution_set);
   std::cout << "init_makespan_mean=" << init_makespan_mean << '\n';
 
   Solution best_solution =
@@ -70,10 +69,8 @@ Solution Solver::Solve(const Problem& problem)
     hybridHeuristic(sol);
     localSearch(sol);
   }
-  double hybrid_makespan_mean = std::accumulate(
-      begin(solution_set), end(solution_set), 0.0
-      , [](double acc, const auto& sol) { return acc + sol.Makespan(); });
-  hybrid_makespan_mean /= static_cast<double>(solution_set.size());
+  std::cout << "hybridHeuristic=" << hybridHeuristic << '\n';
+  double hybrid_makespan_mean = mean(solution_set);
   std::cout << "hybrid_makespan_mean=" << hybrid_makespan_mean << '\n';
   std::cout << "makespan_mean_improv=" << init_makespan_mean - hybrid_makespan_mean << '\n';
 

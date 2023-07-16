@@ -13,6 +13,7 @@ public:
   size_t operator()(const vector<CandidateJob>& candidates) override;
 
 private:
+  void Write(std::ostream&) const override;
   double _alpha = 0.5;
 
   // Restricted Candidate List

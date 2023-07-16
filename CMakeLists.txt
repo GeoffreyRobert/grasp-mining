@@ -51,6 +51,7 @@ add_library(grasp-lib
   src/const-heuristic/const_heuristic.cpp
   src/data/problem.cpp
   src/data/solution.cpp
+  src/local-search/local_search.cpp
   src/local-search/empty_search.cpp
   src/local-search/laarhoven_search.cpp
   src/miner/empty_miner.cpp
